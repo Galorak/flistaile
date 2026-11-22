@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Flistaile — Simulador</title>
+<meta name="robots" content="noindex">
+<style>
+  body { font-family: system-ui, sans-serif; background: #15121f; color: #eee; margin: 0; padding: 16px; }
+  textarea { width: 100%; min-height: 90px; background: #0008; color: #eee; border: 1px solid #444; border-radius: 8px; font-family: monospace; }
+  pre { background: #0006; padding: 12px; border-radius: 8px; white-space: pre-wrap; }
+  button { padding: 8px 14px; font-weight: 700; }
+</style>
+</head>
+<body>
+<h1>Simulador de balanceamento</h1>
+<p>Um jogador robô joga ativamente (cliques/s abaixo), compra o que rende mais dano por ouro, usa habilidades nos chefes e renasce quando empaca. Mede quanto tempo leva para chegar a cada zona.</p>
+<label>Parâmetros (JSON, sobrescrevem BAL e opções do robô):</label>
+<textarea id="opts">{"cps": 6, "hours": 140}</textarea>
+<p><button id="run">Simular</button></p>
+<pre id="out"></pre>
+<script>window.FL_SIM = true;</script>
+<script src="../assets/game.js"></script>
+<script src="sim.js"></script>
+</body>
+</html>

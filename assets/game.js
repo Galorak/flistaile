@@ -53,20 +53,24 @@
   const TRAININGS = [
     { id: 'forca', icon: '💪', name: 'Força do Braço', type: 'click', base: 5, growth: 1.07, per: 1, unlock: 1,
       desc: 'Golpes de escudo mais pesados. Aumenta o dano por clique.' },
-    { id: 'arremesso', icon: '🛡️', name: 'Arremesso de Escudo', type: 'dps', base: 25, growth: 1.07, per: 3, unlock: 1,
+    { id: 'arremesso', icon: '🛡️', name: 'Arremesso de Escudo', type: 'dps', base: 25, growth: 1.07, per: 1.5, unlock: 1,
       desc: 'Um escudo espectral é arremessado sozinho contra o inimigo.' },
-    { id: 'giro', icon: '🌀', name: 'Escudo Giratório', type: 'dps', base: 600, growth: 1.072, per: 40, unlock: 3,
+    { id: 'giro', icon: '🌀', name: 'Escudo Giratório', type: 'dps', base: 600, growth: 1.072, per: 10, unlock: 3,
       desc: 'Os escudos giram ao redor de Flistaile cortando tudo.' },
-    { id: 'eco', icon: '🔔', name: 'Eco do Impacto', type: 'dps', base: 2.5e4, growth: 1.075, per: 900, unlock: 8,
+    { id: 'eco', icon: '🔔', name: 'Eco do Impacto', type: 'dps', base: 2.5e4, growth: 1.075, per: 90, unlock: 8,
       desc: 'Cada pancada ecoa e golpeia de novo.' },
-    { id: 'bastiao', icon: '🔥', name: 'Fúria do Bastião', type: 'dps', base: 1.5e6, growth: 1.08, per: 2.5e4, unlock: 15,
+    { id: 'bastiao', icon: '🔥', name: 'Fúria do Bastião', type: 'dps', base: 1.5e6, growth: 1.08, per: 800, unlock: 15,
       desc: 'A defesa vira ataque: os escudos ardem em chamas.' },
-    { id: 'tempestade', icon: '⛈️', name: 'Tempestade de Escudos', type: 'dps', base: 2e8, growth: 1.085, per: 8e5, unlock: 25,
+    { id: 'tempestade', icon: '⛈️', name: 'Tempestade de Escudos', type: 'dps', base: 2e8, growth: 1.085, per: 1e4, unlock: 25,
       desc: 'Uma chuva de escudos de luz cai do céu.' },
-    { id: 'cometa', icon: '☄️', name: 'Cometa de Égide', type: 'dps', base: 5e10, growth: 1.09, per: 3e7, unlock: 40,
+    { id: 'cometa', icon: '☄️', name: 'Cometa de Égide', type: 'dps', base: 5e10, growth: 1.09, per: 1.5e5, unlock: 40,
       desc: 'Flistaile lança o escudo como um cometa.' },
-    { id: 'eclipse', icon: '🌑', name: 'Eclipse Gêmeo', type: 'dps', base: 2e13, growth: 1.095, per: 1.5e9, unlock: 60,
+    { id: 'eclipse', icon: '🌑', name: 'Eclipse Gêmeo', type: 'dps', base: 2e13, growth: 1.095, per: 3e6, unlock: 60,
       desc: 'Os dois escudos se unem e apagam o sol do inimigo.' },
+    { id: 'juramento', icon: '⚜️', name: 'Juramento Eterno', type: 'dps', base: 1e19, growth: 1.1, per: 4e9, unlock: 100,
+      desc: 'Flistaile jura proteger Égide, e cada escudo responde ao chamado.' },
+    { id: 'genese', icon: '🌌', name: 'Gênese da Égide', type: 'dps', base: 1e27, growth: 1.105, per: 2e13, unlock: 160,
+      desc: 'O poder que forjou o primeiro escudo do mundo desperta.' },
   ];
 
   const ATTRS = [
@@ -74,7 +78,7 @@
       desc: '+1% de chance de golpe crítico (máx. 50%).' },
     { id: 'impacto', icon: '💥', name: 'Impacto Esmagador', base: 400, growth: 1.6, unlock: 1,
       desc: '+50% de dano nos golpes críticos.' },
-    { id: 'ganancia', icon: '💰', name: 'Ganância', base: 80, growth: 1.45, unlock: 1,
+    { id: 'ganancia', icon: '💰', name: 'Ganância', base: 80, growth: 2.2, unlock: 1,
       desc: '+15% de ouro por criatura (multiplicativo).' },
     { id: 'sinergia', icon: '🔗', name: 'Sinergia', base: 3000, growth: 2.2, max: 25, unlock: 6,
       desc: 'Cada golpe recebe +1% do seu DPS.' },
@@ -100,51 +104,90 @@
   const tierName = (l) => l < TIERS.length ? TIERS[l].n : `${TIERS[TIERS.length - 1].n} +${l - TIERS.length + 1}`;
 
   const SKILLS = [
-    { id: 'furia', icon: '⚔️', name: 'Fúria Dupla', dur: 15, cd: 120, unlock: 5, desc: 'DPS ×3 por 15s.' },
-    { id: 'rajada', icon: '👊', name: 'Rajada', dur: 15, cd: 150, unlock: 10, desc: '10 golpes automáticos por segundo durante 15s.' },
-    { id: 'falcao', icon: '🦅', name: 'Olho do Falcão', dur: 20, cd: 180, unlock: 15, desc: '+50% de chance de crítico por 20s.' },
-    { id: 'ouro', icon: '🪙', name: 'Chuva de Ouro', dur: 30, cd: 400, unlock: 20, desc: 'Ouro ×3 por 30s.' },
-    { id: 'sismo', icon: '💢', name: 'Impacto Sísmico', dur: 0, cd: 300, unlock: 35, desc: 'Causa de uma vez o equivalente a 30s de DPS + 50 golpes.' },
+    { id: 'furia', icon: '⚔️', name: 'Fúria Dupla', dur: 30, cd: 300, unlock: 5, desc: 'DPS ×2 por 30s.' },
+    { id: 'rajada', icon: '👊', name: 'Rajada', dur: 30, cd: 420, unlock: 10, desc: '10 golpes automáticos por segundo durante 30s.' },
+    { id: 'falcao', icon: '🦅', name: 'Olho do Falcão', dur: 30, cd: 480, unlock: 15, desc: '+50% de chance de crítico por 30s.' },
+    { id: 'ouro', icon: '🪙', name: 'Chuva de Ouro', dur: 30, cd: 600, unlock: 20, desc: 'Ouro ×3 por 30s.' },
+    { id: 'sismo', icon: '💢', name: 'Impacto Sísmico', dur: 0, cd: 600, unlock: 30, desc: 'Causa de uma vez 60s de DPS + 100 golpes.' },
+    { id: 'grito', icon: '📯', name: 'Grito de Guerra', dur: 30, cd: 600, unlock: 45, desc: 'Golpes ×3 por 30s.' },
+    { id: 'muralha', icon: '🧱', name: 'Muralha do Tempo', dur: 15, cd: 900, unlock: 60, desc: 'Congela o relógio do chefe por 15s.' },
+    { id: 'ima', icon: '🧲', name: 'Ímã de Tesouros', dur: 30, cd: 1200, unlock: 80, desc: 'Baús Vivos aparecem muito mais por 30s.' },
+    { id: 'eco', icon: '⏪', name: 'Eco Temporal', dur: 0, cd: 3600, unlock: 100, desc: 'Recarrega na hora todas as outras habilidades.' },
+    { id: 'ascensao', icon: '🌟', name: 'Ascensão Gêmea', dur: 30, cd: 1800, unlock: 130, desc: 'Todo o dano ×5 por 30s.' },
   ];
+  const SKILL_KEYS = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'];
 
   const RELICS = [
     { id: 'egide', icon: '🏺', name: 'Égide Ancestral', desc: '+25% de todo o dano por nível.', cost: (l) => l + 1 },
     { id: 'bolsa', icon: '👝', name: 'Bolsa do Andarilho', desc: '+20% de ouro por nível.', cost: (l) => l + 1 },
-    { id: 'mao', icon: '✋', name: 'Mão Incansável', desc: '+1 golpe automático por segundo.', cost: (l) => (l + 1) * 2, max: 20 },
+    { id: 'mao', icon: '🧤', name: 'Luvas do Escudeiro', desc: 'Escudeiros trabalham 20% mais rápido.', cost: (l) => (l + 1) * 2, max: 20 },
     { id: 'ampulheta', icon: '⏳', name: 'Ampulheta de Bronze', desc: '+3s para derrotar chefes.', cost: (l) => Math.pow(2, l), max: 10 },
+    { id: 'pressa', icon: '📜', name: 'Pergaminho da Pressa', desc: 'Habilidades recarregam 4% mais rápido.', cost: (l) => 2 + l * 2, max: 15 },
     { id: 'ferreiro', icon: '🔨', name: 'Bênção do Ferreiro', desc: 'Forjar escudos fica 4% mais barato.', cost: (l) => 2 + l * 2, max: 15 },
     { id: 'tesouro', icon: '🗝️', name: 'Faro de Tesouro', desc: '+1% de chance de aparecer um Baú Vivo.', cost: (l) => 3 + l, max: 10 },
   ];
 
+  // Escudeiros (auto clickers): comprados com gemas, ficam após renascer
+  const AC_COSTS = [3, 8, 15, 25, 40, 60, 90, 130, 180, 250];
+  const AC_BASE_RATE = 5;
+  const FINAL_ZONE = 500;
+
   const BIOMES = [
-    { name: 'Campos Verdejantes', sky: ['#7ec0ff', '#d6efff'], hills: ['#8fcf7a', '#6eb35a'], ground: '#5fa83c', dirt: '#7a5a34', fx: 'leaves', clouds: true, sun: '#fff6c0',
+    { name: 'Campos Verdejantes', lore: 'Onde tudo começa: gosmas e lobos rondam as fazendas de Égide.', sky: ['#7ec0ff', '#d6efff'], hills: ['#8fcf7a', '#6eb35a'], ground: '#5fa83c', dirt: '#7a5a34', fx: 'leaves', clouds: true, sun: '#fff6c0',
       monsters: [['Gosma', 'slime', '#6ad04a'], ['Cogumelo Raivoso', 'mushroom', '#d9473f'], ['Lobo Cinzento', 'beast', '#8a8f99']] },
-    { name: 'Floresta Sombria', sky: ['#1e3a2e', '#5f8a66'], hills: ['#2f5a3a', '#244a2e'], ground: '#2f5a2a', dirt: '#3e2f22', fx: 'fireflies', moon: '#e8f5d0',
+    { name: 'Floresta Sombria', lore: 'As árvores sussurram. Algo voa entre os galhos.', sky: ['#1e3a2e', '#5f8a66'], hills: ['#2f5a3a', '#244a2e'], ground: '#2f5a2a', dirt: '#3e2f22', fx: 'fireflies', moon: '#e8f5d0',
       monsters: [['Morcego Noturno', 'bat', '#5b3f7a'], ['Espírito do Bosque', 'ghost', '#9fe0c0'], ['Lobo Sombrio', 'beast', '#3e3a52']] },
-    { name: 'Cavernas de Cristal', sky: ['#15142b', '#3a3670'], hills: ['#2c2a52', '#232145'], ground: '#4a4560', dirt: '#2f2b40', fx: 'sparkle', stars: true, crystals: true,
+    { name: 'Cavernas de Cristal', lore: 'Cristais brilham no escuro e golems guardam cada veio.', sky: ['#15142b', '#3a3670'], hills: ['#2c2a52', '#232145'], ground: '#4a4560', dirt: '#2f2b40', fx: 'sparkle', stars: true, crystals: true,
       monsters: [['Golem de Cristal', 'golem', '#7fd6ff'], ['Olho Errante', 'eye', '#c86bff'], ['Gosma Cristalina', 'slime', '#58e0e0']] },
-    { name: 'Deserto Escaldante', sky: ['#f3a54e', '#ffe7a8'], hills: ['#e6b46a', '#d49a50'], ground: '#dcae62', dirt: '#b5823e', fx: 'dust', sun: '#fff1b0',
+    { name: 'Deserto Escaldante', lore: 'O sol castiga. Nas dunas, os mortos ainda caminham.', sky: ['#f3a54e', '#ffe7a8'], hills: ['#e6b46a', '#d49a50'], ground: '#dcae62', dirt: '#b5823e', fx: 'dust', sun: '#fff1b0',
       monsters: [['Chacal de Areia', 'beast', '#c08a4a'], ['Múmia Errante', 'ghost', '#e8dcb5'], ['Golem de Arenito', 'golem', '#d2a35f']] },
-    { name: 'Pântano Pútrido', sky: ['#3d4a32', '#8a9a66'], hills: ['#4f6038', '#3e4d2c'], ground: '#4a5a30', dirt: '#33301e', fx: 'spores',
+    { name: 'Pântano Pútrido', lore: 'O ar pesa. Cada passo afunda na lama tóxica.', sky: ['#3d4a32', '#8a9a66'], hills: ['#4f6038', '#3e4d2c'], ground: '#4a5a30', dirt: '#33301e', fx: 'spores',
       monsters: [['Gosma Tóxica', 'slime', '#9acd32'], ['Cogumelo Venenoso', 'mushroom', '#8a4fbf'], ['Olho do Lodo', 'eye', '#7aa83a']] },
-    { name: 'Tundra Congelada', sky: ['#8fb9dc', '#eef7ff'], hills: ['#dbe9f5', '#c3d8ea'], ground: '#e9f3fb', dirt: '#9fb5c8', fx: 'snow', clouds: true,
+    { name: 'Tundra Congelada', lore: 'Um vento cortante. Os escudos de Flistaile ficam cobertos de gelo.', sky: ['#8fb9dc', '#eef7ff'], hills: ['#dbe9f5', '#c3d8ea'], ground: '#e9f3fb', dirt: '#9fb5c8', fx: 'snow', clouds: true,
       monsters: [['Lobo do Gelo', 'beast', '#cfe6f5'], ['Golem de Gelo', 'golem', '#9fd8ff'], ['Espectro Gélido', 'ghost', '#bfe8ff']] },
-    { name: 'Cratera Vulcânica', sky: ['#2a0a08', '#a3361a'], hills: ['#4a1a12', '#33110c'], ground: '#3b2420', dirt: '#24130f', fx: 'embers', lava: true,
+    { name: 'Cratera Vulcânica', lore: 'O chão ferve. Até as gosmas aqui são de magma.', sky: ['#2a0a08', '#a3361a'], hills: ['#4a1a12', '#33110c'], ground: '#3b2420', dirt: '#24130f', fx: 'embers', lava: true,
       monsters: [['Gosma de Magma', 'slime', '#ff6a1a'], ['Morcego Ígneo', 'bat', '#ff4a2a'], ['Golem de Obsidiana', 'golem', '#3a2f45']] },
-    { name: 'Ruínas Celestes', sky: ['#6f7fff', '#ffd6f5'], hills: ['#c8bfff', '#b0a6f0'], ground: '#cfc8ec', dirt: '#9a90c8', fx: 'motes', clouds: true,
+    { name: 'Ruínas Celestes', lore: 'Templos flutuam acima das nuvens, vigiados por olhos dourados.', sky: ['#6f7fff', '#ffd6f5'], hills: ['#c8bfff', '#b0a6f0'], ground: '#cfc8ec', dirt: '#9a90c8', fx: 'motes', clouds: true,
       monsters: [['Olho Celestial', 'eye', '#ffd84a'], ['Guardião Alado', 'bat', '#f0f0ff'], ['Espírito Astral', 'ghost', '#c9a8ff']] },
-    { name: 'Abismo Eterno', sky: ['#05030d', '#2a0f3d'], hills: ['#1a0a2a', '#12061f'], ground: '#1a0f26', dirt: '#0d0714', fx: 'void', stars: true,
+    { name: 'Abismo Eterno', lore: 'O fim do mundo conhecido. Lá no fundo, algo devora estrelas.', sky: ['#05030d', '#2a0f3d'], hills: ['#1a0a2a', '#12061f'], ground: '#1a0f26', dirt: '#0d0714', fx: 'void', stars: true,
       monsters: [['Devorador', 'beast', '#6a1a8a'], ['Olho do Vazio', 'eye', '#ff2a6a'], ['Sombra Primordial', 'ghost', '#4a3a7a']] },
   ];
-  const biomeIndex = (z) => Math.floor((z - 1) / 10) % BIOMES.length;
+  // as últimas 10 zonas antes do chefe final são sempre no Abismo
+  const biomeIndex = (z) => (z > FINAL_ZONE - 10 && z <= FINAL_ZONE ? BIOMES.length - 1 : Math.floor((z - 1) / 10) % BIOMES.length);
   const biomeOf = (z) => BIOMES[biomeIndex(z)];
+
+  // Conquistas: cada uma dá +3% de todo o dano; algumas dão gemas
+  const ACH = [];
+  {
+    const add = (id, icon, name, desc, test, gems) => ACH.push({ id, icon, name, desc, test, gems: gems || 0 });
+    [10, 25, 50, 100, 150, 200, 300, 400].forEach((z, i) => add('z' + z, '🗺️', `Explorador ${roman(i + 1)}`, `Alcance a zona ${z}.`, () => S.stats.maxZoneEver >= z, [1, 1, 2, 2, 3, 3, 4, 5][i]));
+    add('final', '👑', 'Fim do Devorador', `Derrote o chefe final da zona ${FINAL_ZONE}.`, () => S.stats.finalBeaten, 15);
+    [100, 1e3, 1e4, 1e5, 1e6].forEach((n, i) => add('k' + n, '⚔️', `Caçador ${roman(i + 1)}`, `Derrote ${fmt(n)} criaturas.`, () => S.stats.kills >= n, i >= 2 ? 1 : 0));
+    [10, 100, 1000, 5000].forEach((n, i) => add('b' + n, '☠️', `Matador de Chefes ${roman(i + 1)}`, `Derrote ${fmt(n)} chefes.`, () => S.stats.bosses >= n, i >= 1 ? 2 : 0));
+    [1000, 1e4, 1e5, 1e6].forEach((n, i) => add('c' + n, '👆', `Braço de Ferro ${roman(i + 1)}`, `Dê ${fmt(n)} golpes com as próprias mãos.`, () => S.stats.clicks >= n, i >= 1 ? 1 : 0));
+    [1e6, 1e15, 1e30, 1e60, 1e100].forEach((n, i) => add('g' + i, '💰', `Tesoureiro ${roman(i + 1)}`, `Junte ${fmt(n)} de ouro no total.`, () => S.stats.goldTotal >= n, i >= 2 ? 2 : 0));
+    [1, 5, 20, 50].forEach((n, i) => add('p' + n, '✨', `Renascido ${roman(i + 1)}`, `Renasça ${n} vez${n > 1 ? 'es' : ''}.`, () => S.stats.prestiges >= n, 2));
+    [10, 100, 500].forEach((n, i) => add('t' + n, '🗝️', `Caçador de Tesouros ${roman(i + 1)}`, `Abra ${n} Baús Vivos.`, () => S.stats.chests >= n, 1));
+    add('mithril', '🛡️', 'Mithril nos Dois Braços', 'Forje os dois escudos até Mithril.', () => Math.min(S.shields.left, S.shields.right) >= 7, 2);
+    add('eterno', '💠', 'Escudos Eternos', 'Forje os dois escudos até Eterno.', () => Math.min(S.shields.left, S.shields.right) >= 13, 5);
+    add('ac1', '🧤', 'Primeiro Escudeiro', 'Contrate um Escudeiro.', () => S.ac.owned >= 1);
+    add('ac10', '🎖️', 'Exército de Escudeiros', 'Tenha 10 Escudeiros.', () => S.ac.owned >= 10, 5);
+    add('skills', '📖', 'Mestre das Técnicas', 'Use cada uma das 10 habilidades.', () => Object.keys(S.stats.skillUses || {}).length >= SKILLS.length, 3);
+    add('lenda', '🏋️', 'Lenda do Treino', 'Leve um treino ao nível 1000.', () => Object.values(S.trainings).some((l) => l >= 1000), 3);
+  }
+
+  // Parâmetros de balanceamento (ajustados com tools/sim.html)
+  const BAL = {
+    hpGrowth: 1.55, hpLateGrowth: 1.0, hpLateStart: 100, goldDiv: 5.5, bossHp: 7, finalHp: 10,
+    soulsBase: 10, soulsGrowth: 1.22, soulsStep: 5, ms25: 2, ms100: 1, shieldMult: 1.6, shieldCost: 10,
+  };
 
   // ======================================================================
   // Estado
   // ======================================================================
   function defaultState() {
     return {
-      v: 1,
+      v: 2,
       gold: 0,
       zone: 1,
       maxZone: 1,
@@ -154,10 +197,13 @@
       shields: { left: 0, right: 0 },
       relics: {},
       souls: 0,
+      gems: 0,
+      ac: { owned: 0, assign: [] },
+      achievements: {},
       skills: {},
       buyMode: 1,
       settings: { sound: true, numbers: true },
-      stats: { clicks: 0, kills: 0, bosses: 0, goldTotal: 0, prestiges: 0, maxZoneEver: 1, playTime: 0, soulsTotal: 0, chests: 0, startedAt: Date.now() },
+      stats: { clicks: 0, kills: 0, bosses: 0, goldTotal: 0, prestiges: 0, maxZoneEver: 1, playTime: 0, soulsTotal: 0, chests: 0, gemsTotal: 0, gemZone: 0, finalBeaten: false, skillUses: {}, startedAt: Date.now() },
       seenIntro: false,
       lastSave: Date.now(),
     };
@@ -183,6 +229,11 @@
     S.maxZone = Math.max(1, Math.floor(num(S.maxZone, 1)));
     S.zone = Math.min(S.maxZone, Math.max(1, Math.floor(num(S.zone, 1))));
     S.souls = Math.max(0, Math.floor(num(S.souls, 0)));
+    S.gems = Math.max(0, Math.floor(num(S.gems, 0)));
+    S.ac.owned = Math.max(0, Math.min(AC_COSTS.length, Math.floor(num(S.ac.owned, 0))));
+    if (!Array.isArray(S.ac.assign)) S.ac.assign = [];
+    S.ac.assign.length = S.ac.owned;
+    for (let i = 0; i < S.ac.owned; i++) if (typeof S.ac.assign[i] !== 'string') S.ac.assign[i] = null;
     if (![1, 10, 25, 'max'].includes(S.buyMode)) S.buyMode = 1;
   }
   function save() {
@@ -204,65 +255,110 @@
   // ======================================================================
   // Fórmulas
   // ======================================================================
+  let clock = () => Date.now();
   const lvl = (id) => S.trainings[id] || 0;
   const rl = (id) => S.relics[id] || 0;
-  const milestone = (l) => Math.pow(2, Math.floor(l / 25)) * Math.pow(2, Math.floor(l / 100));
+  const milestone = (l) => Math.pow(BAL.ms25, Math.floor(l / 25)) * Math.pow(BAL.ms100, Math.floor(l / 100));
   const nextMilestone = (l) => (Math.floor(l / 25) + 1) * 25;
-  const shieldMult = (l) => Math.pow(1.8, l);
+  const shieldMult = (l) => Math.pow(BAL.shieldMult, l);
   const harmony = () => 1 + 0.15 * Math.min(S.shields.left, S.shields.right);
-  const globalMult = () => (1 + 0.1 * S.souls) * (1 + 0.25 * rl('egide')) * harmony();
+  const achCount = () => { let n = 0; for (const k in S.achievements) if (S.achievements[k]) n++; return n; };
+  const achMult = () => 1 + 0.03 * achCount();
+  const globalMult = () => (1 + 0.1 * S.souls) * (1 + 0.25 * rl('egide')) * harmony() * achMult();
   const trainPower = (t, l) => t.per * l * milestone(l);
+  const buffAll = () => (skillActive('ascensao') ? 5 : 1);
 
-  function monsterHP(z) { return Math.ceil(10 * Math.pow(1.47, z - 1) * (z > 100 ? Math.pow(1.03, z - 100) : 1)); }
-  function baseGold(z) { return Math.max(1, Math.ceil(monsterHP(z) / 5.5)); }
+  function monsterHP(z) {
+    return Math.ceil(10 * Math.pow(BAL.hpGrowth, z - 1) * (z > BAL.hpLateStart ? Math.pow(BAL.hpLateGrowth, z - BAL.hpLateStart) : 1));
+  }
+  function baseGold(z) { return Math.max(1, Math.ceil(monsterHP(z) / BAL.goldDiv)); }
   const isBoss = (z) => z % 5 === 0;
 
   function rawDps() { let s = 0; for (const t of TRAININGS) if (t.type === 'dps') s += trainPower(t, lvl(t.id)); return s; }
   function baseDps() { return rawDps() * shieldMult(S.shields.right) * globalMult(); }
-  function dps() { return baseDps() * (skillActive('furia') ? 3 : 1); }
-  function clickDmg() {
+  function dps() { return baseDps() * (skillActive('furia') ? 2 : 1) * buffAll(); }
+  function baseClick() {
     return (1 + trainPower(TRAININGS[0], lvl('forca'))) * shieldMult(S.shields.left) * globalMult() + baseDps() * 0.01 * lvl('sinergia');
   }
+  function clickDmg() { return baseClick() * (skillActive('grito') ? 3 : 1) * buffAll(); }
   function critChance() { return Math.min(0.5, 0.01 * lvl('precisao')) + (skillActive('falcao') ? 0.5 : 0); }
   function critMult() { return 3 + 0.5 * lvl('impacto'); }
   function goldMult(withBuff = true) { return Math.pow(1.15, lvl('ganancia')) * (1 + 0.2 * rl('bolsa')) * (withBuff && skillActive('ouro') ? 3 : 1); }
-  function autoClicks() { return rl('mao') + (skillActive('rajada') ? 10 : 0); }
+  function autoClicks() { return skillActive('rajada') ? 10 : 0; }
+  function acRate() { return AC_BASE_RATE * (1 + 0.2 * rl('mao')); }
+  function acOn(target) { let n = 0; for (let i = 0; i < S.ac.owned; i++) if (S.ac.assign[i] === target) n++; return n; }
   function bossTime() { return BOSS_TIME + 3 * rl('ampulheta'); }
-  function chestChance() { return 0.015 + 0.01 * rl('tesouro'); }
+  function chestChance() { return Math.min(0.6, 0.015 + 0.01 * rl('tesouro') + (skillActive('ima') ? 0.3 : 0)); }
+  function cdMult() { return 1 - 0.04 * rl('pressa'); }
   function shieldCost(side) {
     const l = S.shields[side];
-    return (side === 'left' ? 80 : 300) * Math.pow(10, l) * (1 - 0.04 * rl('ferreiro'));
+    return (side === 'left' ? 80 : 300) * Math.pow(BAL.shieldCost, l) * (1 - 0.04 * rl('ferreiro'));
   }
-  function soulsFor(z) { return z < PRESTIGE_ZONE ? 0 : Math.floor(Math.pow(z - 20, 1.5) / 3); }
+  function soulsFor(z) { return z < PRESTIGE_ZONE ? 0 : Math.floor(BAL.soulsBase * Math.pow(BAL.soulsGrowth, (z - PRESTIGE_ZONE) / BAL.soulsStep)); }
   function costBulk(base, g, l, n) { return base * Math.pow(g, l) * (Math.pow(g, n) - 1) / (g - 1); }
   function maxAffordable(base, g, l, gold) {
     const first = base * Math.pow(g, l);
     if (gold < first) return 0;
     return Math.floor(Math.log(gold * (g - 1) / first + 1) / Math.log(g));
   }
-  function avgClick() { const c = critChance(); return clickDmg() * (1 - Math.min(1, c) + Math.min(1, c) * critMult()); }
+  function avgClick() { const c = Math.min(1, critChance()); return clickDmg() * (1 - c + c * critMult()); }
 
   // ======================================================================
   // Habilidades
   // ======================================================================
-  function skillActive(id) { const s = S.skills[id]; return !!s && s.until > Date.now(); }
-  function skillReady(id) { const s = S.skills[id]; return !s || s.ready <= Date.now(); }
-  function useSkill(id) {
+  function skillActive(id) { const s = S.skills[id]; return !!s && s.until > clock(); }
+  function skillReady(id) { const s = S.skills[id]; return !s || s.ready <= clock(); }
+  function useSkill(id, silent) {
     const sk = SKILLS.find((s) => s.id === id);
-    if (!sk || S.maxZone < sk.unlock || !skillReady(id)) return;
-    const now = Date.now();
-    S.skills[id] = { until: now + sk.dur * 1000, ready: now + sk.cd * 1000 };
+    if (!sk || S.maxZone < sk.unlock || !skillReady(id)) return false;
+    const now = clock();
+    S.skills[id] = { until: now + sk.dur * 1000, ready: now + sk.cd * cdMult() * 1000 };
+    S.stats.skillUses[id] = (S.stats.skillUses[id] || 0) + 1;
     Sfx.skill();
     if (id === 'sismo') {
       shakeT = 0.6;
       if (M && !M.dying) {
-        const d = baseDps() * 30 + clickDmg() * 50;
+        const d = (baseDps() * 60 + baseClick() * 100) * buffAll();
         addFloat(MX, GROUND - 170, fmt(d), '#ffb14a', 34);
         burst(MX, GROUND - 60, '#ffb14a', 30);
         damage(d, false);
       }
     }
-    toast(`${sk.icon} ${sk.name}!`);
+    if (id === 'eco') {
+      for (const o of SKILLS) if (o.id !== 'eco' && S.skills[o.id]) S.skills[o.id].ready = now;
+    }
+    if (!silent) toast(`${sk.icon} ${sk.name}!`);
+    return true;
+  }
+
+  // ======================================================================
+  // Gemas, escudeiros e conquistas
+  // ======================================================================
+  function addGems(n, why) {
+    if (n <= 0) return;
+    S.gems += n;
+    S.stats.gemsTotal += n;
+    toast(`💎 +${n} gema${n > 1 ? 's' : ''}${why ? ' — ' + why : ''}`, 'gem');
+  }
+  function acNextCost() { return S.ac.owned < AC_COSTS.length ? AC_COSTS[S.ac.owned] : Infinity; }
+  function buyAutoclicker() {
+    const c = acNextCost();
+    if (S.gems < c) return;
+    S.gems -= c;
+    S.ac.owned++;
+    S.ac.assign.push(null);
+    Sfx.buy();
+    toast('🧤 Novo Escudeiro! Arraste-o para o monstro, uma habilidade ou um botão de compra.', 'gold');
+    acDirty = true;
+  }
+  function checkAchievements() {
+    for (const a of ACH) {
+      if (S.achievements[a.id] || !a.test()) continue;
+      S.achievements[a.id] = true;
+      toast(`🏆 Conquista: ${a.name}`, 'gold');
+      if (a.gems) addGems(a.gems);
+      shopDirty = true;
+    }
   }
 
   // ======================================================================
@@ -272,22 +368,24 @@
   function spawnMonster() {
     const z = S.zone;
     const boss = isBoss(z);
+    const final = z === FINAL_ZONE;
     const chest = !boss && Math.random() < chestChance();
     const b = biomeOf(z);
     const cycle = Math.floor((z - 1) / (10 * BIOMES.length));
     let spec;
-    if (chest) spec = ['Baú Vivo', 'chest', '#b07a3a'];
+    if (final) spec = ['Devorador de Mundos', 'eye', '#ff2a6a'];
+    else if (chest) spec = ['Baú Vivo', 'chest', '#b07a3a'];
     else if (boss) spec = b.monsters[Math.floor(z / 5) % 3];
     else spec = b.monsters[Math.floor(Math.random() * 3)];
     let name = spec[0];
-    if (boss) name += z % 10 === 0 ? ' Soberano' : ' Colossal';
-    if (cycle > 0) name += ' ' + roman(cycle + 1);
-    const hp = monsterHP(z) * (boss ? 7 : 1) * (chest ? 0.5 : 1);
+    if (boss && !final) name += z % 10 === 0 ? ' Soberano' : ' Colossal';
+    if (cycle > 0 && !final) name += ' ' + roman(Math.min(cycle + 1, 39));
+    const hp = monsterHP(z) * (final ? BAL.finalHp : boss ? BAL.bossHp : 1) * (chest ? 0.5 : 1);
     M = {
-      name, shape: spec[1], color: spec[2], boss, chest, hp, maxHp: hp,
-      gold: baseGold(z) * (boss ? 6 : 1) * (chest ? 15 : 1),
-      size: boss ? 1.4 : 0.9 + Math.random() * 0.2,
-      hit: 0, dying: 0, spawn: 0, time: boss ? bossTime() : 0, seed: Math.random() * 10,
+      name, shape: spec[1], color: spec[2], boss, chest, final, hp, maxHp: hp,
+      gold: baseGold(z) * (final ? 100 : boss ? 6 : 1) * (chest ? 15 : 1),
+      size: final ? 1.8 : boss ? 1.4 : 0.9 + Math.random() * 0.2,
+      hit: 0, dying: 0, spawn: 0, time: boss ? bossTime() * (final ? 2 : 1) : 0, seed: Math.random() * 10,
     };
     hudDirty = true;
     puff(MX, GROUND - 30, 6);
@@ -315,6 +413,13 @@
     Sfx.coin();
     if (M.boss) toast(`☠ ${M.name} derrotado!`, 'gold');
     if (M.chest) toast(`🗝️ Baú Vivo! +${fmt(g)} de ouro`, 'gold');
+    // gemas: todo chefe derrotado pela primeira vez dá 1 gema; depois, chance pequena
+    if (M.boss) {
+      if (S.zone > S.stats.gemZone) { S.stats.gemZone = S.zone; addGems(M.final ? 10 : 1, 'primeiro chefe'); }
+      else if (Math.random() < 0.04) addGems(1);
+    }
+    if (M.chest && Math.random() < 0.03) addGems(1);
+    if (M.final && !S.stats.finalBeaten) { S.stats.finalBeaten = true; setTimeout(showEnding, 900); }
     if (S.zone === S.maxZone) {
       if (M.boss) unlockNext();
       else if (++S.zoneKills >= KILLS_PER_ZONE) unlockNext();
@@ -323,6 +428,7 @@
   }
 
   function unlockNext() {
+    const firstTime = S.maxZone + 1 > S.stats.maxZoneEver;
     S.maxZone++;
     S.zoneKills = 0;
     if (S.maxZone > S.stats.maxZoneEver) S.stats.maxZoneEver = S.maxZone;
@@ -331,7 +437,11 @@
     for (const t of TRAININGS) if (t.unlock === S.maxZone && t.unlock > 1) toast(`Novo treino: ${t.icon} ${t.name}`);
     for (const a of ATTRS) if (a.unlock === S.maxZone && a.unlock > 1) toast(`Novo atributo: ${a.icon} ${a.name}`);
     if (S.maxZone === PRESTIGE_ZONE) toast('✨ Renascimento liberado na aba Relíquias!', 'gold');
-    if ((S.maxZone - 1) % 10 === 0) toast(`Você chegou a: ${biomeOf(S.maxZone).name}`);
+    if (biomeIndex(S.maxZone) !== biomeIndex(S.maxZone - 1)) {
+      const b = biomeOf(S.maxZone);
+      toast(firstTime ? `${b.name}: ${b.lore}` : `Você chegou a: ${b.name}`);
+    }
+    if (S.maxZone === FINAL_ZONE) toast('👁 O Devorador de Mundos espera por você...', 'bad');
     shopDirty = true;
     zonesDirty = true;
   }
@@ -346,16 +456,16 @@
 
   function attack(auto) {
     if (!auto) { S.stats.clicks++; if (introClicks < 6) introClicks++; }
-    if (!M || M.dying > 0 || M.spawn < 0.5) { if (!auto) hero.attack = 1; return; }
+    if (!M || M.dying > 0 || M.spawn < 0.5) { if (!auto) heroCharge(); return; }
     const crit = Math.random() < critChance();
     const d = clickDmg() * (crit ? critMult() : 1);
-    if (!auto || hero.attack < 0.3) hero.attack = 1;
+    if (!auto) heroCharge(); else if (hero.bash < 0.3 && hero.pos > 0.9) hero.bash = 0.7;
     const fx = MX + (Math.random() - 0.5) * 80, fy = GROUND - 110 * M.size - Math.random() * 40;
     if (crit) addFloat(fx, fy, 'CRÍTICO ' + fmt(d), '#ff9a3c', 26);
-    else if (!auto || Math.random() < 0.35) addFloat(fx, fy, fmt(d), '#ffffff', auto ? 16 : 20);
+    else if (!auto || Math.random() < 0.25) addFloat(fx, fy, fmt(d), '#ffffff', auto ? 16 : 20);
     sparks(MX - 40 * M.size, GROUND - 70 * M.size, crit ? '#ffb14a' : '#fff6c0', crit ? 10 : 5);
-    if (!auto || Math.random() < 0.3) impact(MX - 40 * M.size, GROUND - 75 * M.size, crit);
-    if (!auto || Math.random() < 0.3) Sfx.hit(crit);
+    if (!auto || Math.random() < 0.25) impact(MX - 40 * M.size, GROUND - 75 * M.size, crit);
+    if (!auto || Math.random() < 0.2) Sfx.hit(crit);
     damage(d, false);
   }
 
@@ -373,7 +483,7 @@
     let z = S.zone;
     if (isBoss(z) && z > 1) z--;
     const hp = monsterHP(z);
-    const eff = baseDps() + rl('mao') * avgClick();
+    const eff = baseDps() + acOn('arena') * acRate() * avgClick();
     const kps = Math.min(MAX_KILLS_PER_SEC, eff / hp);
     const kills = Math.floor(kps * secs);
     const gold = kills * baseGold(z) * goldMult(false);
@@ -391,20 +501,43 @@
     if (gain <= 0) return;
     const keep = {
       souls: S.souls + gain, relics: S.relics, settings: S.settings, seenIntro: true, buyMode: S.buyMode,
+      gems: S.gems, ac: S.ac, achievements: S.achievements,
       stats: Object.assign({}, S.stats, { prestiges: S.stats.prestiges + 1, soulsTotal: S.stats.soulsTotal + gain }),
     };
     S = Object.assign(defaultState(), keep);
     save();
     spawnMonster();
-    shopDirty = true; zonesDirty = true;
-    toast(`✨ Flistaile renasceu com +${gain} Égides!`, 'gold');
+    shopDirty = true; zonesDirty = true; acDirty = true;
+    toast(`✨ Flistaile renasceu com +${fmt(gain)} Égides!`, 'gold');
     Sfx.skill();
   }
 
   // ======================================================================
   // Efeitos visuais
   // ======================================================================
-  const hero = { attack: 0 };
+  const hero = { pos: 0, vel: 0, step: 0, bash: 0, dashT: 0, pendingBash: false, x: HX };
+  // clique: Flistaile corre até o monstro e dá uma escudada; se continuar clicando, fica lá golpeando
+  function heroCharge() {
+    hero.dashT = 0.55;
+    if (hero.pos >= 0.9) hero.bash = 1; else hero.pendingBash = true;
+  }
+  function updateHero(dt) {
+    const prev = hero.pos;
+    hero.dashT = Math.max(0, hero.dashT - dt);
+    if (hero.dashT > 0) hero.pos = Math.min(1, hero.pos + dt * 5.5);
+    else hero.pos = Math.max(0, hero.pos - dt * 2.4);
+    const v = dt > 0 ? (hero.pos - prev) / dt : 0;
+    hero.vel += ((v / 5.5) * 1.6 - hero.vel) * Math.min(1, dt * 20);
+    if (Math.abs(v) > 0.01) hero.step += dt * 16;
+    hero.bash = Math.max(0, hero.bash - dt * 5);
+    if (hero.pendingBash && hero.pos >= 0.9) {
+      hero.pendingBash = false;
+      hero.bash = 1;
+      shakeT = Math.max(shakeT, 0.18);
+      if (M && !M.dying) impact(heroX() + 100, GROUND - 76, false);
+    }
+    hero.x = heroX();
+  }
   let floats = [], parts = [], projs = [];
   let shakeT = 0, critFlash = 0, projTimer = 0, dpsAcc = 0, dpsTimer = 0, autoAcc = 0, introClicks = 0;
 
@@ -456,7 +589,7 @@
   // ======================================================================
   // Canvas e desenho
   // ======================================================================
-  const cv = document.getElementById('cv');
+  const cv = document.getElementById('cv') || document.createElement('canvas');
   const ctx = cv.getContext('2d');
   let sx = 1, sy = 1;
   function resize() {
@@ -805,80 +938,163 @@
     g.addColorStop(0, '#f4f7fb'); g.addColorStop(0.45, '#b4bfcc'); g.addColorStop(1, '#5f6b7e');
     return g;
   }
+  // posição de contato: na frente do monstro, com o escudo encostando nele
+  function heroContactX() { return M ? MX - 78 - 58 * M.size : MX - 150; }
+  const easeIO = (k) => (k < 0.5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2);
+  function heroX() { return HX + easeIO(hero.pos) * (heroContactX() - HX); }
+
+  function drawLeg(hipX, ang, bend) {
+    ctx.save(); ctx.translate(hipX, -46); ctx.rotate(ang);
+    // coxa e canela
+    ctx.fillStyle = '#34395a'; rrect(-6.5, -2, 13, 26, 5);
+    ctx.save(); ctx.translate(0, 22); ctx.rotate(bend);
+    ctx.fillStyle = '#34395a'; rrect(-6, -2, 12, 14, 4);
+    // bota com bico para a frente
+    const bg = ctx.createLinearGradient(0, 8, 0, 24); bg.addColorStop(0, '#8a5a34'); bg.addColorStop(1, '#4e3018');
+    ctx.fillStyle = bg;
+    ctx.beginPath(); ctx.moveTo(-8, 8); ctx.lineTo(7, 8); ctx.quadraticCurveTo(9, 16, 17, 17); ctx.quadraticCurveTo(21, 19, 19, 24); ctx.lineTo(-8, 24); ctx.closePath(); fillOL();
+    ctx.fillStyle = '#ffd24a'; noOL(() => rrect(-7, 10, 13, 3, 1.5));
+    ctx.restore();
+    // joelheira
+    ctx.fillStyle = steel(-7, 16, 7, 28); ellipse(0.5, 22, 8, 6.5);
+    ctx.restore();
+  }
+
   function drawHero(t) {
-    const atk = hero.attack > 0 ? Math.sin((1 - hero.attack) * Math.PI) : 0;
-    const lunge = atk * 58;
-    const br = Math.sin(t * 2.6);
+    const hx = heroX();
+    const bash = hero.bash > 0 ? Math.sin((1 - hero.bash) * Math.PI) : 0;
+    const run = Math.min(1, Math.abs(hero.vel));
+    const stride = Math.sin(hero.step) * run;
+    const idle = 1 - run;
+    const br = Math.sin(t * 2.6) * idle;
+    const hop = -Math.abs(Math.sin(hero.step)) * 6 * run;
+    const lean = Math.max(-0.12, Math.min(0.22, hero.vel * 0.16)) + bash * 0.16;
     ctx.save();
-    ctx.translate(HX + lunge, GROUND);
-    ctx.fillStyle = 'rgba(0,0,0,.3)'; ellipse(0, 2, 50 - atk * 8, 10);
+    ctx.translate(hx, GROUND);
+    ctx.fillStyle = 'rgba(0,0,0,.3)'; ellipse(0, 2, 46 + bash * 6, 10);
+    ctx.translate(0, hop);
+    ctx.rotate(lean);
     outline(true);
-    const wave = Math.sin(t * 4) * 6 + atk * 16;
+    const wave = Math.sin(t * 4) * 5 + run * 16 + bash * 10;
+
     // capa
-    const cg = ctx.createLinearGradient(-10, -100, -50, -20);
-    cg.addColorStop(0, '#e0483c'); cg.addColorStop(1, '#7a1a16');
+    const cg = ctx.createLinearGradient(-8, -104, -52, -24);
+    cg.addColorStop(0, '#e8503f'); cg.addColorStop(1, '#7a1a16');
     ctx.fillStyle = cg;
-    ctx.beginPath(); ctx.moveTo(-10, -100 + br);
-    ctx.quadraticCurveTo(-38 - wave, -66, -52 - wave, -16);
-    ctx.quadraticCurveTo(-38 - wave * 0.6, -24, -28, -16);
-    ctx.quadraticCurveTo(-20, -56, -2, -96 + br); ctx.closePath(); fillOL();
-    // braço e escudo de trás (mão direita)
-    limb(-6, -90 + br, -22, -100 - atk * 6, '#24507f', 10);
-    ctx.save(); ctx.translate(-34, -104 - atk * 8 + br); ctx.rotate(-0.3 - atk * 0.25); drawShield(S.shields.right, 50, 62, t, true); ctx.restore();
-    // pernas
-    const step = atk * 12;
-    for (const lx of [-11, 9 + step]) {
-      ctx.fillStyle = '#3b3f5c'; rrect(lx - 6, -50, 13, 38, 4);
-      ctx.fillStyle = steel(lx - 6, -34, lx + 7, -24); ellipse(lx + 0.5, -30, 7.5, 6);
-      ctx.fillStyle = '#6b4426'; rrect(lx - 8, -14, 21, 14, 4);
-      ctx.fillStyle = '#3e2a18'; ctx.fillRect(lx - 7, -4, 19, 3);
-    }
+    ctx.beginPath(); ctx.moveTo(-6, -102 + br);
+    ctx.quadraticCurveTo(-34 - wave, -72, -50 - wave * 1.2, -26 + run * 6);
+    ctx.quadraticCurveTo(-40 - wave * 0.8, -20 + run * 4, -30 - wave * 0.4, -28);
+    ctx.quadraticCurveTo(-26, -34, -22, -24);
+    ctx.quadraticCurveTo(-18, -60, -2, -96 + br); ctx.closePath(); fillOL();
+    ctx.fillStyle = '#a8261e'; noOL(() => { ctx.beginPath(); ctx.moveTo(-8, -100 + br); ctx.quadraticCurveTo(-26 - wave * 0.6, -70, -36 - wave, -30); ctx.lineTo(-30 - wave * 0.8, -30); ctx.quadraticCurveTo(-20 - wave * 0.4, -66, -6, -98 + br); ctx.fill(); });
+
+    // braço e escudo de trás (mão direita), levantado em guarda
+    limb(-4, -92 + br, -22, -84 - bash * 6, '#24507f', 11);
+    ctx.save(); ctx.translate(-36, -82 - bash * 8 + br); ctx.rotate(-0.16 - bash * 0.2 - run * 0.15); drawShield(S.shields.right, 48, 60, t, true); ctx.restore();
+
+    // pernas (a de trás primeiro)
+    drawLeg(-8, -0.55 * stride - bash * 0.35, Math.max(0, stride) * 0.7 + bash * 0.2);
+    drawLeg(8, 0.55 * stride + bash * 0.45, Math.max(0, -stride) * 0.7);
+
     ctx.save(); ctx.translate(0, br * 0.8);
-    // saia da túnica
+    // saiote de placas
     ctx.fillStyle = '#2f6fb3';
-    ctx.beginPath(); ctx.moveTo(-21, -62); ctx.lineTo(21, -62); ctx.lineTo(25, -40); ctx.quadraticCurveTo(0, -34, -25, -40); ctx.closePath(); fillOL();
-    ctx.fillStyle = '#ffd24a'; ctx.fillRect(-22, -43, 44, 2.5);
-    // peitoral
-    ctx.fillStyle = steel(-22, -106, 22, -58); rrect(-21, -106, 42, 48, 12);
-    ctx.strokeStyle = 'rgba(255,255,255,.6)'; ctx.lineWidth = 2;
-    ctx.beginPath(); ctx.moveTo(-12, -100); ctx.quadraticCurveTo(-16, -84, -10, -70); ctx.stroke();
-    ctx.strokeStyle = '#c8891c'; ctx.lineWidth = 3;
-    ctx.beginPath(); ctx.moveTo(-7, -90); ctx.lineTo(1, -83); ctx.lineTo(9, -90); ctx.moveTo(-7, -82); ctx.lineTo(1, -75); ctx.lineTo(9, -82); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(-20, -60); ctx.lineTo(22, -60); ctx.quadraticCurveTo(28, -48, 24, -38); ctx.quadraticCurveTo(2, -32, -22, -38); ctx.quadraticCurveTo(-25, -48, -20, -60); ctx.closePath(); fillOL();
+    noOL(() => {
+      ctx.strokeStyle = '#1f4f88'; ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.moveTo(-6, -58); ctx.lineTo(-8, -36); ctx.moveTo(9, -58); ctx.lineTo(10, -35); ctx.stroke();
+      ctx.fillStyle = '#ffd24a'; ctx.fillRect(-21, -41, 45, 2.5);
+    });
+    // peitoral arredondado
+    const pg2 = ctx.createRadialGradient(10, -92, 4, 2, -82, 34);
+    pg2.addColorStop(0, '#ffffff'); pg2.addColorStop(0.35, '#c9d2de'); pg2.addColorStop(1, '#5f6b7e');
+    ctx.fillStyle = pg2;
+    ctx.beginPath(); ctx.moveTo(-17, -104); ctx.quadraticCurveTo(2, -110, 21, -104); ctx.quadraticCurveTo(28, -84, 21, -60); ctx.lineTo(-18, -60); ctx.quadraticCurveTo(-24, -84, -17, -104); ctx.closePath(); fillOL();
+    noOL(() => {
+      ctx.strokeStyle = 'rgba(70,80,100,.55)'; ctx.lineWidth = 1.5;
+      ctx.beginPath(); ctx.moveTo(4, -106); ctx.quadraticCurveTo(7, -84, 3, -62); ctx.stroke();
+      // emblema: duas divisas douradas
+      ctx.strokeStyle = '#d99a24'; ctx.lineWidth = 3.2; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+      ctx.beginPath(); ctx.moveTo(-3, -92); ctx.lineTo(5, -85); ctx.lineTo(13, -92); ctx.moveTo(-3, -84); ctx.lineTo(5, -77); ctx.lineTo(13, -84); ctx.stroke();
+    });
     // cinto
-    ctx.fillStyle = '#5a3a22'; rrect(-23, -63, 46, 9, 3);
-    ctx.fillStyle = '#ffd24a'; rrect(-5, -64.5, 10, 11, 2);
-    // cabeça
-    ctx.fillStyle = '#f2c79b'; ellipse(6, -119, 15, 16);
-    outline(false);
-    ctx.fillStyle = '#e9a37e'; ellipse(14, -110, 4, 2.5);
-    ctx.fillStyle = '#fff'; ellipse(13, -119, 3.4, 3.8);
-    ctx.fillStyle = '#20263a'; ellipse(14, -118.5, 2, 2.6);
-    ctx.fillStyle = '#fff'; ellipse(13.4, -119.6, 0.7, 0.7);
-    ctx.strokeStyle = '#5a3a22'; ctx.lineWidth = 2.2; ctx.lineCap = 'round';
-    ctx.beginPath(); ctx.moveTo(9, -125 + atk * 1.5); ctx.lineTo(17, -123.5 - atk); ctx.stroke();
-    outline(true);
-    // elmo
-    ctx.fillStyle = steel(-14, -142, 22, -112);
-    ctx.beginPath(); ctx.arc(5, -121, 20, Math.PI * 1.02, Math.PI * 2); ctx.lineTo(25, -118); ctx.lineTo(-15, -118); ctx.closePath(); fillOL();
-    ctx.fillStyle = '#8e99a8'; rrect(-17, -124, 44, 6, 2);
-    ctx.fillStyle = steel(12, -124, 18, -104); rrect(12, -124, 6, 20, 2);
-    outline(false);
-    ctx.fillStyle = '#ffd24a'; ellipse(-10, -121, 1.6, 1.6); ellipse(0, -121, 1.6, 1.6); ellipse(20, -121, 1.6, 1.6);
-    ctx.fillStyle = 'rgba(255,255,255,.7)'; ellipse(-4, -134, 6, 2.5, -0.4);
-    outline(true);
+    ctx.fillStyle = '#5a3a22'; rrect(-20, -64, 44, 9, 3);
+    ctx.fillStyle = '#ffd24a'; rrect(1, -65.5, 11, 12, 2.5);
+    noOL(() => { ctx.fillStyle = '#5a3a22'; ctx.fillRect(4, -62, 5, 6); });
+
+    // cabeça (mais redonda e um pouco maior)
+    ctx.save(); ctx.translate(4, -128); ctx.rotate(-lean * 0.4);
+    ctx.fillStyle = '#f2c79b'; ellipse(5, 3, 18, 18.5);
+    // rosto
+    noOL(() => {
+      ctx.fillStyle = 'rgba(255,140,120,.4)'; ellipse(15.5, 11, 4, 2.6);
+      const blink = (t % 4.2) > 4.05 ? 0.15 : 1;
+      ctx.fillStyle = '#ffffff'; ellipse(11.5, 3, 4.8, 5.8 * blink);
+      if (blink > 0.5) {
+        ctx.fillStyle = '#2b4a8a'; ellipse(13, 3.8, 3.2, 4);
+        ctx.fillStyle = '#0f1426'; ellipse(13.5, 4.2, 1.7, 2.2);
+        ctx.fillStyle = '#ffffff'; ellipse(11.8, 2, 1.3, 1.3);
+      }
+      ctx.strokeStyle = '#4a2a16'; ctx.lineWidth = 2.6; ctx.lineCap = 'round';
+      const frown = bash * 2 + run;
+      ctx.beginPath(); ctx.moveTo(6.5, -4 + frown * 0.6); ctx.lineTo(17, -3.5 - frown * 0.8); ctx.stroke();
+      // nariz
+      ctx.fillStyle = '#e4a77e'; ellipse(21, 8, 2.6, 2.2);
+      // boca: sorriso confiante, grito na escudada
+      ctx.strokeStyle = '#7a3a22'; ctx.lineWidth = 1.9;
+      if (bash > 0.3) { ctx.fillStyle = '#7a2a22'; ellipse(15, 15, 3.2, 2.8 * bash); }
+      else { ctx.beginPath(); ctx.moveTo(11, 14.5); ctx.quadraticCurveTo(15, 17, 18.5, 13.5); ctx.stroke(); }
+    });
+    // elmo de viseira aberta: cobre o topo e a nuca, deixa o rosto à mostra
+    ctx.fillStyle = steel(-16, -22, 20, 10);
+    ctx.beginPath();
+    ctx.moveTo(22, -8); ctx.quadraticCurveTo(20, -25, 2, -25); ctx.quadraticCurveTo(-21, -25, -20, -2);
+    ctx.lineTo(-19, 15); ctx.quadraticCurveTo(-11, 20, -3, 16); ctx.lineTo(-2, -2); ctx.quadraticCurveTo(7, -9, 22, -8);
+    ctx.closePath(); fillOL();
+    noOL(() => {
+      ctx.fillStyle = 'rgba(255,255,255,.75)'; ellipse(-7, -16, 8, 3.2, -0.35);
+      ctx.fillStyle = '#8e99a8'; ctx.fillRect(-18, -3, 16, 3);
+      ctx.fillStyle = '#ffd24a'; ellipse(-13, 6, 1.8, 1.8); ellipse(-8, 10, 1.8, 1.8);
+    });
+    // aba do elmo (testeira)
+    ctx.fillStyle = steel(-4, -14, 24, -8); rrect(-3, -14, 27, 6, 3);
     // penacho
-    const pg = ctx.createLinearGradient(0, -150, -36, -120);
-    pg.addColorStop(0, '#ff6a4a'); pg.addColorStop(1, '#a8221a');
-    ctx.fillStyle = pg;
-    ctx.beginPath(); ctx.moveTo(2, -140); ctx.quadraticCurveTo(-24 - wave * 0.5, -158, -38 - wave * 0.6, -126); ctx.quadraticCurveTo(-18, -138, -2, -132); ctx.closePath(); fillOL();
-    // ombreira
-    ctx.fillStyle = steel(2, -106, 24, -88); ellipse(12, -98, 13, 9, -0.2);
+    const plg = ctx.createLinearGradient(2, -40, -34, -8);
+    plg.addColorStop(0, '#ff7a54'); plg.addColorStop(1, '#a8221a');
+    ctx.fillStyle = plg;
+    ctx.beginPath(); ctx.moveTo(4, -21); ctx.quadraticCurveTo(-8, -46, -36 - wave * 0.7, -26 + run * 6); ctx.quadraticCurveTo(-24, -26, -16, -18); ctx.quadraticCurveTo(-6, -28, 0, -20); ctx.closePath(); fillOL();
     ctx.restore();
-    // braço da frente + escudo principal (mão esquerda)
-    limb(12, -90 + br, 30 + atk * 16, -78 - atk * 4, '#2f6fb3', 11);
-    ctx.save(); ctx.translate(38 + atk * 22, -74 - atk * 4); ctx.rotate(0.06 + atk * 0.4); drawShield(S.shields.left, 60, 74, t, false); ctx.restore();
+
+    // ombreira da frente
+    ctx.fillStyle = steel(4, -106, 26, -88); ellipse(14, -97, 13, 9.5, -0.25);
+    noOL(() => { ctx.fillStyle = '#ffd24a'; ellipse(14, -97, 2, 2); });
+    ctx.restore();
+
+    // braço da frente + escudo principal (mão esquerda), empurrado na escudada
+    const push = bash * 30;
+    limb(14, -92 + br, 34 + push * 0.6, -72 - bash * 6, '#2f6fb3', 12);
+    ctx.fillStyle = steel(28 + push * 0.6, -80, 40 + push * 0.6, -66); ellipse(34 + push * 0.6, -73 - bash * 6, 7, 6);
+    ctx.save();
+    ctx.translate(44 + push, -66 - bash * 6);
+    ctx.rotate(0.08 + run * 0.12 - bash * 0.12);
+    const sc = 1 + bash * 0.1;
+    ctx.scale(sc, sc);
+    drawShield(S.shields.left, 60, 74, t, false);
+    ctx.restore();
     outline(false);
     ctx.restore();
+
+    // rastro de velocidade durante a investida
+    if (hero.vel > 0.4) {
+      ctx.save();
+      ctx.globalAlpha = Math.min(0.5, (hero.vel - 0.4) * 0.6);
+      ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 3; ctx.lineCap = 'round';
+      for (let i = 0; i < 4; i++) {
+        const y = GROUND - 30 - i * 26, len = 30 + i * 10;
+        ctx.beginPath(); ctx.moveTo(hx - 50 - len, y); ctx.lineTo(hx - 50, y); ctx.stroke();
+      }
+      ctx.restore();
+    }
   }
 
   // ---- monstros ----
@@ -1128,7 +1344,7 @@
     for (const p of projs) {
       for (let j = 3; j >= 0; j--) {
         const k = Math.max(0, p.t / 0.45 - j * 0.06);
-        const x = HX + 40 + (MX - 40 - HX - 40) * k;
+        const x0 = hero.x + 40, x = x0 + (MX - 40 - x0) * k;
         const y = GROUND - 90 - Math.sin(k * Math.PI) * 70 + k * 20;
         ctx.save(); ctx.translate(x, y); ctx.rotate(k * Math.PI * 4);
         drawShield(S.shields.right, 28, 34, t, false, (j ? 0.18 / j : 0.8) * (1 - k * 0.3));
@@ -1224,9 +1440,24 @@
     update(dt);
   }
 
+  let achTimer = 0;
+  const acAcc = [];
+  function workAutoclickers(dt) {
+    const r = acRate();
+    for (let i = 0; i < S.ac.owned; i++) {
+      const t = S.ac.assign[i];
+      if (!t || t === 'arena') continue;
+      acAcc[i] = (acAcc[i] || 0) + r * dt;
+      if (acAcc[i] < 1) continue;
+      acAcc[i] = 0;
+      if (t.startsWith('skill:')) useSkill(t.slice(6), true);
+      else if (t.startsWith('buy:')) { const it = ITEMS.find((x) => x.key === t.slice(4)); if (it) buyItem(it, true); }
+    }
+  }
+
   function update(dt) {
     S.stats.playTime += dt;
-    hero.attack = Math.max(0, hero.attack - dt * 4.5);
+    updateHero(dt);
     shakeT = Math.max(0, shakeT - dt * 1.5);
     critFlash = Math.max(0, critFlash - dt);
     if (!M) spawnMonster();
@@ -1238,10 +1469,16 @@
     } else {
       const d = dps();
       if (d > 0 && M.spawn >= 0.5) { dpsAcc += Math.min(d * dt, M.hp); damage(d * dt, true); }
-      autoAcc += autoClicks() * dt;
+      autoAcc += (autoClicks() + acOn('arena') * acRate()) * dt;
       while (autoAcc >= 1) { autoAcc -= 1; attack(true); }
-      if (M.boss && M.dying === 0 && M.spawn >= 1) { M.time -= dt; if (M.time <= 0) bossFail(); }
+      if (M.boss && M.dying === 0 && M.spawn >= 1) {
+        if (!skillActive('muralha')) M.time -= dt;
+        if (M.time <= 0) bossFail();
+      }
     }
+    workAutoclickers(dt);
+    achTimer += dt;
+    if (achTimer > 1) { achTimer = 0; checkAchievements(); }
     dpsTimer += dt;
     if (dpsTimer >= 1) {
       if (dpsAcc > 0 && S.settings.numbers) addFloat(MX + 60 + Math.random() * 40, GROUND - 40 - Math.random() * 30, '-' + fmt(dpsAcc), '#9fd8ff', 16);
@@ -1280,7 +1517,7 @@
   const $ = (id) => document.getElementById(id);
   const el = (tag, cls, html) => { const e = document.createElement(tag); if (cls) e.className = cls; if (html !== undefined) e.innerHTML = html; return e; };
   const setText = (e, v) => { if (e.textContent !== v) e.textContent = v; };
-  let shopDirty = true, zonesDirty = true, hudDirty = true, ghostP = 1, ghostMon = null;
+  let shopDirty = true, zonesDirty = true, hudDirty = true, acDirty = true, ghostP = 1, ghostMon = null;
 
   function toast(msg, kind) {
     const t = el('div', 'toast' + (kind ? ' ' + kind : ''));
@@ -1313,20 +1550,23 @@
     setText($('dps'), fmt(dps()));
     setText($('clickdmg'), fmt(clickDmg()));
     setText($('souls'), fmt(S.souls));
+    setText($('gems'), fmt(S.gems));
     if (M) {
       setText($('mName'), M.name);
-      $('mName').className = 'mname' + (M.boss ? ' boss' : '') + (M.chest ? ' chest' : '');
+      $('mName').className = 'mname' + (M.boss ? ' boss' : '') + (M.chest ? ' chest' : '') + (M.final ? ' final' : '');
       const p = Math.max(0, M.hp / M.maxHp);
       if (M !== ghostMon) { ghostMon = M; ghostP = 1; }
       ghostP = p >= ghostP ? p : Math.max(p, ghostP - 0.006 - (ghostP - p) * 0.06);
       $('mHpFill').style.width = (p * 100).toFixed(1) + '%';
       $('mHpGhost').style.width = (ghostP * 100).toFixed(1) + '%';
-      setText($('mHpText'), `${fmt(Math.max(0, Math.ceil(M.hp)))} / ${fmt(M.maxHp)}`);
+      setText($('mHpText'), `${fmt(Math.max(0, Math.ceil(M.hp)))} / ${fmt(Math.ceil(M.maxHp))}`);
       const bt = $('bossTimer');
       if (M.boss) {
         bt.hidden = false;
-        $('btFill').style.width = (Math.max(0, M.time / bossTime()) * 100).toFixed(1) + '%';
-        setText($('btText'), `⏱ ${Math.max(0, M.time).toFixed(1).replace('.', ',')}s`);
+        $('btFill').style.width = (Math.max(0, M.time / (bossTime() * (M.final ? 2 : 1))) * 100).toFixed(1) + '%';
+        const frozen = skillActive('muralha');
+        bt.classList.toggle('frozen', frozen);
+        setText($('btText'), `${frozen ? '❄' : '⏱'} ${Math.max(0, M.time).toFixed(1).replace('.', ',')}s`);
       } else bt.hidden = true;
     }
     const z = S.zone;
@@ -1368,28 +1608,30 @@
   function buildSkills() {
     const box = $('skills');
     SKILLS.forEach((sk, i) => {
-      const b = el('button', 'skill', `<span class="skey">${i + 1}</span><span class="sbadge"><span class="sicon">${sk.icon}</span><span class="scd"></span><span class="stime"></span></span><span class="sname">${sk.name}</span>`);
+      const b = el('button', 'skill', `<span class="skey">${SKILL_KEYS[i]}</span><span class="sbadge"><span class="sicon">${sk.icon}</span><span class="scd"></span><span class="stime"></span></span><span class="sname">${sk.name}</span>`);
       b.addEventListener('click', () => useSkill(sk.id));
+      b.dataset.ac = 'skill:' + sk.id;
       box.appendChild(b);
       skillEls[sk.id] = { b, cd: b.querySelector('.scd'), time: b.querySelector('.stime') };
     });
   }
   function updateSkills() {
-    const now = Date.now();
+    const now = clock();
     for (const sk of SKILLS) {
       const r = skillEls[sk.id];
       const locked = S.maxZone < sk.unlock;
       const s = S.skills[sk.id];
       const active = !locked && skillActive(sk.id);
       const ready = !locked && skillReady(sk.id);
-      r.b.className = 'skill' + (locked ? ' locked' : active ? ' active' : ready ? ' ready' : '');
-      r.b.disabled = locked || !ready;
-      r.b.title = locked ? `${sk.name} — desbloqueia na zona ${sk.unlock}` : `${sk.name}: ${sk.desc} Recarga: ${fmtTime(sk.cd)}. Atalho: tecla ${SKILLS.indexOf(sk) + 1}`;
+      const cls = 'skill' + (locked ? ' locked' : active ? ' active' : ready ? ' ready' : '');
+      if (r.b.className !== cls) r.b.className = cls;
+      r.b.setAttribute('aria-disabled', String(locked || !ready));
+      r.b.title = locked ? `${sk.name} — desbloqueia na zona ${sk.unlock}` : `${sk.name}: ${sk.desc} Recarga: ${fmtTime(sk.cd * cdMult())}. Atalho: tecla ${SKILL_KEYS[SKILLS.indexOf(sk)]}`;
       if (locked) { r.cd.style.setProperty('--p', '0%'); setText(r.time, `Zona ${sk.unlock}`); continue; }
       if (active) { r.cd.style.setProperty('--p', '0%'); setText(r.time, Math.ceil((s.until - now) / 1000) + 's'); }
       else if (!ready) {
         const left = (s.ready - now) / 1000;
-        r.cd.style.setProperty('--p', ((left / sk.cd) * 100).toFixed(1) + '%');
+        r.cd.style.setProperty('--p', ((left / (sk.cd * cdMult())) * 100).toFixed(1) + '%');
         setText(r.time, fmtTime(left));
       } else { r.cd.style.setProperty('--p', '0%'); setText(r.time, ''); }
     }
@@ -1406,7 +1648,7 @@
   const ITEMS = [];
   function bulkItem(def, panel, effect) {
     return {
-      panel, def, bulk: true, currency: 'gold',
+      panel, def, bulk: true, currency: 'gold', key: def.id,
       unlocked: () => S.maxZone >= def.unlock,
       level: () => lvl(def.id),
       max: def.max || Infinity,
@@ -1424,7 +1666,7 @@
       buy(n) { S.trainings[def.id] = lvl(def.id) + n; },
     };
   }
-  function msText(l) { const nm = nextMilestone(l); return ` · <span class="ms">Nv ${nm}: ×2</span>`; }
+  function msText(l) { const nm = nextMilestone(l); return ` · <span class="ms">Nv ${nm}: ×${BAL.ms25}</span>`; }
 
   function buildItems() {
     for (const t of TRAININGS) {
@@ -1448,7 +1690,7 @@
 
     for (const side of ['left', 'right']) {
       ITEMS.push({
-        panel: 'escudos', currency: 'gold', unlocked: () => true, level: () => S.shields[side], max: Infinity,
+        panel: 'escudos', currency: 'gold', key: 'shield-' + side, unlocked: () => true, level: () => S.shields[side], max: Infinity,
         icon: () => shieldSVG(S.shields[side]), iconKey: () => S.shields[side],
         title: () => (side === 'left' ? 'Escudo Esquerdo' : 'Escudo Direito') + ' · ' + tierName(S.shields[side]),
         desc: () => side === 'left' ? 'O escudo de golpear. Multiplica o dano por clique.' : 'O escudo espectral. Multiplica todo o DPS.',
@@ -1460,14 +1702,15 @@
     }
     for (const r of RELICS) {
       ITEMS.push({
-        panel: 'reliquias', currency: 'souls', unlocked: () => S.stats.prestiges > 0 || S.souls > 0, level: () => rl(r.id), max: r.max || Infinity,
+        panel: 'reliquias', currency: 'souls', key: 'relic-' + r.id, unlocked: () => S.stats.prestiges > 0 || S.souls > 0, level: () => rl(r.id), max: r.max || Infinity,
         icon: () => r.icon, title: () => r.name, desc: () => r.desc,
         effect: () => {
           const l = rl(r.id);
           switch (r.id) {
             case 'egide': return `Dano ×${fmt(1 + 0.25 * l)}`;
             case 'bolsa': return `Ouro ×${fmt(1 + 0.2 * l)}`;
-            case 'mao': return `${l} golpe(s)/s`;
+            case 'mao': return `Cada Escudeiro: ${fmt(acRate())} toques/s`;
+            case 'pressa': return `Recarga ${l * 4}% mais rápida`;
             case 'ampulheta': return `Tempo contra chefes: ${bossTime()}s`;
             case 'ferreiro': return `Forja ${l * 4}% mais barata`;
             case 'tesouro': return `Chance de baú: ${pct(chestChance())}`;
@@ -1491,6 +1734,7 @@
         bl: root.querySelector('.bl'), bc: root.querySelector('.bc'), prog: root.querySelector('.item-prog i'),
       };
       it.els.btn.addEventListener('click', () => buyItem(it));
+      root.dataset.ac = 'buy:' + it.key;
       $('panel-' + it.panel).appendChild(root);
     }
     // cartões extras
@@ -1505,7 +1749,7 @@
     prest.after(relInfo);
   }
 
-  function buyItem(it) {
+  function buyItem(it, auto) {
     if (!it.unlocked()) return;
     const inf = it.info();
     if (inf.maxed || inf.n < 1) return;
@@ -1513,11 +1757,13 @@
     if (wallet < inf.cost) return;
     if (it.currency === 'souls') S.souls -= inf.cost; else S.gold -= inf.cost;
     it.buy(inf.n);
-    const r = it.els.root;
-    r.classList.remove('bought'); void r.offsetWidth; r.classList.add('bought');
-    Sfx.init(); Sfx.buy();
+    if (it.els) {
+      const r = it.els.root;
+      r.classList.remove('bought'); void r.offsetWidth; r.classList.add('bought');
+    }
+    if (!auto) { Sfx.init(); Sfx.buy(); }
     shopDirty = true;
-    refreshShop();
+    if (!auto && it.els) refreshShop();
   }
 
   function refreshShop() {
@@ -1615,7 +1861,10 @@
       ['Chance de crítico', pct(critChance())],
       ['Dano crítico', '×' + fmt(critMult())],
       ['Multiplicador de ouro', '×' + fmt(goldMult())],
-      ['Golpes automáticos/s', autoClicks()],
+      ['Escudeiros', `${S.ac.owned}/${AC_COSTS.length} (${fmt(acRate())} toques/s cada)`],
+      ['Gemas ganhas no total', fmt(S.stats.gemsTotal)],
+      ['Conquistas', `${achCount()}/${ACH.length}`],
+      ['Chefe final', S.stats.finalBeaten ? 'Derrotado 👑' : `Zona ${FINAL_ZONE}`],
     ];
     const html = '<div class="card"><dl class="stat-list">' + rows.map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join('') + '</dl></div>';
     const p = $('panel-stats');
@@ -1631,7 +1880,7 @@
       <div class="card"><p>O progresso é salvo automaticamente neste navegador a cada 10 segundos. Use exportar/importar para levar seu save para outro aparelho.</p>
         <div class="btn-row"><button class="btn primary" id="optSave">Salvar agora</button><button class="btn" id="optExport">Exportar</button><button class="btn" id="optImport">Importar</button></div></div>
       <div class="card"><p>Apaga todo o progresso, incluindo Égides e relíquias.</p><button class="btn danger" id="optReset">Apagar progresso</button></div>
-      <div class="card"><p><b>Como jogar</b></p><p>Clique na arena para golpear com o escudo. Derrote ${KILLS_PER_ZONE} criaturas para liberar a próxima zona; a cada 5 zonas há um chefe com tempo limite. Gaste ouro em treinos (DPS automático), atributos e forje seus dois escudos. Na zona ${PRESTIGE_ZONE}, renasça para ganhar Égides.</p><p>Atalhos: teclas 1 a 5 usam habilidades; ← e → trocam de zona.</p></div>`;
+      <div class="card"><p><b>Como jogar</b></p><p>Clique na arena para golpear com o escudo. Derrote ${KILLS_PER_ZONE} criaturas para liberar a próxima zona; a cada 5 zonas há um chefe com tempo limite. Gaste ouro em treinos (DPS automático), atributos e forje seus dois escudos. Na zona ${PRESTIGE_ZONE}, renasça para ganhar Égides.</p><p>Chefes derrotados pela primeira vez dão 💎 gemas. Com elas você contrata Escudeiros: arraste cada um até o monstro, uma habilidade ou um botão de compra e ele fica apertando ali. Clique num Escudeiro para recolhê-lo.</p><p>Derrote o Devorador de Mundos na zona ${FINAL_ZONE} para concluir a história — a jornada continua depois.</p><p>Atalhos: teclas 1 a 9 e 0 usam habilidades; ← e → trocam de zona.</p></div>`;
     p.querySelectorAll('input').forEach((i) => i.setAttribute('autocomplete', 'off'));
     $('optSound').checked = S.settings.sound;
     $('optNumbers').checked = S.settings.numbers;
@@ -1664,11 +1913,113 @@
 
   function afterStateChange() {
     spawnMonster();
-    shopDirty = true; zonesDirty = true;
+    shopDirty = true; zonesDirty = true; acDirty = true;
     $('optSound').checked = S.settings.sound;
     $('optNumbers').checked = S.settings.numbers;
     syncBuyMode();
     refreshShop();
+  }
+
+  // ---- escudeiros (auto clickers arrastáveis) ----
+  let drag = null, suppressClick = false;
+  const AC_SVG = '<svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 5c3-4 9-2 10 2-3-1-7 0-10 2z" fill="#e04a3a" stroke="#1b1426" stroke-width="1.5" stroke-linejoin="round"/><path d="M5 16a11 11 0 0 1 22 0v3H5z" fill="#dfe6ee" stroke="#1b1426" stroke-width="2"/><path d="M5 19h22v3a4 4 0 0 1-4 4H9a4 4 0 0 1-4-4z" fill="#97a3b3" stroke="#1b1426" stroke-width="2"/><rect x="10" y="19.5" width="12" height="3" rx="1.2" fill="#1b1426"/><circle cx="16" cy="13" r="2" fill="#ffd24a" stroke="#1b1426" stroke-width="1"/></svg>';
+  function acTargetName(t) {
+    if (t === 'arena') return 'golpeando o monstro';
+    if (t.startsWith('skill:')) { const sk = SKILLS.find((s) => s.id === t.slice(6)); return sk ? `usando ${sk.name}` : ''; }
+    if (t.startsWith('buy:')) { const it = ITEMS.find((x) => x.key === t.slice(4)); return it ? `comprando ${it.title().split(' · ')[0]}` : ''; }
+    return '';
+  }
+  function renderAC() {
+    acDirty = false;
+    document.querySelectorAll('.ac-pin').forEach((p) => p.remove());
+    const tray = $('acTokens');
+    tray.innerHTML = '';
+    const rate = acRate();
+    for (let i = 0; i < S.ac.owned; i++) {
+      const t = S.ac.assign[i];
+      const tok = el('div', t ? 'ac-pin' : 'ac-token', AC_SVG);
+      tok.dataset.i = i;
+      tok.style.setProperty('--tap', (1 / rate).toFixed(3) + 's');
+      tok.title = t ? `Escudeiro ${acTargetName(t)}. Arraste para mover ou clique para recolher.` : 'Escudeiro livre: arraste até o monstro, uma habilidade ou um botão de compra.';
+      tok.addEventListener('pointerdown', startDrag);
+      if (!t) { tray.appendChild(tok); continue; }
+      const host = t === 'arena' ? $('arenaPins') : document.querySelector(`[data-ac="${t}"]`);
+      if (host) host.appendChild(tok); else { S.ac.assign[i] = null; tray.appendChild(tok); }
+    }
+    const c = acNextCost();
+    const btn = $('acBuy');
+    btn.hidden = c === Infinity;
+    btn.disabled = S.gems < c;
+    btn.innerHTML = `+ Escudeiro <b>💎 ${c}</b>`;
+    setText($('acCount'), `${S.ac.owned}/${AC_COSTS.length}`);
+    $('acHint').hidden = S.ac.owned > 0 && S.ac.assign.some((x) => x);
+    setText($('acHint'), S.ac.owned === 0 ? 'Derrote chefes para ganhar 💎 gemas e contratar Escudeiros (auto clickers).' : 'Arraste um Escudeiro até o monstro, uma habilidade ou um botão de compra.');
+  }
+  function startDrag(e) {
+    if (e.button !== undefined && e.button !== 0) return;
+    e.preventDefault(); e.stopPropagation();
+    const src = e.currentTarget;
+    const ghost = el('div', 'ac-ghost', AC_SVG);
+    document.body.appendChild(ghost);
+    drag = { i: Number(src.dataset.i), ghost, x0: e.clientX, y0: e.clientY, moved: false, fromPin: src.classList.contains('ac-pin') };
+    ghost.style.left = e.clientX + 'px'; ghost.style.top = e.clientY + 'px';
+    window.addEventListener('pointermove', onDragMove);
+    window.addEventListener('pointerup', onDragEnd);
+    window.addEventListener('pointercancel', onDragEnd);
+  }
+  function dropTarget(e) {
+    const hit = document.elementFromPoint(e.clientX, e.clientY);
+    return hit ? hit.closest('[data-ac]') : null;
+  }
+  function clearHover() { document.querySelectorAll('.ac-hover').forEach((x) => x.classList.remove('ac-hover')); }
+  function onDragMove(e) {
+    if (!drag) return;
+    if (!drag.moved && Math.hypot(e.clientX - drag.x0, e.clientY - drag.y0) > 6) { drag.moved = true; document.body.classList.add('ac-dragging'); }
+    drag.ghost.style.left = e.clientX + 'px'; drag.ghost.style.top = e.clientY + 'px';
+    clearHover();
+    if (drag.moved) { const t = dropTarget(e); if (t) t.classList.add('ac-hover'); }
+  }
+  function onDragEnd(e) {
+    window.removeEventListener('pointermove', onDragMove);
+    window.removeEventListener('pointerup', onDragEnd);
+    window.removeEventListener('pointercancel', onDragEnd);
+    clearHover();
+    document.body.classList.remove('ac-dragging');
+    const d = drag; drag = null;
+    if (!d) return;
+    d.ghost.remove();
+    suppressClick = true; setTimeout(() => { suppressClick = false; }, 60);
+    if (!d.moved) {
+      if (d.fromPin) { S.ac.assign[d.i] = null; toast('🧤 Escudeiro de volta à reserva.'); }
+      else toast('Arraste o Escudeiro até o monstro, uma habilidade ou um botão de compra.');
+      acDirty = true;
+      return;
+    }
+    const t = e.type === 'pointerup' ? dropTarget(e) : null;
+    S.ac.assign[d.i] = t ? t.dataset.ac : null;
+    if (t) toast(`🧤 Escudeiro ${acTargetName(t.dataset.ac)}.`);
+    acDirty = true;
+    Sfx.init(); Sfx.buy();
+  }
+
+  // ---- conquistas ----
+  function renderAch() {
+    const n = achCount();
+    const html = `<div class="card"><p><b>${n}/${ACH.length}</b> conquistas. Cada uma dá +3% de todo o dano — bônus atual <b class="hl-gold">+${n * 3}%</b>.</p></div><div class="ach-grid">` +
+      ACH.map((a) => {
+        const ok = !!S.achievements[a.id];
+        return `<div class="ach${ok ? ' ok' : ''}"><span class="ach-i">${ok ? a.icon : '🔒'}</span><div><b>${a.name}</b><small>${a.desc}${a.gems ? ` · 💎 ${a.gems}` : ''}</small></div></div>`;
+      }).join('') + '</div>';
+    const p = $('panel-conquistas');
+    if (p.dataset.v !== html) { p.innerHTML = html; p.dataset.v = html; }
+  }
+
+  // ---- final da história ----
+  function showEnding() {
+    Sfx.skill();
+    modal('O Devorador caiu!', `<p>Com um último golpe dos dois escudos, Flistaile parte o olho do <b>Devorador de Mundos</b>. As estrelas voltam a brilhar sobre Égide.</p><p>A história termina aqui — mas o Abismo é infinito, e os escudos de Flistaile ainda podem ficar mais fortes.</p><p class="credits">Flistaile · um jogo de Galorak<br>Obrigado por jogar!</p>`, [
+      { label: 'Continuar a jornada', cls: 'primary' },
+    ]);
   }
 
   // ---- abas e modo de compra ----
@@ -1679,6 +2030,7 @@
     document.querySelectorAll('.panel').forEach((p) => p.classList.toggle('active', p.id === 'panel-' + tab));
     $('buyMode').classList.toggle('hidden', !(tab === 'treinos' || tab === 'atributos'));
     if (tab === 'stats') renderStats();
+    if (tab === 'conquistas') renderAch();
   }
   function syncBuyMode() {
     document.querySelectorAll('#buyMode button').forEach((b) => b.classList.toggle('active', String(S.buyMode) === b.dataset.mode));
@@ -1701,12 +2053,14 @@
     document.addEventListener('keydown', (e) => {
       if (e.target.tagName === 'TEXTAREA' || e.target.tagName === 'INPUT') return;
       if (!$('modal').hidden) { if (e.key === 'Escape') closeModal(); return; }
-      const n = Number(e.key);
-      if (n >= 1 && n <= SKILLS.length) useSkill(SKILLS[n - 1].id);
+      const si = SKILL_KEYS.indexOf(e.key);
+      if (si >= 0) useSkill(SKILLS[si].id);
       else if (e.key === 'ArrowLeft') setZone(S.zone - 1);
       else if (e.key === 'ArrowRight') setZone(S.zone + 1);
     });
     $('modal').addEventListener('click', (e) => { if (e.target.id === 'modal') closeModal(); });
+    $('acBuy').addEventListener('click', buyAutoclicker);
+    document.addEventListener('click', (e) => { if (suppressClick) { e.stopPropagation(); e.preventDefault(); suppressClick = false; } }, true);
     window.addEventListener('resize', () => { resize(); zonesDirty = true; });
     window.addEventListener('beforeunload', save);
     document.addEventListener('visibilitychange', () => { if (document.hidden) save(); });
@@ -1727,6 +2081,8 @@
     resize();
     spawnMonster();
     refreshShop();
+    renderAC();
+    checkAchievements();
 
     // progresso offline
     const away = (Date.now() - (S.lastSave || Date.now())) / 1000;
@@ -1744,10 +2100,24 @@
     }
 
     setInterval(tick, 100);
-    setInterval(() => { refreshShop(); if (activeTab === 'stats') renderStats(); }, 250);
+    setInterval(() => {
+      refreshShop();
+      if (acDirty && !drag) renderAC();
+      else if (!drag) { const b = $('acBuy'); b.disabled = S.gems < acNextCost(); }
+      if (activeTab === 'stats') renderStats();
+      if (activeTab === 'conquistas') renderAch();
+    }, 250);
     setInterval(save, 10000);
     requestAnimationFrame(frame);
   }
 
-  start();
+  if (window.FL_SIM) {
+    // Ganchos para o simulador de balanceamento (tools/sim.html)
+    window.FL = {
+      BAL, TRAININGS, ATTRS, RELICS, SKILLS, ACH, AC_COSTS, AC_BASE_RATE, FINAL_ZONE, PRESTIGE_ZONE, KILLS_PER_ZONE,
+      defaultState, get S() { return S; }, set S(v) { S = v; }, setClock(f) { clock = f; },
+      monsterHP, baseGold, isBoss, baseDps, baseClick, critChance, critMult, goldMult, shieldCost, soulsFor, costBulk,
+      maxAffordable, bossTime, acRate, achMult, cdMult, lvl, rl, trainPower, milestone, shieldMult, globalMult, harmony, chestChance,
+    };
+  } else start();
 })();

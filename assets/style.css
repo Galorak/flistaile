@@ -323,3 +323,65 @@ textarea.save { width: 100%; min-height: 120px; background: #0005; color: var(--
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
 }
+
+/* ---------- gemas ---------- */
+.res-gems b { color: #7ff0e0; }
+.toast.gem { border-color: #5fe0d0; box-shadow: 0 10px 28px #000a, 0 0 16px #5fe0d044; }
+.btn.gem { background: linear-gradient(180deg, #b8fff4, #5fe0d0 50%, #2aa898); color: #06302c; border-color: #1a6a62; padding: 6px 12px; font-size: 13px; }
+.btn.gem b { font-weight: 900; }
+
+/* ---------- 10 habilidades (duas fileiras) ---------- */
+.skills { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+.skill { padding: 8px 4px 7px; }
+.sbadge { width: 44px; height: 44px; }
+.skill .sicon { font-size: 21px; }
+@media (max-width: 600px) { .sbadge { width: 38px; height: 38px; } }
+
+/* ---------- escudeiros ---------- */
+.ac-bar {
+  border-radius: 14px; padding: 10px 12px; display: flex; flex-direction: column; gap: 8px;
+  background: linear-gradient(180deg, #2a2448, #1d1934); border: 1px solid #4a4078; box-shadow: inset 0 1px 0 #ffffff12, 0 4px 12px #0006;
+}
+.ac-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.ac-title { font-family: 'Cinzel', serif; font-weight: 900; color: #ffe9a8; }
+.ac-title small { font-family: 'Nunito', sans-serif; color: var(--muted); font-size: 12px; margin-left: 4px; }
+.ac-tokens { display: flex; flex-wrap: wrap; gap: 8px; min-height: 40px; align-items: center; padding: 4px; border-radius: 10px; background: #0003; border: 1px dashed #4a4078; }
+.ac-tokens:empty::before { content: 'Nenhum Escudeiro na reserva'; color: #6f6896; font-size: 12px; padding-left: 6px; }
+.ac-hint { font-size: 12.5px; color: var(--muted); }
+.ac-token, .ac-pin, .ac-ghost {
+  width: 38px; height: 38px; border-radius: 50%; display: grid; place-items: center; touch-action: none; user-select: none;
+  background: radial-gradient(circle at 35% 30%, #ffe9a0, #d99a24 70%); border: 2px solid #1b1426; box-shadow: 0 0 0 2px #ffcf4a88, 0 3px 8px #0008;
+}
+.ac-token svg, .ac-pin svg, .ac-ghost svg { width: 78%; height: 78%; pointer-events: none; }
+.ac-token { cursor: grab; transition: transform .12s; }
+.ac-token:hover { transform: translateY(-2px) scale(1.06); }
+.ac-pin {
+  position: absolute; z-index: 5; width: 28px; height: 28px; cursor: grab; top: -8px; right: -8px;
+  animation: tap var(--tap, .2s) ease-in-out infinite alternate;
+}
+.ac-ghost { position: fixed; z-index: 100; pointer-events: none; transform: translate(-50%, -50%) scale(1.15); box-shadow: 0 0 0 3px #ffcf4a, 0 10px 24px #000a; }
+@keyframes tap { from { transform: translateY(0) scale(1); } to { transform: translateY(3px) scale(.9); } }
+.arena-pins { position: absolute; left: 12px; bottom: 12px; display: flex; flex-wrap: wrap; gap: 6px; max-width: 45%; z-index: 4; }
+.arena-pins .ac-pin { position: relative; top: 0; right: 0; width: 32px; height: 32px; }
+.buy { position: relative; }
+.skill .ac-pin { top: -6px; right: -6px; }
+.ac-dragging [data-ac] { outline: 2px dashed #ffcf4a66; outline-offset: 2px; }
+.ac-dragging .arena[data-ac] { outline-offset: -4px; }
+.ac-hover { outline: 3px solid var(--gold) !important; box-shadow: 0 0 18px #ffcf4a88 !important; }
+
+/* ---------- conquistas ---------- */
+.ach-grid { display: grid; grid-template-columns: 1fr; gap: 7px; }
+.ach { display: flex; gap: 10px; align-items: center; padding: 9px 10px; border-radius: 12px; background: #1d1934; border: 1px solid #3f3668; opacity: .6; }
+.ach.ok { opacity: 1; background: linear-gradient(180deg, #3a3060, #262044); border-color: #c9a14a88; }
+.ach-i { width: 36px; height: 36px; flex: none; border-radius: 50%; display: grid; place-items: center; font-size: 19px; background: #0004; border: 1px solid #ffffff1a; }
+.ach.ok .ach-i { background: radial-gradient(circle at 35% 30%, #ffe9a0, #c8891c 75%); border-color: #1b1426; }
+.ach b { display: block; font-size: 14px; }
+.ach small { color: var(--muted); font-size: 12px; }
+
+/* ---------- chefe final e créditos ---------- */
+.mname.final { color: #ff6a8a; font-family: 'Cinzel', serif; font-size: 19px; text-shadow: 0 0 12px #ff2a6a, 0 2px 3px #000; }
+.bosstimer.frozen .btfill { background: linear-gradient(180deg, #d0f4ff, #5ab8e8); }
+.credits { text-align: center; color: #ffe9a8; font-family: 'Cinzel', serif; margin-top: 14px !important; }
+.item { position: relative; }
+.item > .ac-pin { top: -8px; right: -8px; }
+.skill[aria-disabled="true"] { cursor: default; }
