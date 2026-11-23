@@ -134,22 +134,31 @@
 
   const BIOMES = [
     { name: 'Campos Verdejantes', lore: 'Onde tudo começa: gosmas e lobos rondam as fazendas de Égide.', sky: ['#7ec0ff', '#d6efff'], hills: ['#8fcf7a', '#6eb35a'], ground: '#5fa83c', dirt: '#7a5a34', fx: 'leaves', clouds: true, sun: '#fff6c0',
+      variants: [['Outonal', 'Outonal', '#d98a2b'], ['Florido', 'Florida', '#e58fb6']],
       monsters: [['Gosma', 'slime', '#6ad04a'], ['Cogumelo Raivoso', 'mushroom', '#d9473f'], ['Lobo Cinzento', 'beast', '#8a8f99'], ['Goblin Saqueador', 'goblin', '#7cb342', 'm'], ['Planta Faminta', 'plant', '#4caf50', 'f']] },
     { name: 'Floresta Sombria', lore: 'As árvores sussurram. Algo voa entre os galhos.', sky: ['#1e3a2e', '#5f8a66'], hills: ['#2f5a3a', '#244a2e'], ground: '#2f5a2a', dirt: '#3e2f22', fx: 'fireflies', moon: '#e8f5d0',
+      variants: [['Musgoso', 'Musgosa', '#4f7a3a'], ['Noturno', 'Noturna', '#2e2a48']],
       monsters: [['Morcego Noturno', 'bat', '#5b3f7a'], ['Espírito do Bosque', 'ghost', '#9fe0c0'], ['Lobo Sombrio', 'beast', '#3e3a52'], ['Aranha da Mata', 'spider', '#5a4632', 'f'], ['Planta Carnívora', 'plant', '#3f8f3a', 'f']] },
     { name: 'Cavernas de Cristal', lore: 'Cristais brilham no escuro e golems guardam cada veio.', sky: ['#15142b', '#3a3670'], hills: ['#2c2a52', '#232145'], ground: '#4a4560', dirt: '#2f2b40', fx: 'sparkle', stars: true, crystals: true,
+      variants: [['Ametista', 'Ametista', '#9a5ae0'], ['Safira', 'Safira', '#3a7ae0']],
       monsters: [['Golem de Cristal', 'golem', '#7fd6ff'], ['Olho Errante', 'eye', '#c86bff'], ['Gosma Cristalina', 'slime', '#58e0e0'], ['Aranha de Cristal', 'spider', '#7fb0ff', 'f'], ['Esqueleto Mineiro', 'skeleton', '#e8e0cc', 'm']] },
     { name: 'Deserto Escaldante', lore: 'O sol castiga. Nas dunas, os mortos ainda caminham.', sky: ['#f3a54e', '#ffe7a8'], hills: ['#e6b46a', '#d49a50'], ground: '#dcae62', dirt: '#b5823e', fx: 'dust', sun: '#fff1b0',
+      variants: [['Arenoso', 'Arenosa', '#d8b070'], ['Escaldante', 'Escaldante', '#e0602a']],
       monsters: [['Chacal de Areia', 'beast', '#c08a4a'], ['Múmia Errante', 'ghost', '#e8dcb5'], ['Golem de Arenito', 'golem', '#d2a35f'], ['Serpente das Dunas', 'serpent', '#d9a441', 'f'], ['Esqueleto do Deserto', 'skeleton', '#f0e2c0', 'm']] },
     { name: 'Pântano Pútrido', lore: 'O ar pesa. Cada passo afunda na lama tóxica.', sky: ['#3d4a32', '#8a9a66'], hills: ['#4f6038', '#3e4d2c'], ground: '#4a5a30', dirt: '#33301e', fx: 'spores',
+      variants: [['Lodoso', 'Lodosa', '#5d5a2c'], ['Venenoso', 'Venenosa', '#8a3fbf']],
       monsters: [['Gosma Tóxica', 'slime', '#9acd32'], ['Cogumelo Venenoso', 'mushroom', '#8a4fbf'], ['Olho do Lodo', 'eye', '#7aa83a'], ['Serpente do Lodo', 'serpent', '#5f7a2a', 'f'], ['Goblin do Brejo', 'goblin', '#6b8e23', 'm']] },
     { name: 'Tundra Congelada', lore: 'Um vento cortante. Os escudos de Flistaile ficam cobertos de gelo.', sky: ['#8fb9dc', '#eef7ff'], hills: ['#dbe9f5', '#c3d8ea'], ground: '#e9f3fb', dirt: '#9fb5c8', fx: 'snow', clouds: true,
+      variants: [['Ártico', 'Ártica', '#bfe6ff'], ['Nevado', 'Nevada', '#f4f8ff']],
       monsters: [['Lobo do Gelo', 'beast', '#cfe6f5'], ['Golem de Gelo', 'golem', '#9fd8ff'], ['Espectro Gélido', 'ghost', '#bfe8ff'], ['Goblin da Neve', 'goblin', '#9fc3d6', 'm'], ['Aranha Glacial', 'spider', '#bfe0f5', 'f']] },
     { name: 'Cratera Vulcânica', lore: 'O chão ferve. Até as gosmas aqui são de magma.', sky: ['#2a0a08', '#a3361a'], hills: ['#4a1a12', '#33110c'], ground: '#3b2420', dirt: '#24130f', fx: 'embers', lava: true,
+      variants: [['Incandescente', 'Incandescente', '#ffb43a'], ['Carbonizado', 'Carbonizada', '#3a2e2a']],
       monsters: [['Gosma de Magma', 'slime', '#ff6a1a'], ['Morcego Ígneo', 'bat', '#ff4a2a'], ['Golem de Obsidiana', 'golem', '#3a2f45'], ['Serpente de Fogo', 'serpent', '#ff5a1a', 'f'], ['Esqueleto Ardente', 'skeleton', '#ffcf9a', 'm']] },
     { name: 'Ruínas Celestes', lore: 'Templos flutuam acima das nuvens, vigiados por olhos dourados.', sky: ['#6f7fff', '#ffd6f5'], hills: ['#c8bfff', '#b0a6f0'], ground: '#cfc8ec', dirt: '#9a90c8', fx: 'motes', clouds: true,
+      variants: [['Estelar', 'Estelar', '#7fa0ff'], ['Rosado', 'Rosada', '#ffa8d8']],
       monsters: [['Olho Celestial', 'eye', '#ffd84a'], ['Guardião Alado', 'bat', '#f0f0ff'], ['Espírito Astral', 'ghost', '#c9a8ff'], ['Planta Celeste', 'plant', '#ff9ad5', 'f'], ['Serpente Alada', 'serpent', '#a8e0ff', 'f']] },
     { name: 'Abismo Eterno', lore: 'O fim do mundo conhecido. Lá no fundo, algo devora estrelas.', sky: ['#05030d', '#2a0f3d'], hills: ['#1a0a2a', '#12061f'], ground: '#1a0f26', dirt: '#0d0714', fx: 'void', stars: true,
+      variants: [['Abissal', 'Abissal', '#2a1a5a'], ['Carmesim', 'Carmesim', '#c0103a']],
       monsters: [['Devorador', 'beast', '#6a1a8a'], ['Olho do Vazio', 'eye', '#ff2a6a'], ['Sombra Primordial', 'ghost', '#4a3a7a'], ['Aranha do Vazio', 'spider', '#3a2a4a', 'f'], ['Esqueleto Ancestral', 'skeleton', '#b8a8d8', 'm']] },
   ];
   // as últimas 10 zonas antes do chefe final são sempre no Abismo
@@ -370,15 +379,8 @@
   let corpses = [];
   const DEATH_T = 0.9;
   const DEATHS = ['launch', 'squash', 'sink', 'spin', 'pop', 'soul'];
-  const VARIANTS = [
-    { id: 'ouro', m: 'Dourado', f: 'Dourada', color: '#ffc83a', gold: 3 },
-    { id: 'rubro', m: 'Rubro', f: 'Rubra', color: '#d8342c' },
-    { id: 'azul', m: 'Azulado', f: 'Azulada', color: '#3a7ae0' },
-    { id: 'sombra', m: 'Sombrio', f: 'Sombria', color: '#3b2f52' },
-    { id: 'albino', m: 'Albino', f: 'Albina', color: '#f1ede4' },
-    { id: 'esmeralda', m: 'Esmeralda', f: 'Esmeralda', color: '#1fae6e' },
-    { id: 'violeta', m: 'Violeta', f: 'Violeta', color: '#9a4ae0' },
-  ];
+  // a Dourada é rara e vale em todo lugar; as outras cores vêm de cada mapa (BIOMES[].variants)
+  const GOLD_VARIANT = { id: 'ouro', m: 'Dourado', f: 'Dourada', color: '#ffc83a', gold: 3 };
   function spawnMonster() {
     const z = S.zone;
     const boss = isBoss(z);
@@ -396,8 +398,11 @@
     // variações de cor: mudam a cor e o nome (a dourada é rara e dá mais ouro)
     let variant = null;
     if (!final && !chest) {
-      if (!boss && Math.random() < 0.02) variant = VARIANTS[0];
-      else if (Math.random() < (boss ? 0.12 : 0.22)) variant = VARIANTS[1 + Math.floor(Math.random() * (VARIANTS.length - 1))];
+      if (!boss && Math.random() < 0.02) variant = GOLD_VARIANT;
+      else if (b.variants && Math.random() < (boss ? 0.12 : 0.22)) {
+        const v = b.variants[Math.floor(Math.random() * b.variants.length)];
+        if (!name.includes(v[0].slice(0, 5))) variant = { id: 'cor', m: v[0], f: v[1], color: v[2] };
+      }
     }
     if (variant) { color = variant.color; name += ' ' + (fem ? variant.f : variant.m); }
     if (boss && !final) name += z % 10 === 0 ? (fem ? ' Soberana' : ' Soberano') : ' Colossal';
@@ -1292,7 +1297,8 @@
         ctx.fillStyle = fc(shade(c, 0.5)); ellipse(-20, -14, 5, 4); ellipse(-46, -10, 4, 3); ellipse(-8, -6, 3, 3);
       });
       eyes(-44, -26, -16, 5.5, true);
-      ctx.restore();
+      ctx.restore(); // mandíbula de cima
+      ctx.restore(); // cabeça
     },
   };
   const SHAPES = {
@@ -1658,6 +1664,8 @@
   }
 
   function render(t) {
+    // zera o estado do canvas (recortes/save pendentes) a cada quadro
+    if (ctx.reset) ctx.reset(); else { ctx.globalAlpha = 1; }
     ctx.setTransform(sx, 0, 0, sy, 0, 0);
     if (shakeT > 0) ctx.translate((Math.random() - 0.5) * 14 * shakeT, (Math.random() - 0.5) * 10 * shakeT);
     const bi = biomeIndex(S.zone);

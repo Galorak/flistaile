@@ -15,7 +15,7 @@ Site: https://flistaile.galorakdev.com/
 - **Renascer** (zona 30+): recomeça da zona 1 e ganha **Égides** — cada uma dá +10% de dano e compra **Relíquias** permanentes.
 - **Gemas**: todo chefe derrotado pela primeira vez dá uma gema (e às vezes chefes e Baús Vivos também). Com gemas você contrata até 10 **Escudeiros** (auto clickers): arraste cada um até o monstro, uma habilidade ou um item da loja e ele fica apertando ali. Escudeiros no monstro aparecem na arena lutando ao lado de Flistaile; num item da loja, o card ganha borda amarela quando já dá para comprar. Clique num Escudeiro para recolhê-lo. Gemas e Escudeiros ficam após renascer.
 - **40 conquistas**, cada uma com +3% de dano (algumas dão gemas). A aba mostra quanto falta para cada uma.
-- **45 criaturas** em 9 regiões, com variações de cor (a rara Dourada dá ouro ×3) e jeitos diferentes de morrer.
+- **45 criaturas** em 9 regiões, com variações de cor próprias de cada região (e a rara Dourada, que dá ouro ×3) e jeitos diferentes de morrer.
 - **Chefe final**: o Devorador de Mundos, na zona 500, conclui a história. Depois disso as zonas continuam.
 - Baús Vivos aparecem de vez em quando e dão muito ouro.
 - O jogo continua rendendo ouro com a aba fechada (até 12h).
