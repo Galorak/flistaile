@@ -1034,11 +1034,11 @@
     ctx.quadraticCurveTo(-18, -60, -2, -96 + br); ctx.closePath(); fillOL();
     ctx.fillStyle = '#a8261e'; noOL(() => { ctx.beginPath(); ctx.moveTo(-8, -100 + br); ctx.quadraticCurveTo(-26 - wave * 0.6, -70, -36 - wave, -30); ctx.lineTo(-30 - wave * 0.8, -30); ctx.quadraticCurveTo(-20 - wave * 0.4, -66, -6, -98 + br); ctx.fill(); });
 
-    // braço e escudo de trás (mão direita), levantado em guarda
-    // (na escudada com o direito ele é desenhado na frente do corpo, mais abaixo)
-    if (bR <= 0.02) {
-      limb(-4, -92 + br, -22, -84 - bL * 6, '#24507f', 11);
-      ctx.save(); ctx.translate(-36, -82 - bL * 8 + br); ctx.rotate(-0.16 - bL * 0.2 - run * 0.15); drawShield(S.shields.right, 48, 60, t, true); ctx.restore();
+    // Flistaile olha para a direita: o braço de trás é o ESQUERDO e o da frente é o DIREITO.
+    // braço e escudo de trás (mão esquerda), em guarda; na escudada com ele é desenhado na frente
+    if (bL <= 0.02) {
+      limb(-4, -92 + br, -22, -84 - bR * 6, '#24507f', 11);
+      ctx.save(); ctx.translate(-36, -82 - bR * 8 + br); ctx.rotate(-0.16 - bR * 0.2 - run * 0.15); drawShield(S.shields.left, 48, 60, t, true); ctx.restore();
     }
 
     // pernas (a de trás primeiro)
@@ -1119,24 +1119,25 @@
     noOL(() => { ctx.fillStyle = '#ffd24a'; ellipse(14, -97, 2, 2); });
     ctx.restore();
 
-    // braço da frente + escudo principal (mão esquerda), empurrado na escudada
-    const push = bL * 30 - bR * 10;
-    limb(14, -92 + br, 34 + push * 0.6, -72 - bL * 6 + bR * 6, '#2f6fb3', 12);
-    ctx.fillStyle = steel(28 + push * 0.6, -80, 40 + push * 0.6, -66); ellipse(34 + push * 0.6, -73 - bL * 6 + bR * 6, 7, 6);
+    // braço da frente + escudo da mão direita: avança reto contra o monstro na escudada
+    const push = bR * 32 - bL * 14;
+    const fy = -66 - bR * 4 + bL * 6;
+    limb(14, -92 + br, 34 + push * 0.6, fy - 6, '#2f6fb3', 12);
+    ctx.fillStyle = steel(28 + push * 0.6, fy - 14, 40 + push * 0.6, fy); ellipse(34 + push * 0.6, fy - 7, 7, 6);
     ctx.save();
-    ctx.translate(44 + push, -66 - bL * 6 + bR * 8);
-    ctx.rotate(0.08 + run * 0.12 - bL * 0.12 + bR * 0.1);
-    const sc = 1 + bL * 0.1;
+    ctx.translate(44 + push, fy);
+    ctx.rotate(0.08 + run * 0.12 - bR * 0.1);
+    const sc = 1 + bR * 0.08;
     ctx.scale(sc, sc);
-    drawShield(S.shields.left, 60, 74, t, false);
+    drawShield(S.shields.right, 60, 74, t, false);
     ctx.restore();
-    // escudada com o escudo direito: o braço de trás cruza o corpo e golpeia por cima
-    if (bR > 0.02) {
-      const rx = -36 + bR * 112, ry = -82 - bR * 34 + br;
-      limb(-2, -94 + br, rx - 8, ry + 4, '#24507f', 11);
-      ctx.save(); ctx.translate(rx, ry); ctx.rotate(-0.16 + bR * 0.3);
-      const rs = 1 + bR * 0.12; ctx.scale(rs, rs);
-      drawShield(S.shields.right, 48, 60, t, false);
+    // escudada com o escudo esquerdo: o braço de trás avança reto, na altura do peito, por cima do outro escudo
+    if (bL > 0.02) {
+      const lx = -36 + bL * 112, ly = -82 - bL * 8 + br;
+      limb(-2, -94 + br, lx - 10, ly + 2, '#24507f', 11);
+      ctx.save(); ctx.translate(lx, ly); ctx.rotate(-0.16 + bL * 0.22);
+      const ls = 1 + bL * 0.14; ctx.scale(ls, ls);
+      drawShield(S.shields.left, 48, 60, t, false);
       ctx.restore();
     }
     outline(false);
