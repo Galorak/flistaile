@@ -104,16 +104,16 @@
   const tierName = (l) => l < TIERS.length ? TIERS[l].n : `${TIERS[TIERS.length - 1].n} +${l - TIERS.length + 1}`;
 
   const SKILLS = [
-    { id: 'furia', icon: '⚔️', name: 'Fúria Dupla', dur: 30, cd: 300, unlock: 5, desc: 'DPS ×2 por 30s.' },
-    { id: 'rajada', icon: '👊', name: 'Rajada', dur: 30, cd: 420, unlock: 10, desc: '10 golpes automáticos por segundo durante 30s.' },
-    { id: 'falcao', icon: '🦅', name: 'Olho do Falcão', dur: 30, cd: 480, unlock: 15, desc: '+50% de chance de crítico por 30s.' },
-    { id: 'ouro', icon: '🪙', name: 'Chuva de Ouro', dur: 30, cd: 600, unlock: 20, desc: 'Ouro ×3 por 30s.' },
-    { id: 'sismo', icon: '💢', name: 'Impacto Sísmico', dur: 0, cd: 600, unlock: 30, desc: 'Causa de uma vez 60s de DPS + 100 golpes.' },
-    { id: 'grito', icon: '📯', name: 'Grito de Guerra', dur: 30, cd: 600, unlock: 45, desc: 'Golpes ×3 por 30s.' },
-    { id: 'muralha', icon: '🧱', name: 'Muralha do Tempo', dur: 15, cd: 900, unlock: 60, desc: 'Congela o relógio do chefe por 15s.' },
-    { id: 'ima', icon: '🧲', name: 'Ímã de Tesouros', dur: 30, cd: 1200, unlock: 80, desc: 'Baús Vivos aparecem muito mais por 30s.' },
-    { id: 'eco', icon: '⏪', name: 'Eco Temporal', dur: 0, cd: 3600, unlock: 100, desc: 'Recarrega na hora todas as outras habilidades.' },
-    { id: 'ascensao', icon: '🌟', name: 'Ascensão Gêmea', dur: 30, cd: 1800, unlock: 130, desc: 'Todo o dano ×5 por 30s.' },
+    { id: 'furia', icon: '⚔️', name: 'Fúria Dupla', dur: 30, cd: 300, unlock: 10, desc: 'DPS ×2 por 30s.' },
+    { id: 'rajada', icon: '👊', name: 'Rajada', dur: 30, cd: 420, unlock: 25, desc: '10 golpes automáticos por segundo durante 30s.' },
+    { id: 'falcao', icon: '🦅', name: 'Olho do Falcão', dur: 30, cd: 480, unlock: 45, desc: '+50% de chance de crítico por 30s.' },
+    { id: 'ouro', icon: '🪙', name: 'Chuva de Ouro', dur: 30, cd: 600, unlock: 70, desc: 'Ouro ×3 por 30s.' },
+    { id: 'sismo', icon: '💢', name: 'Impacto Sísmico', dur: 0, cd: 600, unlock: 100, desc: 'Causa de uma vez 60s de DPS + 100 golpes.' },
+    { id: 'grito', icon: '📯', name: 'Grito de Guerra', dur: 30, cd: 600, unlock: 140, desc: 'Golpes ×3 por 30s.' },
+    { id: 'muralha', icon: '🧱', name: 'Muralha do Tempo', dur: 15, cd: 900, unlock: 185, desc: 'Congela o relógio do chefe por 15s.' },
+    { id: 'ima', icon: '🧲', name: 'Ímã de Tesouros', dur: 30, cd: 1200, unlock: 240, desc: 'Baús Vivos aparecem muito mais por 30s.' },
+    { id: 'eco', icon: '⏪', name: 'Eco Temporal', dur: 0, cd: 3600, unlock: 310, desc: 'Recarrega na hora todas as outras habilidades.' },
+    { id: 'ascensao', icon: '🌟', name: 'Ascensão Gêmea', dur: 30, cd: 1800, unlock: 390, desc: 'Todo o dano ×5 por 30s.' },
   ];
   const SKILL_KEYS = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'];
 
@@ -134,23 +134,23 @@
 
   const BIOMES = [
     { name: 'Campos Verdejantes', lore: 'Onde tudo começa: gosmas e lobos rondam as fazendas de Égide.', sky: ['#7ec0ff', '#d6efff'], hills: ['#8fcf7a', '#6eb35a'], ground: '#5fa83c', dirt: '#7a5a34', fx: 'leaves', clouds: true, sun: '#fff6c0',
-      monsters: [['Gosma', 'slime', '#6ad04a'], ['Cogumelo Raivoso', 'mushroom', '#d9473f'], ['Lobo Cinzento', 'beast', '#8a8f99']] },
+      monsters: [['Gosma', 'slime', '#6ad04a'], ['Cogumelo Raivoso', 'mushroom', '#d9473f'], ['Lobo Cinzento', 'beast', '#8a8f99'], ['Goblin Saqueador', 'goblin', '#7cb342', 'm'], ['Planta Faminta', 'plant', '#4caf50', 'f']] },
     { name: 'Floresta Sombria', lore: 'As árvores sussurram. Algo voa entre os galhos.', sky: ['#1e3a2e', '#5f8a66'], hills: ['#2f5a3a', '#244a2e'], ground: '#2f5a2a', dirt: '#3e2f22', fx: 'fireflies', moon: '#e8f5d0',
-      monsters: [['Morcego Noturno', 'bat', '#5b3f7a'], ['Espírito do Bosque', 'ghost', '#9fe0c0'], ['Lobo Sombrio', 'beast', '#3e3a52']] },
+      monsters: [['Morcego Noturno', 'bat', '#5b3f7a'], ['Espírito do Bosque', 'ghost', '#9fe0c0'], ['Lobo Sombrio', 'beast', '#3e3a52'], ['Aranha da Mata', 'spider', '#5a4632', 'f'], ['Planta Carnívora', 'plant', '#3f8f3a', 'f']] },
     { name: 'Cavernas de Cristal', lore: 'Cristais brilham no escuro e golems guardam cada veio.', sky: ['#15142b', '#3a3670'], hills: ['#2c2a52', '#232145'], ground: '#4a4560', dirt: '#2f2b40', fx: 'sparkle', stars: true, crystals: true,
-      monsters: [['Golem de Cristal', 'golem', '#7fd6ff'], ['Olho Errante', 'eye', '#c86bff'], ['Gosma Cristalina', 'slime', '#58e0e0']] },
+      monsters: [['Golem de Cristal', 'golem', '#7fd6ff'], ['Olho Errante', 'eye', '#c86bff'], ['Gosma Cristalina', 'slime', '#58e0e0'], ['Aranha de Cristal', 'spider', '#7fb0ff', 'f'], ['Esqueleto Mineiro', 'skeleton', '#e8e0cc', 'm']] },
     { name: 'Deserto Escaldante', lore: 'O sol castiga. Nas dunas, os mortos ainda caminham.', sky: ['#f3a54e', '#ffe7a8'], hills: ['#e6b46a', '#d49a50'], ground: '#dcae62', dirt: '#b5823e', fx: 'dust', sun: '#fff1b0',
-      monsters: [['Chacal de Areia', 'beast', '#c08a4a'], ['Múmia Errante', 'ghost', '#e8dcb5'], ['Golem de Arenito', 'golem', '#d2a35f']] },
+      monsters: [['Chacal de Areia', 'beast', '#c08a4a'], ['Múmia Errante', 'ghost', '#e8dcb5'], ['Golem de Arenito', 'golem', '#d2a35f'], ['Serpente das Dunas', 'serpent', '#d9a441', 'f'], ['Esqueleto do Deserto', 'skeleton', '#f0e2c0', 'm']] },
     { name: 'Pântano Pútrido', lore: 'O ar pesa. Cada passo afunda na lama tóxica.', sky: ['#3d4a32', '#8a9a66'], hills: ['#4f6038', '#3e4d2c'], ground: '#4a5a30', dirt: '#33301e', fx: 'spores',
-      monsters: [['Gosma Tóxica', 'slime', '#9acd32'], ['Cogumelo Venenoso', 'mushroom', '#8a4fbf'], ['Olho do Lodo', 'eye', '#7aa83a']] },
+      monsters: [['Gosma Tóxica', 'slime', '#9acd32'], ['Cogumelo Venenoso', 'mushroom', '#8a4fbf'], ['Olho do Lodo', 'eye', '#7aa83a'], ['Serpente do Lodo', 'serpent', '#5f7a2a', 'f'], ['Goblin do Brejo', 'goblin', '#6b8e23', 'm']] },
     { name: 'Tundra Congelada', lore: 'Um vento cortante. Os escudos de Flistaile ficam cobertos de gelo.', sky: ['#8fb9dc', '#eef7ff'], hills: ['#dbe9f5', '#c3d8ea'], ground: '#e9f3fb', dirt: '#9fb5c8', fx: 'snow', clouds: true,
-      monsters: [['Lobo do Gelo', 'beast', '#cfe6f5'], ['Golem de Gelo', 'golem', '#9fd8ff'], ['Espectro Gélido', 'ghost', '#bfe8ff']] },
+      monsters: [['Lobo do Gelo', 'beast', '#cfe6f5'], ['Golem de Gelo', 'golem', '#9fd8ff'], ['Espectro Gélido', 'ghost', '#bfe8ff'], ['Goblin da Neve', 'goblin', '#9fc3d6', 'm'], ['Aranha Glacial', 'spider', '#bfe0f5', 'f']] },
     { name: 'Cratera Vulcânica', lore: 'O chão ferve. Até as gosmas aqui são de magma.', sky: ['#2a0a08', '#a3361a'], hills: ['#4a1a12', '#33110c'], ground: '#3b2420', dirt: '#24130f', fx: 'embers', lava: true,
-      monsters: [['Gosma de Magma', 'slime', '#ff6a1a'], ['Morcego Ígneo', 'bat', '#ff4a2a'], ['Golem de Obsidiana', 'golem', '#3a2f45']] },
+      monsters: [['Gosma de Magma', 'slime', '#ff6a1a'], ['Morcego Ígneo', 'bat', '#ff4a2a'], ['Golem de Obsidiana', 'golem', '#3a2f45'], ['Serpente de Fogo', 'serpent', '#ff5a1a', 'f'], ['Esqueleto Ardente', 'skeleton', '#ffcf9a', 'm']] },
     { name: 'Ruínas Celestes', lore: 'Templos flutuam acima das nuvens, vigiados por olhos dourados.', sky: ['#6f7fff', '#ffd6f5'], hills: ['#c8bfff', '#b0a6f0'], ground: '#cfc8ec', dirt: '#9a90c8', fx: 'motes', clouds: true,
-      monsters: [['Olho Celestial', 'eye', '#ffd84a'], ['Guardião Alado', 'bat', '#f0f0ff'], ['Espírito Astral', 'ghost', '#c9a8ff']] },
+      monsters: [['Olho Celestial', 'eye', '#ffd84a'], ['Guardião Alado', 'bat', '#f0f0ff'], ['Espírito Astral', 'ghost', '#c9a8ff'], ['Planta Celeste', 'plant', '#ff9ad5', 'f'], ['Serpente Alada', 'serpent', '#a8e0ff', 'f']] },
     { name: 'Abismo Eterno', lore: 'O fim do mundo conhecido. Lá no fundo, algo devora estrelas.', sky: ['#05030d', '#2a0f3d'], hills: ['#1a0a2a', '#12061f'], ground: '#1a0f26', dirt: '#0d0714', fx: 'void', stars: true,
-      monsters: [['Devorador', 'beast', '#6a1a8a'], ['Olho do Vazio', 'eye', '#ff2a6a'], ['Sombra Primordial', 'ghost', '#4a3a7a']] },
+      monsters: [['Devorador', 'beast', '#6a1a8a'], ['Olho do Vazio', 'eye', '#ff2a6a'], ['Sombra Primordial', 'ghost', '#4a3a7a'], ['Aranha do Vazio', 'spider', '#3a2a4a', 'f'], ['Esqueleto Ancestral', 'skeleton', '#b8a8d8', 'm']] },
   ];
   // as últimas 10 zonas antes do chefe final são sempre no Abismo
   const biomeIndex = (z) => (z > FINAL_ZONE - 10 && z <= FINAL_ZONE ? BIOMES.length - 1 : Math.floor((z - 1) / 10) % BIOMES.length);
@@ -159,21 +159,23 @@
   // Conquistas: cada uma dá +3% de todo o dano; algumas dão gemas
   const ACH = [];
   {
-    const add = (id, icon, name, desc, test, gems) => ACH.push({ id, icon, name, desc, test, gems: gems || 0 });
-    [10, 25, 50, 100, 150, 200, 300, 400].forEach((z, i) => add('z' + z, '🗺️', `Explorador ${roman(i + 1)}`, `Alcance a zona ${z}.`, () => S.stats.maxZoneEver >= z, [1, 1, 2, 2, 3, 3, 4, 5][i]));
-    add('final', '👑', 'Fim do Devorador', `Derrote o chefe final da zona ${FINAL_ZONE}.`, () => S.stats.finalBeaten, 15);
-    [100, 1e3, 1e4, 1e5, 1e6].forEach((n, i) => add('k' + n, '⚔️', `Caçador ${roman(i + 1)}`, `Derrote ${fmt(n)} criaturas.`, () => S.stats.kills >= n, i >= 2 ? 1 : 0));
-    [10, 100, 1000, 5000].forEach((n, i) => add('b' + n, '☠️', `Matador de Chefes ${roman(i + 1)}`, `Derrote ${fmt(n)} chefes.`, () => S.stats.bosses >= n, i >= 1 ? 2 : 0));
-    [1000, 1e4, 1e5, 1e6].forEach((n, i) => add('c' + n, '👆', `Braço de Ferro ${roman(i + 1)}`, `Dê ${fmt(n)} golpes com as próprias mãos.`, () => S.stats.clicks >= n, i >= 1 ? 1 : 0));
-    [1e6, 1e15, 1e30, 1e60, 1e100].forEach((n, i) => add('g' + i, '💰', `Tesoureiro ${roman(i + 1)}`, `Junte ${fmt(n)} de ouro no total.`, () => S.stats.goldTotal >= n, i >= 2 ? 2 : 0));
-    [1, 5, 20, 50].forEach((n, i) => add('p' + n, '✨', `Renascido ${roman(i + 1)}`, `Renasça ${n} vez${n > 1 ? 'es' : ''}.`, () => S.stats.prestiges >= n, 2));
-    [10, 100, 500].forEach((n, i) => add('t' + n, '🗝️', `Caçador de Tesouros ${roman(i + 1)}`, `Abra ${n} Baús Vivos.`, () => S.stats.chests >= n, 1));
-    add('mithril', '🛡️', 'Mithril nos Dois Braços', 'Forje os dois escudos até Mithril.', () => Math.min(S.shields.left, S.shields.right) >= 7, 2);
-    add('eterno', '💠', 'Escudos Eternos', 'Forje os dois escudos até Eterno.', () => Math.min(S.shields.left, S.shields.right) >= 13, 5);
-    add('ac1', '🧤', 'Primeiro Escudeiro', 'Contrate um Escudeiro.', () => S.ac.owned >= 1);
-    add('ac10', '🎖️', 'Exército de Escudeiros', 'Tenha 10 Escudeiros.', () => S.ac.owned >= 10, 5);
-    add('skills', '📖', 'Mestre das Técnicas', 'Use cada uma das 10 habilidades.', () => Object.keys(S.stats.skillUses || {}).length >= SKILLS.length, 3);
-    add('lenda', '🏋️', 'Lenda do Treino', 'Leve um treino ao nível 1000.', () => Object.values(S.trainings).some((l) => l >= 1000), 3);
+    // cur(): valor atual; goal: meta. unit: como mostrar o que falta
+    const add = (id, icon, name, desc, cur, goal, gems, unit) => ACH.push({ id, icon, name, desc, cur, goal, unit: unit || '', test: () => cur() >= goal, gems: gems || 0 });
+    const minShield = () => Math.min(S.shields.left, S.shields.right);
+    [10, 25, 50, 100, 150, 200, 300, 400].forEach((z, i) => add('z' + z, '🗺️', `Explorador ${roman(i + 1)}`, `Alcance a zona ${z}.`, () => S.stats.maxZoneEver, z, [1, 1, 2, 2, 3, 3, 4, 5][i], 'zona'));
+    add('final', '👑', 'Fim do Devorador', `Derrote o chefe final da zona ${FINAL_ZONE}.`, () => (S.stats.finalBeaten ? FINAL_ZONE : Math.min(S.stats.maxZoneEver, FINAL_ZONE - 1)), FINAL_ZONE, 15, 'zona');
+    [100, 1e3, 1e4, 1e5, 1e6].forEach((n, i) => add('k' + n, '⚔️', `Caçador ${roman(i + 1)}`, `Derrote ${fmt(n)} criaturas.`, () => S.stats.kills, n, i >= 2 ? 1 : 0, 'criatura'));
+    [10, 100, 1000, 5000].forEach((n, i) => add('b' + n, '☠️', `Matador de Chefes ${roman(i + 1)}`, `Derrote ${fmt(n)} chefes.`, () => S.stats.bosses, n, i >= 1 ? 2 : 0, 'chefe'));
+    [1000, 1e4, 1e5, 1e6].forEach((n, i) => add('c' + n, '👆', `Braço de Ferro ${roman(i + 1)}`, `Dê ${fmt(n)} golpes com as próprias mãos.`, () => S.stats.clicks, n, i >= 1 ? 1 : 0, 'golpe'));
+    [1e6, 1e15, 1e30, 1e60, 1e100].forEach((n, i) => add('g' + i, '💰', `Tesoureiro ${roman(i + 1)}`, `Junte ${fmt(n)} de ouro no total.`, () => S.stats.goldTotal, n, i >= 2 ? 2 : 0, 'ouro'));
+    [1, 5, 20, 50].forEach((n, i) => add('p' + n, '✨', `Renascido ${roman(i + 1)}`, `Renasça ${n} vez${n > 1 ? 'es' : ''}.`, () => S.stats.prestiges, n, 2, 'renascimento'));
+    [10, 100, 500].forEach((n, i) => add('t' + n, '🗝️', `Caçador de Tesouros ${roman(i + 1)}`, `Abra ${n} Baús Vivos.`, () => S.stats.chests, n, 1, 'baú'));
+    add('mithril', '🛡️', 'Mithril nos Dois Braços', 'Forje os dois escudos até Mithril.', minShield, 7, 2, 'forja');
+    add('eterno', '💠', 'Escudos Eternos', 'Forje os dois escudos até Eterno.', minShield, 13, 5, 'forja');
+    add('ac1', '🧤', 'Primeiro Escudeiro', 'Contrate um Escudeiro.', () => S.ac.owned, 1, 0, 'escudeiro');
+    add('ac10', '🎖️', 'Exército de Escudeiros', 'Tenha 10 Escudeiros.', () => S.ac.owned, 10, 5, 'escudeiro');
+    add('skills', '📖', 'Mestre das Técnicas', 'Use cada uma das 10 habilidades.', () => Object.keys(S.stats.skillUses || {}).length, SKILLS.length, 3, 'habilidade');
+    add('lenda', '🏋️', 'Lenda do Treino', 'Leve um treino ao nível 1000.', () => Math.max(0, ...Object.values(S.trainings)), 1000, 3, 'nível');
   }
 
   // Parâmetros de balanceamento (ajustados com tools/sim.html)
@@ -365,6 +367,18 @@
   // Monstros e combate
   // ======================================================================
   let M = null;
+  let corpses = [];
+  const DEATH_T = 0.9;
+  const DEATHS = ['launch', 'squash', 'sink', 'spin', 'pop', 'soul'];
+  const VARIANTS = [
+    { id: 'ouro', m: 'Dourado', f: 'Dourada', color: '#ffc83a', gold: 3 },
+    { id: 'rubro', m: 'Rubro', f: 'Rubra', color: '#d8342c' },
+    { id: 'azul', m: 'Azulado', f: 'Azulada', color: '#3a7ae0' },
+    { id: 'sombra', m: 'Sombrio', f: 'Sombria', color: '#3b2f52' },
+    { id: 'albino', m: 'Albino', f: 'Albina', color: '#f1ede4' },
+    { id: 'esmeralda', m: 'Esmeralda', f: 'Esmeralda', color: '#1fae6e' },
+    { id: 'violeta', m: 'Violeta', f: 'Violeta', color: '#9a4ae0' },
+  ];
   function spawnMonster() {
     const z = S.zone;
     const boss = isBoss(z);
@@ -373,17 +387,25 @@
     const b = biomeOf(z);
     const cycle = Math.floor((z - 1) / (10 * BIOMES.length));
     let spec;
-    if (final) spec = ['Devorador de Mundos', 'eye', '#ff2a6a'];
-    else if (chest) spec = ['Baú Vivo', 'chest', '#b07a3a'];
-    else if (boss) spec = b.monsters[Math.floor(z / 5) % 3];
-    else spec = b.monsters[Math.floor(Math.random() * 3)];
-    let name = spec[0];
-    if (boss && !final) name += z % 10 === 0 ? ' Soberano' : ' Colossal';
+    if (final) spec = ['Devorador de Mundos', 'eye', '#ff2a6a', 'm'];
+    else if (chest) spec = ['Baú Vivo', 'chest', '#b07a3a', 'm'];
+    else if (boss) spec = b.monsters[Math.floor(z / 5) % b.monsters.length];
+    else spec = b.monsters[Math.floor(Math.random() * b.monsters.length)];
+    let name = spec[0], color = spec[2];
+    const fem = (spec[3] || (/^(Gosma|Múmia|Sombra|Aranha|Serpente|Planta)/.test(name) ? 'f' : 'm')) === 'f';
+    // variações de cor: mudam a cor e o nome (a dourada é rara e dá mais ouro)
+    let variant = null;
+    if (!final && !chest) {
+      if (!boss && Math.random() < 0.02) variant = VARIANTS[0];
+      else if (Math.random() < (boss ? 0.12 : 0.22)) variant = VARIANTS[1 + Math.floor(Math.random() * (VARIANTS.length - 1))];
+    }
+    if (variant) { color = variant.color; name += ' ' + (fem ? variant.f : variant.m); }
+    if (boss && !final) name += z % 10 === 0 ? (fem ? ' Soberana' : ' Soberano') : ' Colossal';
     if (cycle > 0 && !final) name += ' ' + roman(Math.min(cycle + 1, 39));
     const hp = monsterHP(z) * (final ? BAL.finalHp : boss ? BAL.bossHp : 1) * (chest ? 0.5 : 1);
     M = {
-      name, shape: spec[1], color: spec[2], boss, chest, final, hp, maxHp: hp,
-      gold: baseGold(z) * (final ? 100 : boss ? 6 : 1) * (chest ? 15 : 1),
+      name, shape: spec[1], color, fem, variant: variant ? variant.id : null, boss, chest, final, hp, maxHp: hp,
+      gold: baseGold(z) * (final ? 100 : boss ? 6 : 1) * (chest ? 15 : 1) * (variant && variant.gold ? variant.gold : 1),
       size: final ? 1.8 : boss ? 1.4 : 0.9 + Math.random() * 0.2,
       hit: 0, dying: 0, spawn: 0, time: boss ? bossTime() * (final ? 2 : 1) : 0, seed: Math.random() * 10,
     };
@@ -407,11 +429,18 @@
     if (M.chest) S.stats.chests++;
     M.hp = 0;
     M.dying = 0.0001;
-    burst(MX, GROUND - 60 * M.size, M.color, M.boss ? 30 : 16);
+    // jeito de morrer: fantasmas sobem como alma, o resto varia
+    M.death = M.shape === 'ghost' && Math.random() < 0.6 ? 'soul' : DEATHS[Math.floor(Math.random() * DEATHS.length)];
+    if (M.final) M.death = 'pop';
+    burst(MX, GROUND - 60 * M.size, M.color, (M.boss ? 30 : 16) + (M.death === 'pop' ? 20 : 0));
+    if (M.death === 'pop') parts.push({ x: MX, y: GROUND - 70 * M.size, vx: 0, vy: 0, g: 0, life: 0, max: 0.35, type: 'ring', color: M.color, r0: 20, r1: 120 * M.size });
+    if (M.death === 'squash' || M.death === 'sink') puff(MX, GROUND - 6, 5);
+    if (M.variant === 'ouro') coins(MX, GROUND - 80, 10);
     coins(MX, GROUND - 60, M.boss || M.chest ? 14 : 6);
     addFloat(MX, GROUND - 130 * M.size - 20, '+' + fmt(g), '#ffd24a', M.boss || M.chest ? 28 : 22);
     Sfx.coin();
-    if (M.boss) toast(`☠ ${M.name} derrotado!`, 'gold');
+    if (M.boss) toast(`☠ ${M.name} derrotad${M.fem ? 'a' : 'o'}!`, 'gold');
+    else if (M.variant === 'ouro') toast(`✨ ${M.name}! Ouro ×3`, 'gold');
     if (M.chest) toast(`🗝️ Baú Vivo! +${fmt(g)} de ouro`, 'gold');
     // gemas: todo chefe derrotado pela primeira vez dá 1 gema; depois, chance pequena
     if (M.boss) {
@@ -454,12 +483,15 @@
     spawnMonster();
   }
 
-  function attack(auto) {
+  let autoSide = 'L';
+  function attack(auto, side) {
     if (!auto) { S.stats.clicks++; if (introClicks < 6) introClicks++; }
-    if (!M || M.dying > 0 || M.spawn < 0.5) { if (!auto) heroCharge(); return; }
+    side = side || (autoSide = autoSide === 'L' ? 'R' : 'L');
+    if (!M || M.dying > 0 || M.spawn < 0.5) { if (!auto) heroCharge(side); return; }
     const crit = Math.random() < critChance();
     const d = clickDmg() * (crit ? critMult() : 1);
-    if (!auto) heroCharge(); else if (hero.bash < 0.3 && hero.pos > 0.9) hero.bash = 0.7;
+    if (crit) side = 'B';
+    if (!auto) heroCharge(side); else if (hero.pos > 0.9 && Math.max(hero.bashL, hero.bashR) < 0.3) heroBash(side, 0.7);
     const fx = MX + (Math.random() - 0.5) * 80, fy = GROUND - 110 * M.size - Math.random() * 40;
     if (crit) addFloat(fx, fy, 'CRÍTICO ' + fmt(d), '#ff9a3c', 26);
     else if (!auto || Math.random() < 0.25) addFloat(fx, fy, fmt(d), '#ffffff', auto ? 16 : 20);
@@ -515,11 +547,17 @@
   // ======================================================================
   // Efeitos visuais
   // ======================================================================
-  const hero = { pos: 0, vel: 0, step: 0, bash: 0, dashT: 0, pendingBash: false, x: HX };
+  const hero = { pos: 0, vel: 0, step: 0, bashL: 0, bashR: 0, dashT: 0, pendingBash: null, x: HX };
+  // side: 'L' (escudo esquerdo), 'R' (escudo direito) ou 'B' (os dois, no crítico)
+  function heroBash(side, v) {
+    if (side !== 'R') hero.bashL = Math.max(hero.bashL, v);
+    if (side !== 'L') hero.bashR = Math.max(hero.bashR, v);
+  }
   // clique: Flistaile corre até o monstro e dá uma escudada; se continuar clicando, fica lá golpeando
-  function heroCharge() {
+  function heroCharge(side) {
     hero.dashT = 0.55;
-    if (hero.pos >= 0.9) hero.bash = 1; else hero.pendingBash = true;
+    if (hero.pos >= 0.9) { hero.bashL = hero.bashR = 0; heroBash(side, 1); }
+    else hero.pendingBash = hero.pendingBash && hero.pendingBash !== side ? 'B' : side;
   }
   function updateHero(dt) {
     const prev = hero.pos;
@@ -529,10 +567,11 @@
     const v = dt > 0 ? (hero.pos - prev) / dt : 0;
     hero.vel += ((v / 5.5) * 1.6 - hero.vel) * Math.min(1, dt * 20);
     if (Math.abs(v) > 0.01) hero.step += dt * 16;
-    hero.bash = Math.max(0, hero.bash - dt * 5);
+    hero.bashL = Math.max(0, hero.bashL - dt * 5);
+    hero.bashR = Math.max(0, hero.bashR - dt * 5);
     if (hero.pendingBash && hero.pos >= 0.9) {
-      hero.pendingBash = false;
-      hero.bash = 1;
+      heroBash(hero.pendingBash, 1);
+      hero.pendingBash = null;
       shakeT = Math.max(shakeT, 0.18);
       if (M && !M.dying) impact(heroX() + 100, GROUND - 76, false);
     }
@@ -962,7 +1001,9 @@
 
   function drawHero(t) {
     const hx = heroX();
-    const bash = hero.bash > 0 ? Math.sin((1 - hero.bash) * Math.PI) : 0;
+    const bL = hero.bashL > 0 ? Math.sin((1 - hero.bashL) * Math.PI) : 0;
+    const bR = hero.bashR > 0 ? Math.sin((1 - hero.bashR) * Math.PI) : 0;
+    const bash = Math.max(bL, bR);
     const run = Math.min(1, Math.abs(hero.vel));
     const stride = Math.sin(hero.step) * run;
     const idle = 1 - run;
@@ -989,8 +1030,11 @@
     ctx.fillStyle = '#a8261e'; noOL(() => { ctx.beginPath(); ctx.moveTo(-8, -100 + br); ctx.quadraticCurveTo(-26 - wave * 0.6, -70, -36 - wave, -30); ctx.lineTo(-30 - wave * 0.8, -30); ctx.quadraticCurveTo(-20 - wave * 0.4, -66, -6, -98 + br); ctx.fill(); });
 
     // braço e escudo de trás (mão direita), levantado em guarda
-    limb(-4, -92 + br, -22, -84 - bash * 6, '#24507f', 11);
-    ctx.save(); ctx.translate(-36, -82 - bash * 8 + br); ctx.rotate(-0.16 - bash * 0.2 - run * 0.15); drawShield(S.shields.right, 48, 60, t, true); ctx.restore();
+    // (na escudada com o direito ele é desenhado na frente do corpo, mais abaixo)
+    if (bR <= 0.02) {
+      limb(-4, -92 + br, -22, -84 - bL * 6, '#24507f', 11);
+      ctx.save(); ctx.translate(-36, -82 - bL * 8 + br); ctx.rotate(-0.16 - bL * 0.2 - run * 0.15); drawShield(S.shields.right, 48, 60, t, true); ctx.restore();
+    }
 
     // pernas (a de trás primeiro)
     drawLeg(-8, -0.55 * stride - bash * 0.35, Math.max(0, stride) * 0.7 + bash * 0.2);
@@ -1071,16 +1115,25 @@
     ctx.restore();
 
     // braço da frente + escudo principal (mão esquerda), empurrado na escudada
-    const push = bash * 30;
-    limb(14, -92 + br, 34 + push * 0.6, -72 - bash * 6, '#2f6fb3', 12);
-    ctx.fillStyle = steel(28 + push * 0.6, -80, 40 + push * 0.6, -66); ellipse(34 + push * 0.6, -73 - bash * 6, 7, 6);
+    const push = bL * 30 - bR * 10;
+    limb(14, -92 + br, 34 + push * 0.6, -72 - bL * 6 + bR * 6, '#2f6fb3', 12);
+    ctx.fillStyle = steel(28 + push * 0.6, -80, 40 + push * 0.6, -66); ellipse(34 + push * 0.6, -73 - bL * 6 + bR * 6, 7, 6);
     ctx.save();
-    ctx.translate(44 + push, -66 - bash * 6);
-    ctx.rotate(0.08 + run * 0.12 - bash * 0.12);
-    const sc = 1 + bash * 0.1;
+    ctx.translate(44 + push, -66 - bL * 6 + bR * 8);
+    ctx.rotate(0.08 + run * 0.12 - bL * 0.12 + bR * 0.1);
+    const sc = 1 + bL * 0.1;
     ctx.scale(sc, sc);
     drawShield(S.shields.left, 60, 74, t, false);
     ctx.restore();
+    // escudada com o escudo direito: o braço de trás cruza o corpo e golpeia por cima
+    if (bR > 0.02) {
+      const rx = -36 + bR * 112, ry = -82 - bR * 34 + br;
+      limb(-2, -94 + br, rx - 8, ry + 4, '#24507f', 11);
+      ctx.save(); ctx.translate(rx, ry); ctx.rotate(-0.16 + bR * 0.3);
+      const rs = 1 + bR * 0.12; ctx.scale(rs, rs);
+      drawShield(S.shields.right, 48, 60, t, false);
+      ctx.restore();
+    }
     outline(false);
     ctx.restore();
 
@@ -1099,7 +1152,7 @@
 
   // ---- monstros ----
   let flashT = 0;
-  const fc = (c) => (flashT > 0 ? mix(c, '#ffffff', flashT * 0.75) : c);
+  const fc = (c) => (flashT > 0 ? mix(c, '#ffe0c8', flashT * 0.22) : c);
   function bodyGrad(c, x, y, r) {
     const g = ctx.createRadialGradient(x - r * 0.35, y - r * 0.45, r * 0.08, x, y, r * 1.1);
     g.addColorStop(0, fc(shade(c, 0.35))); g.addColorStop(0.55, fc(c)); g.addColorStop(1, fc(shade(c, -0.35)));
@@ -1119,7 +1172,129 @@
     }
   }
   function noOL(fn) { const was = OL; OL = false; fn(); OL = was; }
-  const TOPS = { slime: 100, mushroom: 108, beast: 104, bat: 160, golem: 160, ghost: 160, eye: 165, chest: 96 };
+  const TOPS = { slime: 100, mushroom: 108, beast: 104, bat: 160, golem: 160, ghost: 160, eye: 165, chest: 96, goblin: 130, spider: 92, serpent: 150, skeleton: 146, plant: 152 };
+  // traço com contorno (pernas, caules, pescoços)
+  function curveOL(col, w, fn) {
+    ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+    ctx.strokeStyle = OLC; ctx.lineWidth = w + 5; ctx.beginPath(); fn(); ctx.stroke();
+    ctx.strokeStyle = col; ctx.lineWidth = w; ctx.beginPath(); fn(); ctx.stroke();
+  }
+  const NEW_SHAPES = {
+    goblin(c, t) {
+      const b = Math.sin(t * 5) * 2, sw = Math.sin(t * 4) * 0.35;
+      ctx.fillStyle = fc(shade(c, -0.25)); rrect(-22, -38, 13, 38, 5); rrect(6, -38, 13, 38, 5);
+      ctx.fillStyle = fc('#5a3a22'); ellipse(-20, -3, 12, 5); ellipse(9, -3, 12, 5);
+      // clava atrás
+      ctx.save(); ctx.translate(26, -68 + b); ctx.rotate(-0.5 + sw);
+      ctx.fillStyle = fc('#8a5a32'); rrect(-5, -56, 10, 58, 4);
+      ctx.fillStyle = fc('#6e4424'); ellipse(0, -58, 12, 15);
+      noOL(() => { ctx.fillStyle = fc('#d8d0c0'); for (const [px, py] of [[-11, -62], [10, -54], [-4, -72]]) ellipse(px, py, 3, 3); });
+      ctx.restore();
+      ctx.fillStyle = fc('#8a5a32'); rrect(-28, -82 + b, 56, 50, 16);
+      noOL(() => { ctx.fillStyle = fc('#5a3a22'); ctx.fillRect(-27, -48 + b, 54, 6); ctx.fillStyle = '#ffd24a'; ctx.fillRect(-4, -49 + b, 8, 8); });
+      limb(-18, -70 + b, -36, -48 + b, fc(c), 10);
+      ctx.fillStyle = bodyGrad(c, -6, -108 + b, 32);
+      ctx.beginPath(); ctx.moveTo(-26, -112 + b); ctx.lineTo(-62, -128 + b); ctx.lineTo(-30, -96 + b); ctx.closePath(); fillOL();
+      ctx.beginPath(); ctx.moveTo(20, -114 + b); ctx.lineTo(54, -130 + b); ctx.lineTo(24, -96 + b); ctx.closePath(); fillOL();
+      ellipse(-4, -106 + b, 30, 26);
+      ctx.fillStyle = fc(shade(c, -0.15)); ellipse(-28, -100 + b, 9, 7);
+      eyes(-20, 0, -112 + b, 6.5, true, '#c0201a');
+      ctx.fillStyle = '#3a0a1a'; ctx.beginPath(); ctx.ellipse(-10, -90 + b, 12, 6, 0, 0, Math.PI); ctx.closePath(); fillOL();
+      noOL(() => { ctx.fillStyle = '#fff6e0'; ctx.beginPath(); ctx.moveTo(-18, -90 + b); ctx.lineTo(-15, -84 + b); ctx.lineTo(-12, -90 + b); ctx.moveTo(-4, -90 + b); ctx.lineTo(-1, -84 + b); ctx.lineTo(2, -90 + b); ctx.fill(); });
+    },
+    spider(c, t) {
+      const w = t * 9, leg = fc(shade(c, -0.3));
+      for (let i = 0; i < 4; i++) {
+        for (const s of [-1, 1]) {
+          const ax = i * 8 - 10, ay = -46;
+          const kx = s * (38 + i * 6) + i * 4 - 6, ky = -86 + i * 5 + Math.sin(w + i + s) * 5;
+          const fx = s * (64 + i * 7), fy = -Math.max(0, Math.sin(w + i * 1.3 + s)) * 7;
+          curveOL(leg, 6, () => { ctx.moveTo(ax, ay); ctx.lineTo(kx, ky); ctx.lineTo(fx, fy); });
+        }
+      }
+      ctx.fillStyle = bodyGrad(c, 26, -62, 42); ellipse(28, -58, 40, 34);
+      noOL(() => { ctx.fillStyle = fc(shade(c, 0.4)); ellipse(36, -66, 7, 12); ellipse(36, -46, 5, 6); ctx.fillStyle = 'rgba(255,255,255,.3)'; ellipse(14, -80, 12, 6, -0.4); });
+      ctx.fillStyle = bodyGrad(c, -24, -52, 28); ellipse(-22, -46, 27, 22);
+      noOL(() => {
+        ctx.fillStyle = '#ff3a2a';
+        for (const [ex, ey, r] of [[-36, -52, 4.5], [-25, -57, 5.5], [-14, -54, 4], [-33, -42, 3], [-20, -45, 3]]) ellipse(ex, ey, r, r);
+        ctx.fillStyle = '#ffffff'; ellipse(-27, -59, 1.6, 1.6); ellipse(-37, -54, 1.3, 1.3);
+        ctx.fillStyle = '#fff6e0';
+        ctx.beginPath(); ctx.moveTo(-42, -32); ctx.lineTo(-38, -20); ctx.lineTo(-34, -32); ctx.moveTo(-30, -30); ctx.lineTo(-26, -19); ctx.lineTo(-22, -30); ctx.fill();
+      });
+    },
+    serpent(c, t) {
+      const sway = Math.sin(t * 2.4) * 8;
+      ctx.fillStyle = bodyGrad(c, 0, -20, 60); ellipse(10, -16, 62, 18);
+      ctx.fillStyle = bodyGrad(c, 0, -44, 50); ellipse(6, -40, 48, 16);
+      noOL(() => { ctx.fillStyle = fc(shade(c, -0.3)); for (const [px, py] of [[-34, -16], [-8, -20], [20, -18], [44, -14], [-20, -42], [8, -44], [32, -40]]) ellipse(px, py, 5, 3); });
+      curveOL(fc(c), 24, () => { ctx.moveTo(22, -48); ctx.bezierCurveTo(44, -92, -6, -100, -30 + sway, -122); });
+      noOL(() => { curveOL(fc(shade(c, 0.45)), 8, () => { ctx.moveTo(10, -52); ctx.bezierCurveTo(30, -88, -14, -98, -34 + sway, -114); }); });
+      // língua
+      if (Math.sin(t * 6) > 0.2) {
+        ctx.strokeStyle = '#e02a3a'; ctx.lineWidth = 2.5; ctx.lineCap = 'round';
+        const tx = -66 + sway;
+        ctx.beginPath(); ctx.moveTo(tx + 6, -122); ctx.lineTo(tx - 10, -121); ctx.lineTo(tx - 16, -126); ctx.moveTo(tx - 10, -121); ctx.lineTo(tx - 16, -116); ctx.stroke();
+      }
+      ctx.fillStyle = bodyGrad(c, -40 + sway, -132, 30); ellipse(-40 + sway, -128, 28, 18, -0.15);
+      noOL(() => {
+        ctx.fillStyle = '#ffe14a'; ellipse(-46 + sway, -136, 5.5, 5.5);
+        ctx.fillStyle = '#1a1020'; ellipse(-46 + sway, -136, 1.7, 4.6);
+        ctx.fillStyle = fc(shade(c, -0.35)); ellipse(-62 + sway, -130, 2, 1.5);
+      });
+      ctx.strokeStyle = OLC; ctx.lineWidth = 3; ctx.lineCap = 'round';
+      ctx.beginPath(); ctx.moveTo(-54 + sway, -143); ctx.lineTo(-38 + sway, -140); ctx.stroke();
+    },
+    skeleton(c, t) {
+      const b = Math.sin(t * 4) * 1.5, jaw = Math.max(0, Math.sin(t * 6)) * 3, bone = fc(c);
+      limb(-12, -42, -16, -4, bone, 7); limb(10, -42, 13, -4, bone, 7);
+      ctx.fillStyle = bone; ellipse(-20, -3, 10, 4.5); ellipse(9, -3, 10, 4.5);
+      ctx.fillStyle = bone; ellipse(-2, -44, 17, 8);
+      // espada
+      ctx.save(); ctx.translate(34, -64 + b); ctx.rotate(-1 + Math.sin(t * 3) * 0.25);
+      ctx.fillStyle = steel(-3, -64, 3, 0); rrect(-3.5, -64, 7, 64, 2);
+      ctx.fillStyle = '#6e4424'; rrect(-11, -3, 22, 6, 2); rrect(-3, 2, 6, 14, 2);
+      ctx.restore();
+      limb(14, -92 + b, 34, -64 + b, bone, 6);
+      ctx.fillStyle = bone; rrect(-5, -100 + b, 9, 58, 4);
+      for (let i = 0; i < 4; i++) curveOL(bone, 4, () => { ctx.moveTo(-22 + i * 2, -88 + i * 10 + b); ctx.quadraticCurveTo(-2, -98 + i * 10 + b, 20 - i * 2, -88 + i * 10 + b); });
+      limb(-18, -92 + b, -36, -66 + b, bone, 6);
+      const hg = ctx.createRadialGradient(-14, -132 + b, 3, -6, -122 + b, 28);
+      hg.addColorStop(0, fc(shade(c, 0.4))); hg.addColorStop(1, fc(shade(c, -0.3)));
+      ctx.fillStyle = hg; rrect(-22, -110 + b + jaw, 24, 12, 4);
+      ellipse(-6, -124 + b, 24, 21);
+      noOL(() => {
+        ctx.fillStyle = '#1a1020'; ellipse(-17, -126 + b, 6.5, 7.5); ellipse(1, -126 + b, 6.5, 7.5); ellipse(-9, -114 + b, 3, 3.5);
+        ctx.fillStyle = '#ff6a3a'; ellipse(-17, -125 + b, 2.2, 2.2); ellipse(1, -125 + b, 2.2, 2.2);
+        ctx.strokeStyle = '#1a1020'; ctx.lineWidth = 1.5;
+        ctx.beginPath(); for (let i = 0; i < 4; i++) { ctx.moveTo(-18 + i * 5, -104 + b); ctx.lineTo(-18 + i * 5, -99 + b + jaw); } ctx.stroke();
+      });
+    },
+    plant(c, t) {
+      const sway = Math.sin(t * 2) * 8, o = 0.25 + 0.22 * Math.max(0, Math.sin(t * 4));
+      ctx.fillStyle = fc(shade(c, -0.2)); ellipse(-34, -12, 32, 10, -0.3); ellipse(34, -12, 32, 10, 0.3);
+      noOL(() => { ctx.strokeStyle = fc(shade(c, -0.45)); ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(-60, -4); ctx.lineTo(-10, -16); ctx.moveTo(60, -4); ctx.lineTo(10, -16); ctx.stroke(); });
+      curveOL(fc(shade(c, -0.1)), 14, () => { ctx.moveTo(0, -6); ctx.bezierCurveTo(4, -60, 34, -84, 10 + sway, -118); });
+      ctx.fillStyle = fc(shade(c, 0.1)); ellipse(18, -66, 16, 7, -0.8);
+      const hx = 12 + sway, hy = -122;
+      ctx.save(); ctx.translate(hx, hy);
+      ctx.fillStyle = '#7a1a2a'; ellipse(-34, 0, 32, 34 * o + 4);
+      // mandíbula de baixo
+      ctx.save(); ctx.rotate(o * 0.7);
+      ctx.fillStyle = bodyGrad(c, -30, 6, 34); ctx.beginPath(); ctx.ellipse(-32, 0, 36, 18, 0, 0, Math.PI); ctx.closePath(); fillOL();
+      noOL(() => { ctx.fillStyle = '#fff6e0'; ctx.beginPath(); for (let i = 0; i < 5; i++) { const x = -62 + i * 12; ctx.moveTo(x, 1); ctx.lineTo(x + 4, -9); ctx.lineTo(x + 8, 1); } ctx.fill(); });
+      ctx.restore();
+      // mandíbula de cima
+      ctx.save(); ctx.rotate(-o * 0.7);
+      ctx.fillStyle = bodyGrad(c, -30, -12, 40); ctx.beginPath(); ctx.ellipse(-32, 0, 40, 26, 0, Math.PI, 0); ctx.closePath(); fillOL();
+      noOL(() => {
+        ctx.fillStyle = '#fff6e0'; ctx.beginPath(); for (let i = 0; i < 6; i++) { const x = -66 + i * 12; ctx.moveTo(x, -1); ctx.lineTo(x + 4, 10); ctx.lineTo(x + 8, -1); } ctx.fill();
+        ctx.fillStyle = fc(shade(c, 0.5)); ellipse(-20, -14, 5, 4); ellipse(-46, -10, 4, 3); ellipse(-8, -6, 3, 3);
+      });
+      eyes(-44, -26, -16, 5.5, true);
+      ctx.restore();
+    },
+  };
   const SHAPES = {
     slime(c, t) {
       const sq = Math.sin(t * 4) * 0.06, w = 66 * (1 + sq), h = 62 * (1 - sq);
@@ -1299,19 +1474,57 @@
       });
     },
   };
+  Object.assign(SHAPES, NEW_SHAPES);
 
-  function drawMonster(t) {
+  function drawMonster(t, mon) {
+    const M = mon;
     if (!M) return;
-    const die = M.dying > 0 ? Math.min(1, M.dying / 0.35) : 0;
+    const k = M.dying > 0 ? Math.min(1, M.dying / DEATH_T) : 0;
     const appear = M.spawn;
     const pop = appear < 1 ? 1 + Math.sin(appear * Math.PI) * 0.12 : 1;
-    const s = M.size * (0.3 + 0.7 * appear) * pop * (1 - die * 0.6);
+    const s = M.size * (0.3 + 0.7 * appear) * pop;
     const shake = M.hit * 6;
     const squash = 1 - M.hit * 0.08;
     ctx.save();
     ctx.translate(MX + (Math.random() - 0.5) * shake + M.hit * 8, GROUND);
-    ctx.globalAlpha = (1 - die) * Math.min(1, appear * 1.5);
-    ctx.fillStyle = 'rgba(0,0,0,.28)'; ellipse(0, 2, 64 * s, 11 * s);
+    let alpha = Math.min(1, appear * 1.5);
+    const fadeAfter = (a) => Math.max(0, 1 - Math.max(0, k - a) / (1 - a));
+    // animações de morte
+    if (k > 0) {
+      const d = M.death || 'pop';
+      const mid = -70 * s;
+      if (d === 'launch') { // arremessada para longe, girando
+        alpha *= fadeAfter(0.55);
+        ctx.translate(k * 340, -Math.sin(Math.min(1, k * 1.2) * Math.PI * 0.85) * 210);
+        ctx.translate(0, mid); ctx.rotate(k * 8); ctx.translate(0, -mid);
+      } else if (d === 'squash') { // achatada contra o chão
+        const q = Math.min(1, k * 4);
+        alpha *= fadeAfter(0.45);
+        ctx.scale(1 + q * 0.55, 1 - q * 0.86);
+      } else if (d === 'sink') { // afunda no chão
+        alpha *= fadeAfter(0.8);
+        ctx.beginPath(); ctx.rect(-400, -700, 800, 702); ctx.clip();
+        ctx.translate(Math.sin(k * 40) * 4 * (1 - k), k * k * 190 * s);
+      } else if (d === 'spin') { // rodopia e some
+        alpha *= fadeAfter(0.5);
+        ctx.translate(0, mid); ctx.rotate(k * k * 16); ctx.scale(1 - k, 1 - k); ctx.translate(0, -mid);
+      } else if (d === 'pop') { // incha e estoura
+        const g = k < 0.18 ? k / 0.18 : 1;
+        alpha *= k < 0.18 ? 1 : 0;
+        ctx.translate(0, mid); ctx.scale(1 + g * 0.35, 1 + g * 0.35); ctx.translate(0, -mid);
+      } else { // 'soul': a alma sobe e desaparece
+        alpha *= 1 - k;
+        ctx.translate(Math.sin(k * 14) * 10, -k * 170);
+        ctx.scale(1 - k * 0.3, 1 + k * 0.25);
+      }
+    }
+    ctx.globalAlpha = Math.max(0, alpha);
+    ctx.fillStyle = 'rgba(0,0,0,.28)'; if (!k) ellipse(0, 2, 64 * s, 11 * s);
+    if (M.variant === 'ouro') {
+      const ag = ctx.createRadialGradient(0, -70 * s, 10, 0, -70 * s, 120 * s);
+      ag.addColorStop(0, `rgba(255,214,90,${0.3 + 0.12 * Math.sin(t * 5)})`); ag.addColorStop(1, 'rgba(255,214,90,0)');
+      ctx.fillStyle = ag; ctx.fillRect(-130 * s, -200 * s, 260 * s, 220 * s);
+    }
     if (M.boss) {
       const ag = ctx.createRadialGradient(0, -80 * s, 10, 0, -80 * s, 150 * s);
       ag.addColorStop(0, 'rgba(255,60,80,.28)'); ag.addColorStop(1, 'rgba(255,60,80,0)');
@@ -1323,7 +1536,6 @@
       ctx.fillStyle = ag; ctx.fillRect(-130 * s, -170 * s, 260 * s, 190 * s);
     }
     ctx.scale(s * (2 - squash), s * squash);
-    if (die) ctx.rotate(die * 0.5);
     flashT = M.hit;
     const tt = t + M.seed;
     outline(true);
@@ -1356,8 +1568,7 @@
   function impact(x, y, crit) {
     parts.push({ x, y, vx: 0, vy: 0, g: 0, life: 0, max: 0.28, type: 'ring', color: crit ? '#ffb14a' : '#ffffff', r0: 6, r1: crit ? 64 : 36 });
     if (crit) {
-      parts.push({ x, y, vx: 0, vy: 0, g: 0, life: 0, max: 0.22, type: 'star', color: '#fff3c0', size: 30 });
-      critFlash = 0.16;
+      parts.push({ x, y, vx: 0, vy: 0, g: 0, life: 0, max: 0.22, type: 'star', color: '#ffcf6a', size: 30 });
     }
   }
   function puff(x, y, n) {
@@ -1405,6 +1616,47 @@
     ctx.globalAlpha = 1;
   }
 
+  // ---- Escudeiros na arena: ajudantes visíveis golpeando o monstro ----
+  const SQUIRE_SPOTS = [[112, 40], [166, 30], [218, 44], [138, 12], [192, 8], [234, 18], [92, 60], [150, 62], [206, 66], [240, 56]];
+  function drawSquire(x, y, s, t, ph, i) {
+    const hit = ph < 0.35 ? Math.sin((ph / 0.35) * Math.PI) : 0;
+    const bob = Math.abs(Math.sin(t * 3 + i * 1.7)) * 2;
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.fillStyle = 'rgba(0,0,0,.28)'; ellipse(0, 2, 22 * s, 5 * s);
+    ctx.scale(-s, s); // virado para a esquerda, olhando o monstro
+    ctx.translate(hit * 12, -bob);
+    ctx.rotate(hit * 0.18);
+    outline(true);
+    ctx.fillStyle = '#4e3018'; rrect(-10, -17, 8, 17, 3); rrect(3, -17, 8, 17, 3);
+    ctx.fillStyle = '#c0392b'; ctx.beginPath(); ctx.moveTo(-4, -44); ctx.quadraticCurveTo(-24, -30, -22, -14); ctx.lineTo(-10, -18); ctx.closePath(); fillOL();
+    ctx.fillStyle = '#2f6fb3'; rrect(-13, -44, 27, 30, 9);
+    noOL(() => { ctx.fillStyle = '#ffd24a'; ctx.fillRect(-13, -22, 27, 3); });
+    ctx.fillStyle = '#f2c79b'; ellipse(3, -54, 11, 11);
+    noOL(() => { ctx.fillStyle = '#1a1020'; ellipse(9, -54, 1.7, 2.4); });
+    ctx.fillStyle = steel(-12, -68, 14, -52);
+    ctx.beginPath(); ctx.arc(2, -56, 12.5, Math.PI, 0); ctx.lineTo(14.5, -53); ctx.lineTo(-10.5, -53); ctx.closePath(); fillOL();
+    ctx.fillStyle = '#e04a3a';
+    ctx.beginPath(); ctx.moveTo(0, -67); ctx.quadraticCurveTo(-12, -82, -24, -68); ctx.quadraticCurveTo(-12, -70, -5, -63); ctx.closePath(); fillOL();
+    const px = 16 + hit * 12;
+    limb(6, -40, px - 4, -32, '#2f6fb3', 7);
+    ctx.fillStyle = steel(px - 10, -46, px + 10, -18); ellipse(px, -32, 10, 13);
+    noOL(() => { ctx.fillStyle = '#ffd24a'; ellipse(px, -32, 3, 3); });
+    outline(false);
+    ctx.restore();
+  }
+  function drawSquires(t) {
+    const n = Math.min(SQUIRE_SPOTS.length, acOn('arena'));
+    if (!n) return;
+    const rate = Math.min(3, acRate());
+    // os de trás (menor y) primeiro
+    const order = SQUIRE_SPOTS.slice(0, n).map((p, i) => [p, i]).sort((a, b) => a[0][1] - b[0][1]);
+    for (const [[dx, dy], i] of order) {
+      const ph = (t * rate + i * 0.37) % 1;
+      drawSquire(MX + dx, GROUND + dy, 1, t, ph, i);
+    }
+  }
+
   function render(t) {
     ctx.setTransform(sx, 0, 0, sy, 0, 0);
     if (shakeT > 0) ctx.translate((Math.random() - 0.5) * 14 * shakeT, (Math.random() - 0.5) * 10 * shakeT);
@@ -1414,13 +1666,14 @@
     drawAmbient(t, BIOMES[bi]);
     if (skillActive('furia')) { ctx.fillStyle = 'rgba(255,80,40,.08)'; ctx.fillRect(0, 0, W, H); }
     if (skillActive('ouro')) { ctx.fillStyle = 'rgba(255,210,74,.08)'; ctx.fillRect(0, 0, W, H); }
-    drawMonster(t);
+    for (const c of corpses) drawMonster(t, c);
+    drawMonster(t, M);
+    drawSquires(t);
     drawHero(t);
     drawProjectiles(t);
     drawParticles();
     if (!vignette) buildVignette();
     ctx.drawImage(vignette, 0, 0, W, H);
-    if (critFlash > 0) { ctx.fillStyle = `rgba(255,240,200,${critFlash * 0.6})`; ctx.fillRect(-20, -20, W + 40, H + 40); }
   }
 
   // ======================================================================
@@ -1465,7 +1718,8 @@
     M.hit = Math.max(0, M.hit - dt * 5);
     if (M.dying > 0) {
       M.dying += dt;
-      if (M.dying > 0.35) spawnMonster();
+      // o corpo continua a animação de morte enquanto a próxima criatura surge
+      if (M.dying > 0.35) { M.hit = 0; corpses.push(M); if (corpses.length > 4) corpses.shift(); spawnMonster(); }
     } else {
       const d = dps();
       if (d > 0 && M.spawn >= 0.5) { dpsAcc += Math.min(d * dt, M.hp); damage(d * dt, true); }
@@ -1476,6 +1730,8 @@
         if (M.time <= 0) bossFail();
       }
     }
+    for (const c of corpses) c.dying += dt;
+    corpses = corpses.filter((c) => c.dying < DEATH_T);
     workAutoclickers(dt);
     achTimer += dt;
     if (achTimer > 1) { achTimer = 0; checkAchievements(); }
@@ -1778,7 +2034,7 @@
         if (it.panel === 'reliquias' || shownLocked[it.panel]) { e.root.hidden = true; continue; }
         shownLocked[it.panel] = true;
         e.root.hidden = false;
-        e.root.classList.add('locked');
+        e.root.classList.add('locked'); e.root.classList.remove('ac-ready');
         if (e.icon.dataset.k !== 'lock') { e.icon.textContent = '🔒'; e.icon.dataset.k = 'lock'; }
         setText(e.name, '???');
         setText(e.lvl, '');
@@ -1804,12 +2060,14 @@
       const inf = it.info();
       const wallet = it.currency === 'souls' ? S.souls : S.gold;
       if (inf.maxed) {
-        e.btn.disabled = true; e.btn.classList.add('maxed');
+        e.btn.disabled = true; e.btn.classList.add('maxed'); e.root.classList.remove('ac-ready');
         setText(e.bl, ''); setText(e.bc, 'Máximo');
       } else {
         e.btn.classList.remove('maxed');
         const can = wallet >= inf.cost;
         e.btn.disabled = !can;
+        // borda amarela: há um Escudeiro neste item e já dá para comprar
+        e.root.classList.toggle('ac-ready', can && acOn('buy:' + it.key) > 0);
         if (can) affordable[it.panel] = true;
         const label = it.label ? it.label() : (S.buyMode === 'max' ? `Máx ×${inf.n}` : `Treinar ×${inf.n}`);
         setText(e.bl, label);
@@ -1880,7 +2138,7 @@
       <div class="card"><p>O progresso é salvo automaticamente neste navegador a cada 10 segundos. Use exportar/importar para levar seu save para outro aparelho.</p>
         <div class="btn-row"><button class="btn primary" id="optSave">Salvar agora</button><button class="btn" id="optExport">Exportar</button><button class="btn" id="optImport">Importar</button></div></div>
       <div class="card"><p>Apaga todo o progresso, incluindo Égides e relíquias.</p><button class="btn danger" id="optReset">Apagar progresso</button></div>
-      <div class="card"><p><b>Como jogar</b></p><p>Clique na arena para golpear com o escudo. Derrote ${KILLS_PER_ZONE} criaturas para liberar a próxima zona; a cada 5 zonas há um chefe com tempo limite. Gaste ouro em treinos (DPS automático), atributos e forje seus dois escudos. Na zona ${PRESTIGE_ZONE}, renasça para ganhar Égides.</p><p>Chefes derrotados pela primeira vez dão 💎 gemas. Com elas você contrata Escudeiros: arraste cada um até o monstro, uma habilidade ou um botão de compra e ele fica apertando ali. Clique num Escudeiro para recolhê-lo.</p><p>Derrote o Devorador de Mundos na zona ${FINAL_ZONE} para concluir a história — a jornada continua depois.</p><p>Atalhos: teclas 1 a 9 e 0 usam habilidades; ← e → trocam de zona.</p></div>`;
+      <div class="card"><p><b>Como jogar</b></p><p>Clique na arena para golpear: o botão esquerdo do mouse usa o escudo esquerdo, o direito usa o escudo direito, e no crítico Flistaile golpeia com os dois. Derrote ${KILLS_PER_ZONE} criaturas para liberar a próxima zona; a cada 5 zonas há um chefe com tempo limite. Gaste ouro em treinos (DPS automático), atributos e forje seus dois escudos. Na zona ${PRESTIGE_ZONE}, renasça para ganhar Égides.</p><p>Chefes derrotados pela primeira vez dão 💎 gemas. Com elas você contrata Escudeiros: arraste cada um até o monstro, uma habilidade ou um botão de compra e ele fica apertando ali. Clique num Escudeiro para recolhê-lo.</p><p>Derrote o Devorador de Mundos na zona ${FINAL_ZONE} para concluir a história — a jornada continua depois.</p><p>Atalhos: teclas 1 a 9 e 0 usam habilidades; ← e → trocam de zona.</p></div>`;
     p.querySelectorAll('input').forEach((i) => i.setAttribute('autocomplete', 'off'));
     $('optSound').checked = S.settings.sound;
     $('optNumbers').checked = S.settings.numbers;
@@ -2003,12 +2261,24 @@
   }
 
   // ---- conquistas ----
+  const PLURAL = { zona: 'zonas', criatura: 'criaturas', chefe: 'chefes', golpe: 'golpes', renascimento: 'renascimentos', 'baú': 'baús', forja: 'forjas', escudeiro: 'escudeiros', habilidade: 'habilidades', 'nível': 'níveis' };
+  function achLeft(n, unit) {
+    if (unit === 'ouro') return `faltam ${fmt(n)} de ouro`;
+    const one = n > 0 && n < 2;
+    return `falta${one ? '' : 'm'} ${fmt(n)} ${one ? unit : PLURAL[unit] || unit}`;
+  }
   function renderAch() {
     const n = achCount();
     const html = `<div class="card"><p><b>${n}/${ACH.length}</b> conquistas. Cada uma dá +3% de todo o dano — bônus atual <b class="hl-gold">+${n * 3}%</b>.</p></div><div class="ach-grid">` +
       ACH.map((a) => {
         const ok = !!S.achievements[a.id];
-        return `<div class="ach${ok ? ' ok' : ''}"><span class="ach-i">${ok ? a.icon : '🔒'}</span><div><b>${a.name}</b><small>${a.desc}${a.gems ? ` · 💎 ${a.gems}` : ''}</small></div></div>`;
+        let prog = '';
+        if (!ok) {
+          const cur = Math.max(0, Math.min(a.cur(), a.goal));
+          const p = Math.min(100, (cur / a.goal) * 100);
+          prog = `<div class="ach-bar"><i style="width:${p.toFixed(1)}%"></i></div><small class="ach-left">${fmt(cur)} / ${fmt(a.goal)} · ${achLeft(a.goal - cur, a.unit)}</small>`;
+        }
+        return `<div class="ach${ok ? ' ok' : ''}"><span class="ach-i">${ok ? a.icon : '🔒'}</span><div class="ach-body"><b>${a.name}</b><small>${a.desc}${a.gems ? ` · 💎 ${a.gems}` : ''}</small>${prog}</div></div>`;
       }).join('') + '</div>';
     const p = $('panel-conquistas');
     if (p.dataset.v !== html) { p.innerHTML = html; p.dataset.v = html; }
@@ -2037,7 +2307,14 @@
   }
 
   function bindUI() {
-    cv.addEventListener('pointerdown', (e) => { e.preventDefault(); Sfx.init(); attack(false); });
+    // botão esquerdo = escudo esquerdo, botão direito = escudo direito (no toque, alterna)
+    cv.addEventListener('pointerdown', (e) => {
+      e.preventDefault(); Sfx.init();
+      const side = e.pointerType === 'touch' ? undefined : e.button === 2 ? 'R' : e.button === 0 ? 'L' : null;
+      if (side === null) return;
+      attack(false, side);
+    });
+    cv.addEventListener('contextmenu', (e) => e.preventDefault());
     $('zprev').addEventListener('click', () => setZone(S.zone - 1));
     $('znext').addEventListener('click', () => setZone(S.zone + 1));
     $('autoAdv').addEventListener('change', (e) => {

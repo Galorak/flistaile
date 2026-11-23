@@ -235,6 +235,7 @@ button:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
 .item.locked { opacity: .45; filter: grayscale(.6); }
 .item.locked .buy { display: none; }
 .item.bought { animation: bought .45s ease-out; }
+.item.ac-ready { border: 2px solid var(--gold); box-shadow: 0 0 0 1px #1b1426, 0 0 14px #ffcf4a88, inset 0 1px 0 #ffffff10; }
 @keyframes bought { 0% { box-shadow: 0 0 0 0 #ffcf4a, inset 0 0 30px #ffcf4a66; border-color: var(--gold); } 100% { box-shadow: 0 0 0 10px #ffcf4a00; } }
 .item-icon {
   width: 50px; height: 50px; border-radius: 12px; display: grid; place-items: center; font-size: 27px;
@@ -377,6 +378,11 @@ textarea.save { width: 100%; min-height: 120px; background: #0005; color: var(--
 .ach.ok .ach-i { background: radial-gradient(circle at 35% 30%, #ffe9a0, #c8891c 75%); border-color: #1b1426; }
 .ach b { display: block; font-size: 14px; }
 .ach small { color: var(--muted); font-size: 12px; }
+.ach-body { flex: 1; min-width: 0; }
+.ach-bar { height: 6px; margin-top: 6px; border-radius: 4px; background: #0006; overflow: hidden; border: 1px solid #ffffff14; }
+.ach-bar i { display: block; height: 100%; background: linear-gradient(90deg, #c8891c, #ffd24a); border-radius: 4px; }
+.ach small.ach-left { display: block; margin-top: 3px; color: #ffd98a; }
+.ach:not(.ok) { opacity: .85; }
 
 /* ---------- chefe final e créditos ---------- */
 .mname.final { color: #ff6a8a; font-family: 'Cinzel', serif; font-size: 19px; text-shadow: 0 0 12px #ff2a6a, 0 2px 3px #000; }
