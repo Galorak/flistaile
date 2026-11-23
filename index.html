@@ -10,60 +10,64 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Nunito:wght@400;600;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/style.css?v=6">
+  <link rel="stylesheet" href="assets/style.css?v=7">
 </head>
 <body>
-  <header class="topbar">
-    <div class="brand">
-      <img src="assets/icon.svg" alt="" width="30" height="30">
-      <span>Flistaile</span>
-    </div>
-    <div class="resources">
-      <div class="res res-gold" title="Ouro"><span class="coin"></span><b id="gold">0</b></div>
-      <div class="res res-dps" title="Dano por segundo dos escudos espectrais">
-        <svg class="ri" viewBox="0 0 24 24"><path d="M5 4h14v7c0 5-3 8-7 10-4-2-7-5-7-10z" fill="#7cc4ff" stroke="#1d3a66" stroke-width="2" stroke-linejoin="round"/><path d="M9 11l3 3 3-3" fill="none" stroke="#1d3a66" stroke-width="2" stroke-linecap="round"/></svg>
-        <small>DPS</small><b id="dps">0</b></div>
-      <div class="res res-hit" title="Dano de cada golpe de escudo (clique)">
-        <svg class="ri" viewBox="0 0 24 24"><path d="M12 2l2.4 6.2L21 9l-5 4.3L17.5 20 12 16.6 6.5 20 8 13.3 3 9l6.6-.8z" fill="#ffb14a" stroke="#6b3a0a" stroke-width="1.6" stroke-linejoin="round"/></svg>
-        <small>Golpe</small><b id="clickdmg">1</b></div>
-      <div class="res res-souls" title="Égides: cada uma dá +10% de dano">
-        <svg class="ri" viewBox="0 0 24 24"><path d="M12 2l8 7-8 13-8-13z" fill="#c59bff" stroke="#3d1a6b" stroke-width="1.8" stroke-linejoin="round"/><path d="M4 9h16M12 2l-3 7 3 13 3-13z" fill="none" stroke="#3d1a6b" stroke-width="1.2" stroke-linejoin="round"/></svg>
-        <small>Égides</small><b id="souls">0</b></div>
-      <div class="res res-gems" title="Gemas: caem de chefes e Baús Vivos; contratam Escudeiros">
-        <svg class="ri" viewBox="0 0 24 24"><path d="M6 3h12l4 6-10 13L2 9z" fill="#5fe0d0" stroke="#0e4a52" stroke-width="1.8" stroke-linejoin="round"/><path d="M2 9h20M8 3l4 6 4-6M12 9v13" fill="none" stroke="#0e4a52" stroke-width="1.1" stroke-linejoin="round"/></svg>
-        <small>Gemas</small><b id="gems">0</b></div>
-    </div>
-  </header>
-
-  <main class="layout">
-    <section class="arena-col">
-      <div class="zone-bar">
-        <button class="zbtn" id="zprev" aria-label="Zona anterior">&#9664;</button>
-        <div class="zone-list" id="zoneList"></div>
-        <button class="zbtn" id="znext" aria-label="Próxima zona">&#9654;</button>
-        <label class="toggle" title="Avançar automaticamente para a próxima zona">
-          <input type="checkbox" id="autoAdv" autocomplete="off">
-          <span class="track"><span class="thumb"></span></span>
-          <span class="tlabel">Avançar</span>
-        </label>
-      </div>
-
-      <div class="arena framed" id="arena" data-ac="arena">
-        <canvas id="cv" aria-label="Arena de batalha"></canvas>
-        <div class="arena-pins" id="arenaPins"></div>
-        <div class="zone-info">
-          <div><b id="zoneTitle">Zona 1</b> <span id="biomeName"></span></div>
-          <div id="zoneProgress"></div>
+  <div class="game">
+    <!-- cenário: ocupa a maior parte da tela; zonas e informações ficam por cima dele -->
+    <section class="arena framed" id="arena" data-ac="arena">
+      <canvas id="cv" aria-label="Arena de batalha"></canvas>
+      <div class="scene-top">
+        <div class="zone-bar">
+          <button class="zbtn" id="zprev" aria-label="Zona anterior">&#9664;</button>
+          <div class="zone-list" id="zoneList"></div>
+          <button class="zbtn" id="znext" aria-label="Próxima zona">&#9654;</button>
+          <label class="toggle" title="Avançar automaticamente para a próxima zona">
+            <input type="checkbox" id="autoAdv" autocomplete="off">
+            <span class="track"><span class="thumb"></span></span>
+            <span class="tlabel">Avançar</span>
+          </label>
         </div>
-        <div class="monster-hud">
-          <div class="mname" id="mName"></div>
-          <div class="hpbar"><div class="hpghost" id="mHpGhost"></div><div class="hpfill" id="mHpFill"></div><span id="mHpText"></span></div>
-          <div class="bosstimer" id="bossTimer" hidden><div class="btfill" id="btFill"></div><span id="btText"></span></div>
-        </div>
-        <div class="hint" id="hint">Clique na arena para golpear com o escudo!</div>
       </div>
+      <div class="zone-info">
+        <div><b id="zoneTitle">Zona 1</b> <span id="biomeName"></span></div>
+        <div id="zoneProgress"></div>
+      </div>
+      <div class="monster-hud">
+        <div class="mname" id="mName"></div>
+        <div class="hpbar"><div class="hpghost" id="mHpGhost"></div><div class="hpfill" id="mHpFill"></div><span id="mHpText"></span></div>
+        <div class="bosstimer" id="bossTimer" hidden><div class="btfill" id="btFill"></div><span id="btText"></span></div>
+      </div>
+      <div class="arena-pins" id="arenaPins"></div>
+      <div class="hint" id="hint">Clique na arena para golpear com o escudo!</div>
+    </section>
 
-      <div class="skills" id="skills"></div>
+    <!-- habilidades: coluna entre o cenário e os menus -->
+    <nav class="skills" id="skills" aria-label="Habilidades"></nav>
+
+    <!-- lado direito: recursos em cima, escudeiros e menus -->
+    <aside class="side">
+      <header class="topbar">
+        <div class="brand">
+          <img src="assets/icon.svg" alt="" width="26" height="26">
+          <span>Flistaile</span>
+        </div>
+        <div class="res res-gold" title="Ouro"><span class="coin"></span><b id="gold">0</b></div>
+        <div class="resources">
+          <div class="res res-dps" title="Dano por segundo dos escudos espectrais">
+            <svg class="ri" viewBox="0 0 24 24"><path d="M5 4h14v7c0 5-3 8-7 10-4-2-7-5-7-10z" fill="#7cc4ff" stroke="#1d3a66" stroke-width="2" stroke-linejoin="round"/><path d="M9 11l3 3 3-3" fill="none" stroke="#1d3a66" stroke-width="2" stroke-linecap="round"/></svg>
+            <small>DPS</small><b id="dps">0</b></div>
+          <div class="res res-hit" title="Dano de cada golpe de escudo (clique)">
+            <svg class="ri" viewBox="0 0 24 24"><path d="M12 2l2.4 6.2L21 9l-5 4.3L17.5 20 12 16.6 6.5 20 8 13.3 3 9l6.6-.8z" fill="#ffb14a" stroke="#6b3a0a" stroke-width="1.6" stroke-linejoin="round"/></svg>
+            <small>Golpe</small><b id="clickdmg">1</b></div>
+          <div class="res res-souls" title="Égides: cada uma dá +10% de dano">
+            <svg class="ri" viewBox="0 0 24 24"><path d="M12 2l8 7-8 13-8-13z" fill="#c59bff" stroke="#3d1a6b" stroke-width="1.8" stroke-linejoin="round"/><path d="M4 9h16M12 2l-3 7 3 13 3-13z" fill="none" stroke="#3d1a6b" stroke-width="1.2" stroke-linejoin="round"/></svg>
+            <small>Égides</small><b id="souls">0</b></div>
+          <div class="res res-gems" title="Gemas: caem de chefes e Baús Vivos; contratam Escudeiros">
+            <svg class="ri" viewBox="0 0 24 24"><path d="M6 3h12l4 6-10 13L2 9z" fill="#5fe0d0" stroke="#0e4a52" stroke-width="1.8" stroke-linejoin="round"/><path d="M2 9h20M8 3l4 6 4-6M12 9v13" fill="none" stroke="#0e4a52" stroke-width="1.1" stroke-linejoin="round"/></svg>
+            <small>Gemas</small><b id="gems">0</b></div>
+        </div>
+      </header>
 
       <div class="ac-bar" id="acBar">
         <div class="ac-head">
@@ -73,36 +77,36 @@
         <div class="ac-tokens" id="acTokens"></div>
         <div class="ac-hint" id="acHint"></div>
       </div>
-    </section>
 
-    <aside class="shop framed">
-      <nav class="tabs" id="tabs">
-        <button data-tab="treinos" class="active">Treinos<i class="dot"></i></button>
-        <button data-tab="atributos">Atributos<i class="dot"></i></button>
-        <button data-tab="escudos">Escudos<i class="dot"></i></button>
-        <button data-tab="reliquias">Relíquias<i class="dot"></i></button>
-        <button data-tab="conquistas">Conquistas</button>
-        <button data-tab="stats">Estatísticas</button>
-        <button data-tab="opcoes">Opções</button>
-      </nav>
-      <div class="buy-mode" id="buyMode">
-        <span>Comprar:</span>
-        <button data-mode="1">×1</button>
-        <button data-mode="10">×10</button>
-        <button data-mode="25">×25</button>
-        <button data-mode="max">Máx</button>
-      </div>
-      <div class="panels">
-        <div class="panel active" id="panel-treinos"></div>
-        <div class="panel" id="panel-atributos"></div>
-        <div class="panel" id="panel-escudos"></div>
-        <div class="panel" id="panel-reliquias"></div>
-        <div class="panel" id="panel-conquistas"></div>
-        <div class="panel" id="panel-stats"></div>
-        <div class="panel" id="panel-opcoes"></div>
+      <div class="shop framed">
+        <nav class="tabs" id="tabs">
+          <button data-tab="treinos" class="active">Treinos<i class="dot"></i></button>
+          <button data-tab="atributos">Atributos<i class="dot"></i></button>
+          <button data-tab="escudos">Escudos<i class="dot"></i></button>
+          <button data-tab="reliquias">Relíquias<i class="dot"></i></button>
+          <button data-tab="conquistas">Conquistas</button>
+          <button data-tab="stats">Estatísticas</button>
+          <button data-tab="opcoes">Opções</button>
+        </nav>
+        <div class="buy-mode" id="buyMode">
+          <span>Comprar:</span>
+          <button data-mode="1">×1</button>
+          <button data-mode="10">×10</button>
+          <button data-mode="25">×25</button>
+          <button data-mode="max">Máx</button>
+        </div>
+        <div class="panels">
+          <div class="panel active" id="panel-treinos"></div>
+          <div class="panel" id="panel-atributos"></div>
+          <div class="panel" id="panel-escudos"></div>
+          <div class="panel" id="panel-reliquias"></div>
+          <div class="panel" id="panel-conquistas"></div>
+          <div class="panel" id="panel-stats"></div>
+          <div class="panel" id="panel-opcoes"></div>
+        </div>
       </div>
     </aside>
-  </main>
+  </div>
 
   <div class="toasts" id="toasts"></div>
 
@@ -114,6 +118,6 @@
     </div>
   </div>
 
-  <script src="assets/game.js?v=6"></script>
+  <script src="assets/game.js?v=7"></script>
 </body>
 </html>

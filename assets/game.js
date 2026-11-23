@@ -635,13 +635,23 @@
   // ======================================================================
   const cv = document.getElementById('cv') || document.createElement('canvas');
   const ctx = cv.getContext('2d');
-  let sx = 1, sy = 1;
+  // Câmera: o cenário ocupa qualquer formato de tela. A área da ação (herói, monstro, escudeiros)
+  // sempre cabe inteira; o que sobrar vira mais céu (em cima) ou mais paisagem (dos lados).
+  const FOCUS = { x0: 140, x1: 905, y0: 40, y1: H };
+  const cam = { s: 1, ox: 0, oy: 0, vw: W, vh: H };
   function resize() {
     const r = cv.getBoundingClientRect();
-    const dpr = Math.min(2, window.devicePixelRatio || 1);
-    cv.width = Math.max(1, Math.round(r.width * dpr));
-    cv.height = Math.max(1, Math.round(r.height * dpr));
-    sx = cv.width / W; sy = cv.height / H;
+    const w = Math.max(1, r.width), h = Math.max(1, r.height);
+    // limita a resolução em telas muito grandes para não pesar
+    const dpr = Math.min(2, window.devicePixelRatio || 1, Math.sqrt(3.5e6 / (w * h)));
+    cv.width = Math.max(1, Math.round(w * dpr));
+    cv.height = Math.max(1, Math.round(h * dpr));
+    const s = Math.min(cv.width / (FOCUS.x1 - FOCUS.x0), cv.height / (FOCUS.y1 - FOCUS.y0));
+    cam.s = s; cam.vw = cv.width / s; cam.vh = cv.height / s;
+    cam.ox = (FOCUS.x0 + FOCUS.x1) / 2 - cam.vw / 2;
+    // espaço que sobra na vertical: 65% vira céu e 35% vira chão, deixando a luta mais ao centro
+    const extra = Math.max(0, cam.vh - (FOCUS.y1 - FOCUS.y0));
+    cam.oy = FOCUS.y0 - extra * 0.65;
   }
 
   function hexToRgb(h) {
@@ -1168,8 +1178,8 @@
     for (const x of [x1, x2]) {
       ctx.fillStyle = fc('#ffffff'); ellipse(x, y, r, r * 1.1);
       const was = OL; OL = false;
-      ctx.fillStyle = pupil || '#1a1020'; ellipse(x - r * 0.35, y + r * 0.1, r * 0.5, r * 0.6);
-      ctx.fillStyle = '#ffffff'; ellipse(x - r * 0.5, y - r * 0.15, r * 0.17, r * 0.17);
+      ctx.fillStyle = pupil || '#1a1020'; ellipse(x - r * 0.48, y + r * 0.1, r * 0.5, r * 0.6);
+      ctx.fillStyle = '#ffffff'; ellipse(x - r * 0.62, y - r * 0.15, r * 0.17, r * 0.17);
       OL = was;
     }
     if (angry) {
@@ -1270,8 +1280,8 @@
       ctx.fillStyle = hg; rrect(-22, -110 + b + jaw, 24, 12, 4);
       ellipse(-6, -124 + b, 24, 21);
       noOL(() => {
-        ctx.fillStyle = '#1a1020'; ellipse(-17, -126 + b, 6.5, 7.5); ellipse(1, -126 + b, 6.5, 7.5); ellipse(-9, -114 + b, 3, 3.5);
-        ctx.fillStyle = '#ff6a3a'; ellipse(-17, -125 + b, 2.2, 2.2); ellipse(1, -125 + b, 2.2, 2.2);
+        ctx.fillStyle = '#1a1020'; ellipse(-21, -126 + b, 6.5, 7.5); ellipse(-4, -126 + b, 6, 7.5); ellipse(-16, -114 + b, 3, 3.5);
+        ctx.fillStyle = '#ff6a3a'; ellipse(-23, -125 + b, 2.2, 2.2); ellipse(-6, -125 + b, 2.2, 2.2);
         ctx.strokeStyle = '#1a1020'; ctx.lineWidth = 1.5;
         ctx.beginPath(); for (let i = 0; i < 4; i++) { ctx.moveTo(-18 + i * 5, -104 + b); ctx.lineTo(-18 + i * 5, -99 + b + jaw); } ctx.stroke();
       });
@@ -1333,8 +1343,8 @@
         ellipse(-30, -88 + b, 10, 8); ellipse(10, -102 + b, 12, 9); ellipse(38, -80 + b, 8, 6); ellipse(-6, -76 + b, 6, 5); ellipse(-48, -70 + b, 5, 4);
         ctx.fillStyle = 'rgba(255,255,255,.3)'; ellipse(-24, -108 + b, 18, 6, -0.3);
       });
-      eyes(-14, 8, -38, 8, true);
-      ctx.fillStyle = '#3a0a1a'; ctx.beginPath(); ctx.ellipse(-3, -20, 9, 5, 0, 0, Math.PI); ctx.closePath(); fillOL();
+      eyes(-26, -6, -40, 8, true);
+      ctx.fillStyle = '#3a0a1a'; ctx.beginPath(); ctx.ellipse(-18, -20, 8, 5, 0, 0, Math.PI); ctx.closePath(); fillOL();
     },
     beast(c, t) {
       const step = Math.sin(t * 6) * 4;
@@ -1380,11 +1390,11 @@
       ctx.beginPath(); ctx.ellipse(0, 0, 26, 30, 0, 0, Math.PI * 2); fillOL();
       noOL(() => {
         ctx.fillStyle = fc(shade(c, 0.25)); ellipse(0, 8, 14, 16);
-        ctx.fillStyle = '#ff3a2a'; ellipse(-10, -7, 5.5, 5.5); ellipse(8, -7, 5.5, 5.5);
-        ctx.fillStyle = '#fff'; ellipse(-11.5, -8.5, 1.5, 1.5); ellipse(6.5, -8.5, 1.5, 1.5);
+        ctx.fillStyle = '#ff3a2a'; ellipse(-15, -7, 5.5, 5.5); ellipse(2, -7, 5, 5.5);
+        ctx.fillStyle = '#fff'; ellipse(-17.5, -8.5, 1.5, 1.5); ellipse(0, -8.5, 1.5, 1.5);
         ctx.fillStyle = '#ffffff';
-        ctx.beginPath(); ctx.moveTo(-8, 10); ctx.lineTo(-5, 21); ctx.lineTo(-2, 10); ctx.fill();
-        ctx.beginPath(); ctx.moveTo(2, 10); ctx.lineTo(5, 21); ctx.lineTo(8, 10); ctx.fill();
+        ctx.beginPath(); ctx.moveTo(-13, 10); ctx.lineTo(-10, 21); ctx.lineTo(-7, 10); ctx.fill();
+        ctx.beginPath(); ctx.moveTo(-3, 10); ctx.lineTo(0, 21); ctx.lineTo(3, 10); ctx.fill();
       });
       ctx.restore();
     },
@@ -1401,7 +1411,7 @@
       ctx.beginPath(); ctx.moveTo(-20, -112); ctx.lineTo(-6, -92); ctx.lineTo(-16, -66); ctx.moveTo(18, -102); ctx.lineTo(30, -82); ctx.moveTo(-14, -158); ctx.lineTo(-6, -146); ctx.stroke();
       noOL(() => {
         ctx.save(); ctx.shadowColor = shade(c, 0.7); ctx.shadowBlur = 16;
-        ctx.fillStyle = shade(c, 0.8); rrect(-20, -148, 14, 8, 3); rrect(2, -148, 14, 8, 3);
+        ctx.fillStyle = shade(c, 0.8); rrect(-27, -148, 14, 7, 3); rrect(-7, -148, 12, 7, 3);
         const pulse = 0.6 + 0.4 * Math.sin(t * 3);
         ctx.globalAlpha *= pulse; ellipse(0, -88, 10, 10);
         ctx.restore();
@@ -1421,8 +1431,8 @@
       ctx.globalAlpha /= 0.9;
       noOL(() => {
         ctx.fillStyle = 'rgba(255,255,255,.35)'; ellipse(-22, -122, 12, 7, -0.5);
-        ctx.fillStyle = '#1a1020'; ellipse(-20, -100, 9, 13); ellipse(8, -100, 9, 13); ellipse(-6, -70, 10, 7 + Math.sin(t * 3) * 3);
-        ctx.fillStyle = 'rgba(160,255,230,.8)'; ellipse(-22, -103, 3, 4); ellipse(6, -103, 3, 4);
+        ctx.fillStyle = '#1a1020'; ellipse(-26, -100, 9, 13); ellipse(0, -100, 8, 12); ellipse(-14, -70, 10, 7 + Math.sin(t * 3) * 3);
+        ctx.fillStyle = 'rgba(160,255,230,.8)'; ellipse(-30, -103, 3, 4); ellipse(-3, -103, 3, 4);
       });
       ctx.restore();
     },
@@ -1667,14 +1677,23 @@
   function render(t) {
     // zera o estado do canvas (recortes/save pendentes) a cada quadro
     if (ctx.reset) ctx.reset(); else { ctx.globalAlpha = 1; }
-    ctx.setTransform(sx, 0, 0, sy, 0, 0);
+    const { s: cs, ox, oy, vw, vh } = cam;
+    ctx.setTransform(cs, 0, 0, cs, -ox * cs, -oy * cs);
     if (shakeT > 0) ctx.translate((Math.random() - 0.5) * 14 * shakeT, (Math.random() - 0.5) * 10 * shakeT);
     const bi = biomeIndex(S.zone);
     if (bgCache.idx !== bi) buildBg(bi);
-    ctx.drawImage(bgCache.canvas, -10, -10, W + 20, H + 20);
+    // céu extra acima do cenário e paisagem esticada se a tela for mais larga que ele
+    if (oy < -10) { ctx.fillStyle = BIOMES[bi].sky[0]; ctx.fillRect(ox - 20, oy - 20, vw + 40, -oy + 30); }
+    const bx0 = Math.min(-10, ox - 12), bx1 = Math.max(W + 10, ox + vw + 12);
+    ctx.drawImage(bgCache.canvas, bx0, -10, bx1 - bx0, H + 20);
+    if (oy + vh > H + 6) { // terra extra abaixo do chão
+      const dg = ctx.createLinearGradient(0, H, 0, oy + vh);
+      dg.addColorStop(0, BIOMES[bi].dirt); dg.addColorStop(1, shade(BIOMES[bi].dirt, -0.55));
+      ctx.fillStyle = dg; ctx.fillRect(ox - 20, H, vw + 40, oy + vh - H + 20);
+    }
     drawAmbient(t, BIOMES[bi]);
-    if (skillActive('furia')) { ctx.fillStyle = 'rgba(255,80,40,.08)'; ctx.fillRect(0, 0, W, H); }
-    if (skillActive('ouro')) { ctx.fillStyle = 'rgba(255,210,74,.08)'; ctx.fillRect(0, 0, W, H); }
+    if (skillActive('furia')) { ctx.fillStyle = 'rgba(255,80,40,.08)'; ctx.fillRect(ox, oy, vw, vh); }
+    if (skillActive('ouro')) { ctx.fillStyle = 'rgba(255,210,74,.08)'; ctx.fillRect(ox, oy, vw, vh); }
     for (const c of corpses) drawMonster(t, c);
     drawMonster(t, M);
     drawSquires(t);
@@ -1682,7 +1701,7 @@
     drawProjectiles(t);
     drawParticles();
     if (!vignette) buildVignette();
-    ctx.drawImage(vignette, 0, 0, W, H);
+    ctx.drawImage(vignette, ox, oy, vw, vh);
   }
 
   // ======================================================================
@@ -1851,7 +1870,8 @@
     zonesDirty = false;
     const list = $('zoneList');
     list.innerHTML = '';
-    const count = window.innerWidth < 420 ? 3 : window.innerWidth < 620 ? 5 : 7;
+    let count = Math.max(3, Math.min(9, Math.floor((list.clientWidth || 300) / 50)));
+    if (count % 2 === 0) count--;
     let start = Math.max(1, S.zone - Math.floor(count / 2));
     for (let z = start; z < start + count; z++) {
       const b = el('button', 'zone');
@@ -2348,6 +2368,7 @@
     $('acBuy').addEventListener('click', buyAutoclicker);
     document.addEventListener('click', (e) => { if (suppressClick) { e.stopPropagation(); e.preventDefault(); suppressClick = false; } }, true);
     window.addEventListener('resize', () => { resize(); zonesDirty = true; });
+    if (window.ResizeObserver) new ResizeObserver(() => { resize(); zonesDirty = true; }).observe(cv);
     window.addEventListener('beforeunload', save);
     document.addEventListener('visibilitychange', () => { if (document.hidden) save(); });
   }

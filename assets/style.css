@@ -192,13 +192,6 @@ button:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
 .skill.locked .sicon { filter: grayscale(1); opacity: .35; }
 .skill.locked .sbadge { border-color: #4a4078; }
 .skill.locked .stime { font-size: 10px; line-height: 1.1; text-align: center; }
-@media (max-width: 600px) {
-  .skills { gap: 6px; }
-  .sbadge { width: 40px; height: 40px; }
-  .skill .sicon { font-size: 19px; }
-  .skill .sname { font-size: 10px; }
-  .skill .skey { display: none; }
-}
 
 /* ---------- loja ---------- */
 .shop {
@@ -206,7 +199,6 @@ button:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
   max-height: calc(100vh - 96px); position: sticky; top: 78px;
   background: linear-gradient(180deg, #221c3c, #17132a);
 }
-@media (max-width: 980px) { .shop { max-height: none; position: static; } }
 .tabs { display: flex; flex-wrap: wrap; gap: 2px; padding: 8px 8px 0; border-bottom: 1px solid #4a4078; background: #0003; border-radius: var(--radius) var(--radius) 0 0; }
 .tabs button {
   flex: 1 1 auto; background: transparent; border: 0; border-bottom: 3px solid transparent; border-radius: 8px 8px 0 0;
@@ -336,7 +328,6 @@ textarea.save { width: 100%; min-height: 120px; background: #0005; color: var(--
 .skill { padding: 8px 4px 7px; }
 .sbadge { width: 44px; height: 44px; }
 .skill .sicon { font-size: 21px; }
-@media (max-width: 600px) { .sbadge { width: 38px; height: 38px; } }
 
 /* ---------- escudeiros ---------- */
 .ac-bar {
@@ -392,54 +383,126 @@ textarea.save { width: 100%; min-height: 120px; background: #0005; color: var(--
 .item > .ac-pin { top: -8px; right: -8px; }
 .skill[aria-disabled="true"] { cursor: default; }
 
-/* ---------- celular: topo numa linha, arena fixa no alto, controles compactos ---------- */
-@media (max-width: 600px) {
-  .topbar { padding: 6px 8px; gap: 6px; flex-wrap: nowrap; }
+/* =====================================================================
+   Layout de jogo: cenário ocupando a tela, habilidades numa coluna,
+   recursos e menus à direita (como um app, sem rolar a página)
+   ===================================================================== */
+html, body { height: 100%; }
+body { overflow: hidden; min-height: 0; }
+.game {
+  display: grid; grid-template-columns: minmax(0, 1fr) 84px clamp(340px, 30vw, 460px);
+  gap: 10px; height: 100vh; height: 100dvh; padding: 10px; box-sizing: border-box;
+}
+.arena { position: relative; min-height: 0; min-width: 0; overflow: hidden; }
+#cv { width: 100%; height: 100%; aspect-ratio: auto; }
+
+/* zonas no alto do cenário */
+.scene-top {
+  position: absolute; top: 10px; left: 50%; transform: translateX(-50%); z-index: 6;
+  width: min(620px, calc(100% - 20px)); padding: 6px 8px; border-radius: 16px;
+  background: linear-gradient(180deg, #1a1430d0, #0e0a1cd0); border: 1px solid #c9a14a55; box-shadow: 0 4px 14px #0007;
+}
+.scene-top .zone-list { padding: 2px 0 0; }
+.zone-info { top: 86px; z-index: 5; }
+.monster-hud { top: 86px; z-index: 5; }
+.arena-pins { z-index: 5; }
+
+/* coluna de habilidades */
+.skills {
+  display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: repeat(10, minmax(0, 1fr));
+  gap: 6px; min-height: 0; padding: 8px 6px; border-radius: 16px;
+  background: linear-gradient(180deg, #221c3c, #17132a); border: 1px solid var(--frame); box-shadow: 0 12px 32px #0009;
+}
+.skill { display: grid; place-items: center; padding: 0; gap: 0; min-height: 0; border-radius: 12px; }
+.sbadge { width: auto; height: min(54px, 86%); aspect-ratio: 1; }
+.skill .sicon { font-size: clamp(16px, 2.6vh, 24px); }
+.skill .sname { display: none; }
+.skill .skey { top: 3px; left: 4px; }
+.skill.locked .stime { font-size: 9.5px; }
+
+/* coluna da direita */
+.side { display: flex; flex-direction: column; gap: 10px; min-height: 0; min-width: 0; }
+.topbar {
+  position: static; display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 8px; align-items: center;
+  padding: 10px; border-radius: 16px; border: 1px solid var(--frame); backdrop-filter: none; z-index: auto;
+}
+.brand { font-size: 18px; gap: 7px; }
+.res-gold { justify-content: center; padding: 6px 12px; }
+.res-gold b { font-size: 22px; }
+.res-gold .coin { width: 24px; height: 24px; }
+.resources { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; margin: 0; }
+.resources .res { justify-content: center; padding: 4px 6px; gap: 5px; }
+.resources .res small { display: none; }
+.resources .res b { font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ac-bar { padding: 8px 10px; gap: 6px; }
+.ac-tokens { min-height: 40px; }
+.shop { flex: 1; min-height: 0; max-height: none; position: static; top: auto; }
+
+/* telas estreitas ou em pé (celular/tablet): tudo empilhado, o menu rola por dentro */
+@media (max-width: 900px), (orientation: portrait) and (max-width: 1100px) {
+  .game {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto auto auto auto minmax(0, 1fr);
+    gap: 6px; padding: 6px;
+  }
+  .side { display: contents; }
+  .topbar { order: 1; display: flex; flex-wrap: nowrap; gap: 5px; padding: 6px 8px; border-radius: 12px; }
+  .arena { order: 2; height: min(calc(52vw + 80px), 46vh); }
+  .skills { order: 3; }
+  .ac-bar { order: 4; }
+  .shop { order: 5; }
+
   .brand span { display: none; }
   .brand img { width: 22px; height: 22px; }
-  .resources { flex-wrap: nowrap; gap: 4px; margin-left: 0; flex: 1; min-width: 0; }
-  .res { flex: 1 1 auto; min-width: 0; padding: 3px 5px 3px 4px; gap: 3px; justify-content: center; }
-  .res-gold { padding-left: 4px; }
-  .res small { display: none; }
-  .res b, .res-gold b { font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-shadow: none; }
-  .ri, .coin { width: 14px; height: 14px; }
+  .res-gold { flex: 1 1 auto; padding: 3px 8px 3px 5px; gap: 4px; }
+  .res-gold b { font-size: 15px; }
+  .res-gold .coin { width: 16px; height: 16px; }
+  .resources { display: flex; flex: 3 1 auto; gap: 4px; min-width: 0; }
+  .resources .res { flex: 1 1 auto; min-width: 0; padding: 3px 5px 3px 4px; gap: 3px; }
+  .resources .res b { font-size: 12px; }
+  .ri { width: 14px; height: 14px; }
 
-  .layout { padding: 8px; gap: 8px; }
-  .arena-col { display: contents; }
+  .scene-top { top: 6px; padding: 4px 5px; border-radius: 12px; }
   .zone-bar { gap: 4px; }
-  .zbtn { width: 30px; height: 38px; border-radius: 10px; }
-  .zone { height: 40px; font-size: 13px; }
-  .toggle { gap: 4px; }
-  .toggle .track { width: 36px; height: 22px; }
-  .toggle .thumb { width: 16px; height: 16px; }
+  .zbtn { width: 28px; height: 34px; border-radius: 9px; }
+  .zone { height: 36px; font-size: 12px; }
+  .toggle .track { width: 34px; height: 20px; }
+  .toggle .thumb { width: 14px; height: 14px; }
   .toggle input:checked + .track .thumb { left: 17px; }
-  .tlabel { font-size: 11px; }
-
-  /* a arena fica presa no alto da tela enquanto se rola a loja */
-  .arena { position: sticky; top: 37px; z-index: 12; }
-  .framed::before, .framed::after { width: 12px; height: 12px; }
+  .tlabel { font-size: 10.5px; }
+  .zone-info { top: 56px; left: 6px; font-size: 10.5px; padding: 3px 7px; }
+  .zone-info b { font-size: 12px; }
+  .monster-hud { top: 56px; right: 6px; width: min(46%, 260px); }
+  .mname { font-size: 11.5px; margin-bottom: 3px; }
+  .hpbar { height: 15px; }
+  .hpbar span { font-size: 10px; }
   .hint { font-size: 11px; padding: 5px 10px; bottom: 6px; }
+  .framed::before, .framed::after { width: 12px; height: 12px; }
   .arena-pins { left: 6px; bottom: 6px; gap: 3px; max-width: 38%; }
   .arena-pins .ac-pin { width: 20px; height: 20px; border-width: 1px; box-shadow: 0 0 0 1px #ffcf4a88; }
 
-  .skills { gap: 5px; }
-  .skill { padding: 5px 2px; gap: 0; border-radius: 11px; }
-  .sbadge { width: 36px; height: 36px; }
-  .skill .sicon { font-size: 18px; }
-  .skill .sname { display: none; }
-  .skill.locked .stime { font-size: 9px; }
-  .skill .ac-pin { width: 20px; height: 20px; top: -5px; right: -5px; }
+  .skills { grid-template-rows: none; grid-template-columns: repeat(10, minmax(0, 1fr)); gap: 4px; padding: 5px; border-radius: 12px; }
+  .skill { aspect-ratio: 1; border-radius: 10px; }
+  .sbadge { height: 82%; }
+  .skill .sicon { font-size: clamp(13px, 4vw, 20px); }
+  .skill .skey { display: none; }
+  .skill.locked .stime { font-size: 8px; }
+  .skill .ac-pin { width: 18px; height: 18px; top: -5px; right: -5px; }
 
-  .ac-bar { padding: 7px 9px; gap: 5px; border-radius: 12px; }
-  .ac-title { font-size: 14px; }
-  .ac-tokens { min-height: 34px; gap: 6px; padding: 3px; }
-  .ac-token { width: 32px; height: 32px; }
-  .ac-hint { font-size: 11.5px; }
+  .ac-bar { padding: 6px 8px; gap: 6px; border-radius: 12px; flex-direction: row; align-items: center; flex-wrap: nowrap; }
+  .ac-tokens:empty::before { content: "Nenhum na reserva"; font-size: 11px; white-space: nowrap; }
+  .ac-head { gap: 6px; }
+  .ac-title { font-size: 13px; }
+  .ac-tokens { flex: 1; min-height: 32px; gap: 5px; padding: 2px 4px; }
+  .ac-token { width: 28px; height: 28px; }
+  .ac-hint { display: none; }
+  .btn.gem { padding: 4px 8px; font-size: 12px; white-space: nowrap; }
+  .ac-title { white-space: nowrap; }
 
-  .tabs { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; padding: 6px 6px 0; }
+  .tabs { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; padding: 5px 5px 0; }
   .tabs::-webkit-scrollbar { display: none; }
-  .tabs button { flex: 0 0 auto; padding: 8px 10px 7px; font-size: 12.5px; }
-  .buy-mode { padding: 8px 10px 0; }
+  .tabs button { flex: 0 0 auto; padding: 7px 10px 6px; font-size: 12.5px; }
+  .buy-mode { padding: 6px 8px 0; }
   .panels { padding: 8px; }
   .item { padding: 8px; gap: 8px; }
   .item-title { font-size: 14px; }
