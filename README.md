@@ -12,8 +12,8 @@ Site: https://flistaile.galorakdev.com/
 - **Atributos**: Precisão (crítico), Impacto Esmagador (dano crítico), Ganância (ouro) e Sinergia (golpe ganha parte do DPS).
 - **Escudos**: forje o Escudo Esquerdo (multiplica o golpe) e o Escudo Direito (multiplica o DPS) de Madeira até Eterno. Manter os dois no mesmo nível dá o bônus de **Harmonia**.
 - **10 habilidades** (teclas 1–9 e 0): Fúria Dupla, Rajada, Olho do Falcão, Chuva de Ouro, Impacto Sísmico, Grito de Guerra, Muralha do Tempo, Ímã de Tesouros, Eco Temporal e Ascensão Gêmea. Elas são liberadas nas zonas 10, 25, 45, 70, 100, 140, 185, 240, 310 e 390.
-- **Renascer** (zona 30+): recomeça da zona 1 e ganha **Égides** — cada uma dá +10% de dano e compra **Relíquias** permanentes.
-- **Gemas**: todo chefe derrotado pela primeira vez dá uma gema (e às vezes chefes e Baús Vivos também). Com gemas você contrata até 10 **Escudeiros** (auto clickers): arraste cada um até o monstro, uma habilidade ou um item da loja e ele fica apertando ali. Escudeiros no monstro aparecem na arena lutando ao lado de Flistaile; num item da loja, o card ganha borda amarela quando já dá para comprar. Clique num Escudeiro para recolhê-lo. Gemas e Escudeiros ficam após renascer.
+- **Renascer** (zona 30+): recomeça da zona 1 e ganha **Égides** — cada uma dá +10% de dano e compra **Relíquias** permanentes. As relíquias podem ser compradas de 1, 10, 25 ou no máximo de uma vez. As caras **Botas da Marcha** reduzem as criaturas por zona de 10 até 5.
+- **Gemas**: todo chefe derrotado pela primeira vez dá uma gema (e às vezes chefes e Baús Vivos também). Com gemas você contrata **Escudeiros** (auto clickers), sem limite de quantidade; as gemas do jogo até o chefe final dão para pelo menos 10, e cada um depois do 10º custa 35% a mais: arraste cada um até o monstro, uma habilidade ou um item da loja e ele fica apertando ali. Escudeiros no monstro aparecem na arena lutando ao lado de Flistaile; num item da loja, o card ganha borda amarela quando já dá para comprar. Clique num Escudeiro para recolhê-lo. Gemas e Escudeiros ficam após renascer.
 - **40 conquistas**, cada uma com +3% de dano (algumas dão gemas). A aba mostra quanto falta para cada uma.
 - **45 criaturas** em 9 regiões, com variações de cor próprias de cada região (e a rara Dourada, que dá ouro ×3) e jeitos diferentes de morrer.
 - **Chefe final**: o Devorador de Mundos, na zona 500, conclui a história. Depois disso as zonas continuam.
@@ -22,7 +22,7 @@ Site: https://flistaile.galorakdev.com/
 
 ## Balanceamento
 
-Os parâmetros ficam em `BAL` no topo de `assets/game.js`. O simulador em `tools/sim.html` roda um jogador robô com as fórmulas reais do jogo e mede o tempo até cada zona; `tools/simworker.js` roda várias combinações em paralelo. Na configuração atual o robô (compras ótimas, 6 cliques/s) derrota o chefe final em ~76h — um jogador humano deve levar perto de 100h.
+Os parâmetros ficam em `BAL` no topo de `assets/game.js`. O simulador em `tools/sim.html` roda um jogador robô com as fórmulas reais do jogo e mede o tempo até cada zona; `tools/simworker.js` roda várias combinações em paralelo. Na configuração atual o robô (compras ótimas, 6 cliques/s) derrota o chefe final em ~75h — um jogador humano deve levar perto de 100h.
 
 O progresso fica salvo no navegador (localStorage) e pode ser exportado/importado em **Opções**.
 

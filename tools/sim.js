@@ -100,8 +100,8 @@
         S.achievements[a.id] = true;
         addGems(a.gems);
       }
-      while (S.ac.owned < F.AC_COSTS.length && S.gems >= F.AC_COSTS[S.ac.owned]) {
-        S.gems -= F.AC_COSTS[S.ac.owned]; S.ac.owned++; S.ac.assign.push('arena');
+      while (S.gems >= F.acCost(S.ac.owned)) {
+        S.gems -= F.acCost(S.ac.owned); S.ac.owned++; S.ac.assign.push('arena');
       }
     }
 
@@ -142,6 +142,7 @@
       tryBuy('ferreiro', 15, 0.05);
       if (S.ac.owned) tryBuy('mao', 20, 0.05);
       tryBuy('tesouro', 10, 0.03);
+      tryBuy('marcha', 5, 0.25);
       // Égide Ancestral só quando vale mais que guardar as Égides (+10% cada)
       for (let g = 0; g < 1e6; g++) {
         const L = F.rl('egide'), c = L + 1;
@@ -166,7 +167,7 @@
       checkAch();
     }
 
-    let finalAt = null, prestigeQueued = false;
+    let finalAt = null, prestigeQueued = false, gemsAtFinal = null, acAtFinal = null;
     while (t < MAX_T) {
       if (prestigeQueued) prestige();
       buyGreedy();
@@ -177,8 +178,8 @@
       if (!F.isBoss(z)) {
         const tk = hp / e + 0.475;
         t += KILLS(tk);
-        gainGold(F.baseGold(z) * 10, 10);
-        S.stats.clicks += CPS * 10 * tk;
+        gainGold(F.baseGold(z) * F.killsPerZone(), F.killsPerZone());
+        S.stats.clicks += CPS * F.killsPerZone() * tk;
         advance();
         continue;
       }
@@ -194,7 +195,7 @@
         gainGold(F.baseGold(z) * (final ? 100 : 6), 1);
         S.stats.bosses++;
         if (z > S.stats.gemZone) { S.stats.gemZone = z; addGems(final ? 10 : 1); }
-        if (final && !S.stats.finalBeaten) { S.stats.finalBeaten = true; finalAt = t; }
+        if (final && !S.stats.finalBeaten) { S.stats.finalBeaten = true; finalAt = t; checkAch(); gemsAtFinal = S.stats.gemsTotal; acAtFinal = S.ac.owned; }
         advance();
         if (finalAt !== null && opts.stopAtFinal !== false) break;
         continue;
@@ -208,12 +209,12 @@
       t += dt;
       if (t - stuckSince > STUCK && F.soulsFor(S.maxZone) > 0) prestige();
     }
-    function KILLS(tk) { return 10 * tk; }
+    function KILLS(tk) { return F.killsPerZone() * tk; }
 
     const h = (s) => (s / 3600).toFixed(1) + 'h';
     const lines = [];
     lines.push(`Robô: ${CPS} cliques/s · BAL ${JSON.stringify(F.BAL)}`);
-    lines.push(`Tempo simulado: ${h(t)} · renascimentos: ${runs.length} · escudeiros: ${S.ac.owned} · gemas sobrando: ${S.gems} · conquistas: ${Object.keys(S.achievements).length}/${F.ACH.length}`);
+    lines.push(`Tempo simulado: ${h(t)} · renascimentos: ${runs.length} · escudeiros: ${S.ac.owned} (no chefe final: ${acAtFinal}) · gemas totais: ${S.stats.gemsTotal} (no chefe final: ${gemsAtFinal}) · Botas: ${F.rl('marcha')} · conquistas: ${Object.keys(S.achievements).length}/${F.ACH.length}`);
     lines.push('Zona → tempo total: ' + MARKS.map((m) => `${m}: ${marks[m] !== undefined ? h(marks[m]) : '—'}`).join(' · '));
     lines.push(`Chefe final: ${finalAt !== null ? h(finalAt) : 'não alcançado'}`);
     lines.push('Jornadas (início→fim, zona máx, Égides):');

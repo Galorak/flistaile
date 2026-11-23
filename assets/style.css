@@ -430,7 +430,7 @@ body { overflow: hidden; min-height: 0; }
 .res-gold { justify-content: center; padding: 6px 12px; }
 .res-gold b { font-size: 22px; }
 .res-gold .coin { width: 24px; height: 24px; }
-.resources { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; margin: 0; }
+.resources { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(auto-fit, minmax(96px, 1fr)); gap: 6px; margin: 0; }
 .resources .res { justify-content: center; padding: 4px 6px; gap: 5px; }
 .resources .res small { display: none; }
 .resources .res b { font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }

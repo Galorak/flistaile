@@ -125,10 +125,11 @@
     { id: 'pressa', icon: '📜', name: 'Pergaminho da Pressa', desc: 'Habilidades recarregam 4% mais rápido.', cost: (l) => 2 + l * 2, max: 15 },
     { id: 'ferreiro', icon: '🔨', name: 'Bênção do Ferreiro', desc: 'Forjar escudos fica 4% mais barato.', cost: (l) => 2 + l * 2, max: 15 },
     { id: 'tesouro', icon: '🗝️', name: 'Faro de Tesouro', desc: '+1% de chance de aparecer um Baú Vivo.', cost: (l) => 3 + l, max: 10 },
+    { id: 'marcha', icon: '🥾', name: 'Botas da Marcha', desc: 'Precisa derrotar 1 criatura a menos para liberar a próxima zona (mínimo 5).', cost: (l) => 1e4 * Math.pow(60, l), max: 5 },
   ];
 
   // Escudeiros (auto clickers): comprados com gemas, ficam após renascer
-  const AC_COSTS = [3, 8, 15, 25, 40, 60, 90, 130, 180, 250];
+  const AC_COSTS = [3, 6, 10, 16, 25, 40, 60, 85, 120, 160];
   const AC_BASE_RATE = 5;
   const FINAL_ZONE = 500;
 
@@ -190,7 +191,7 @@
   // Parâmetros de balanceamento (ajustados com tools/sim.html)
   const BAL = {
     hpGrowth: 1.55, hpLateGrowth: 1.0, hpLateStart: 100, goldDiv: 5.5, bossHp: 7, finalHp: 10,
-    soulsBase: 10, soulsGrowth: 1.22, soulsStep: 5, ms25: 2, ms100: 1, shieldMult: 1.6, shieldCost: 10,
+    soulsBase: 10, soulsGrowth: 1.2175, soulsStep: 5, ms25: 2, ms100: 1, shieldMult: 1.6, shieldCost: 10,
   };
 
   // ======================================================================
@@ -241,7 +242,7 @@
     S.zone = Math.min(S.maxZone, Math.max(1, Math.floor(num(S.zone, 1))));
     S.souls = Math.max(0, Math.floor(num(S.souls, 0)));
     S.gems = Math.max(0, Math.floor(num(S.gems, 0)));
-    S.ac.owned = Math.max(0, Math.min(AC_COSTS.length, Math.floor(num(S.ac.owned, 0))));
+    S.ac.owned = Math.max(0, Math.min(500, Math.floor(num(S.ac.owned, 0))));
     if (!Array.isArray(S.ac.assign)) S.ac.assign = [];
     S.ac.assign.length = S.ac.owned;
     for (let i = 0; i < S.ac.owned; i++) if (typeof S.ac.assign[i] !== 'string') S.ac.assign[i] = null;
@@ -298,6 +299,7 @@
   function autoClicks() { return skillActive('rajada') ? 10 : 0; }
   function acRate() { return AC_BASE_RATE * (1 + 0.2 * rl('mao')); }
   function acOn(target) { let n = 0; for (let i = 0; i < S.ac.owned; i++) if (S.ac.assign[i] === target) n++; return n; }
+  function killsPerZone() { return Math.max(5, KILLS_PER_ZONE - rl('marcha')); }
   function bossTime() { return BOSS_TIME + 3 * rl('ampulheta'); }
   function chestChance() { return Math.min(0.6, 0.015 + 0.01 * rl('tesouro') + (skillActive('ima') ? 0.3 : 0)); }
   function cdMult() { return 1 - 0.04 * rl('pressa'); }
@@ -351,7 +353,9 @@
     S.stats.gemsTotal += n;
     toast(`💎 +${n} gema${n > 1 ? 's' : ''}${why ? ' — ' + why : ''}`, 'gem');
   }
-  function acNextCost() { return S.ac.owned < AC_COSTS.length ? AC_COSTS[S.ac.owned] : Infinity; }
+  // depois do 10º, cada Escudeiro custa 35% mais que o anterior (sem limite de quantidade)
+  function acCost(n) { const L = AC_COSTS.length; return n < L ? AC_COSTS[n] : Math.round(AC_COSTS[L - 1] * Math.pow(1.35, n - L + 1)); }
+  function acNextCost() { return acCost(S.ac.owned); }
   function buyAutoclicker() {
     const c = acNextCost();
     if (S.gems < c) return;
@@ -456,7 +460,7 @@
     if (M.final && !S.stats.finalBeaten) { S.stats.finalBeaten = true; setTimeout(showEnding, 900); }
     if (S.zone === S.maxZone) {
       if (M.boss) unlockNext();
-      else if (++S.zoneKills >= KILLS_PER_ZONE) unlockNext();
+      else if (++S.zoneKills >= killsPerZone()) unlockNext();
     }
     hudDirty = true;
   }
@@ -1859,7 +1863,7 @@
     let prog;
     if (z < S.maxZone) prog = 'Zona concluída ✓ (farmando)';
     else if (isBoss(z)) prog = '☠ Chefe da zona!';
-    else prog = `Criaturas: ${S.zoneKills}/${KILLS_PER_ZONE}`;
+    else prog = `Criaturas: ${S.zoneKills}/${killsPerZone()}`;
     setText($('zoneProgress'), prog);
     $('hint').classList.toggle('hide', introClicks >= 6 || S.stats.clicks > 20);
     if (zonesDirty) renderZones();
@@ -1999,12 +2003,26 @@
             case 'ampulheta': return `Tempo contra chefes: ${bossTime()}s`;
             case 'ferreiro': return `Forja ${l * 4}% mais barata`;
             case 'tesouro': return `Chance de baú: ${pct(chestChance())}`;
+            case 'marcha': return `Criaturas por zona: ${killsPerZone()}`;
           }
           return '';
         },
-        info: () => { const l = rl(r.id); if (l >= (r.max || Infinity)) return { n: 0, cost: Infinity, maxed: true }; return { n: 1, cost: r.cost(l) }; },
-        label: () => 'Comprar',
-        buy() { S.relics[r.id] = rl(r.id) + 1; },
+        // compra múltipla: ×1, ×10, ×25 ou o máximo que as Égides pagam
+        info: () => {
+          const l = rl(r.id), room = (r.max || Infinity) - l;
+          if (room <= 0) return { n: 0, cost: Infinity, maxed: true };
+          let n = 0, cost = 0;
+          if (S.buyMode === 'max') {
+            while (n < room && n < 1e5) { const c = r.cost(l + n); if (cost + c > S.souls) break; cost += c; n++; }
+            if (n === 0) { n = 1; cost = r.cost(l); }
+          } else {
+            n = Math.min(room, S.buyMode);
+            for (let i = 0; i < n; i++) cost += r.cost(l + i);
+          }
+          return { n, cost };
+        },
+        label: (inf) => (S.buyMode === 'max' ? `Máx ×${inf.n}` : `Comprar ×${inf.n}`),
+        buy(n) { S.relics[r.id] = rl(r.id) + n; },
       });
     }
   }
@@ -2098,7 +2116,7 @@
         // borda amarela: há um Escudeiro neste item e já dá para comprar
         e.root.classList.toggle('ac-ready', can && acOn('buy:' + it.key) > 0);
         if (can) affordable[it.panel] = true;
-        const label = it.label ? it.label() : (S.buyMode === 'max' ? `Máx ×${inf.n}` : `Treinar ×${inf.n}`);
+        const label = it.label ? it.label(inf) :(S.buyMode === 'max' ? `Máx ×${inf.n}` : `Treinar ×${inf.n}`);
         setText(e.bl, label);
         setText(e.bc, fmt(inf.cost) + (it.currency === 'souls' ? ' Égide' + (inf.cost > 1 ? 's' : '') : ''));
       }
@@ -2148,7 +2166,7 @@
       ['Chance de crítico', pct(critChance())],
       ['Dano crítico', '×' + fmt(critMult())],
       ['Multiplicador de ouro', '×' + fmt(goldMult())],
-      ['Escudeiros', `${S.ac.owned}/${AC_COSTS.length} (${fmt(acRate())} toques/s cada)`],
+      ['Escudeiros', `${S.ac.owned} (${fmt(acRate())} toques/s cada)`],
       ['Gemas ganhas no total', fmt(S.stats.gemsTotal)],
       ['Conquistas', `${achCount()}/${ACH.length}`],
       ['Chefe final', S.stats.finalBeaten ? 'Derrotado 👑' : `Zona ${FINAL_ZONE}`],
@@ -2167,7 +2185,7 @@
       <div class="card"><p>O progresso é salvo automaticamente neste navegador a cada 10 segundos. Use exportar/importar para levar seu save para outro aparelho.</p>
         <div class="btn-row"><button class="btn primary" id="optSave">Salvar agora</button><button class="btn" id="optExport">Exportar</button><button class="btn" id="optImport">Importar</button></div></div>
       <div class="card"><p>Apaga todo o progresso, incluindo Égides e relíquias.</p><button class="btn danger" id="optReset">Apagar progresso</button></div>
-      <div class="card"><p><b>Como jogar</b></p><p>Clique na arena para golpear: o botão esquerdo do mouse usa o escudo esquerdo, o direito usa o escudo direito, e no crítico Flistaile golpeia com os dois. Derrote ${KILLS_PER_ZONE} criaturas para liberar a próxima zona; a cada 5 zonas há um chefe com tempo limite. Gaste ouro em treinos (DPS automático), atributos e forje seus dois escudos. Na zona ${PRESTIGE_ZONE}, renasça para ganhar Égides.</p><p>Chefes derrotados pela primeira vez dão 💎 gemas. Com elas você contrata Escudeiros: arraste cada um até o monstro, uma habilidade ou um botão de compra e ele fica apertando ali. Clique num Escudeiro para recolhê-lo.</p><p>Derrote o Devorador de Mundos na zona ${FINAL_ZONE} para concluir a história — a jornada continua depois.</p><p>Atalhos: teclas 1 a 9 e 0 usam habilidades; ← e → trocam de zona.</p></div>`;
+      <div class="card"><p><b>Como jogar</b></p><p>Clique na arena para golpear: o botão esquerdo do mouse usa o escudo esquerdo, o direito usa o escudo direito, e no crítico Flistaile golpeia com os dois. Derrote ${KILLS_PER_ZONE} criaturas (menos com as Botas da Marcha) para liberar a próxima zona; a cada 5 zonas há um chefe com tempo limite. Gaste ouro em treinos (DPS automático), atributos e forje seus dois escudos. Na zona ${PRESTIGE_ZONE}, renasça para ganhar Égides.</p><p>Chefes derrotados pela primeira vez dão 💎 gemas. Com elas você contrata Escudeiros: arraste cada um até o monstro, uma habilidade ou um botão de compra e ele fica apertando ali. Clique num Escudeiro para recolhê-lo.</p><p>Derrote o Devorador de Mundos na zona ${FINAL_ZONE} para concluir a história — a jornada continua depois.</p><p>Atalhos: teclas 1 a 9 e 0 usam habilidades; ← e → trocam de zona.</p></div>`;
     p.querySelectorAll('input').forEach((i) => i.setAttribute('autocomplete', 'off'));
     $('optSound').checked = S.settings.sound;
     $('optNumbers').checked = S.settings.numbers;
@@ -2238,7 +2256,7 @@
     btn.hidden = c === Infinity;
     btn.disabled = S.gems < c;
     btn.innerHTML = `+ Escudeiro <b>💎 ${c}</b>`;
-    setText($('acCount'), `${S.ac.owned}/${AC_COSTS.length}`);
+    setText($('acCount'), `${S.ac.owned}`);
     $('acHint').hidden = S.ac.owned > 0 && S.ac.assign.some((x) => x);
     setText($('acHint'), S.ac.owned === 0 ? 'Derrote chefes para ganhar 💎 gemas e contratar Escudeiros (auto clickers).' : 'Arraste um Escudeiro até o monstro, uma habilidade ou um botão de compra.');
   }
@@ -2327,7 +2345,7 @@
     activeTab = tab;
     document.querySelectorAll('#tabs button').forEach((b) => b.classList.toggle('active', b.dataset.tab === tab));
     document.querySelectorAll('.panel').forEach((p) => p.classList.toggle('active', p.id === 'panel-' + tab));
-    $('buyMode').classList.toggle('hidden', !(tab === 'treinos' || tab === 'atributos'));
+    $('buyMode').classList.toggle('hidden', !(tab === 'treinos' || tab === 'atributos' || tab === 'reliquias'));
     if (tab === 'stats') renderStats();
     if (tab === 'conquistas') renderAch();
   }
@@ -2424,7 +2442,7 @@
       BAL, TRAININGS, ATTRS, RELICS, SKILLS, ACH, AC_COSTS, AC_BASE_RATE, FINAL_ZONE, PRESTIGE_ZONE, KILLS_PER_ZONE,
       defaultState, get S() { return S; }, set S(v) { S = v; }, setClock(f) { clock = f; },
       monsterHP, baseGold, isBoss, baseDps, baseClick, critChance, critMult, goldMult, shieldCost, soulsFor, costBulk,
-      maxAffordable, bossTime, acRate, achMult, cdMult, lvl, rl, trainPower, milestone, shieldMult, globalMult, harmony, chestChance,
+      maxAffordable, bossTime, killsPerZone, acCost, acRate, achMult, cdMult, lvl, rl, trainPower, milestone, shieldMult, globalMult, harmony, chestChance,
     };
   } else start();
 })();
