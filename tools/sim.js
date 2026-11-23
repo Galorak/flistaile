@@ -109,7 +109,6 @@
       g *= F.goldMult(false) * goldAvgMul();
       S.gold += g; S.stats.goldTotal += g; S.stats.kills += kills;
       S.stats.chests += kills * F.chestChance();
-      { const exp = kills * F.chestChance() * 0.03; addGems(Math.floor(exp) + (Math.random() < exp % 1 ? 1 : 0)); }
     }
     const trace = [];
     function advance() {
@@ -194,7 +193,6 @@
         t += Math.min(tk, limitBurst) + 0.475;
         gainGold(F.baseGold(z) * (final ? 100 : 6), 1);
         S.stats.bosses++;
-        if (z > S.stats.gemZone) { S.stats.gemZone = z; addGems(final ? 10 : 1); }
         if (final && !S.stats.finalBeaten) { S.stats.finalBeaten = true; finalAt = t; checkAch(); gemsAtFinal = S.stats.gemsTotal; acAtFinal = S.ac.owned; }
         advance();
         if (finalAt !== null && opts.stopAtFinal !== false) break;
@@ -214,7 +212,7 @@
     const h = (s) => (s / 3600).toFixed(1) + 'h';
     const lines = [];
     lines.push(`Robô: ${CPS} cliques/s · BAL ${JSON.stringify(F.BAL)}`);
-    lines.push(`Tempo simulado: ${h(t)} · renascimentos: ${runs.length} · escudeiros: ${S.ac.owned} (no chefe final: ${acAtFinal}) · gemas totais: ${S.stats.gemsTotal} (no chefe final: ${gemsAtFinal}) · Botas: ${F.rl('marcha')} · conquistas: ${Object.keys(S.achievements).length}/${F.ACH.length}`);
+    lines.push(`Tempo simulado: ${h(t)} · renascimentos: ${runs.length} · escudeiros: ${S.ac.owned} (no chefe final: ${acAtFinal}) · gemas totais: ${S.stats.gemsTotal} (no chefe final: ${gemsAtFinal}) · Botas: ${F.rl('marcha')} · faltam: ${F.ACH.filter((a) => !S.achievements[a.id]).map((a) => a.id).join(",")} · conquistas: ${Object.keys(S.achievements).length}/${F.ACH.length}`);
     lines.push('Zona → tempo total: ' + MARKS.map((m) => `${m}: ${marks[m] !== undefined ? h(marks[m]) : '—'}`).join(' · '));
     lines.push(`Chefe final: ${finalAt !== null ? h(finalAt) : 'não alcançado'}`);
     lines.push('Jornadas (início→fim, zona máx, Égides):');

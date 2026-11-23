@@ -173,20 +173,20 @@
     // cur(): valor atual; goal: meta. unit: como mostrar o que falta
     const add = (id, icon, name, desc, cur, goal, gems, unit) => ACH.push({ id, icon, name, desc, cur, goal, unit: unit || '', test: () => cur() >= goal, gems: gems || 0 });
     const minShield = () => Math.min(S.shields.left, S.shields.right);
-    [10, 25, 50, 100, 150, 200, 300, 400].forEach((z, i) => add('z' + z, '🗺️', `Explorador ${roman(i + 1)}`, `Alcance a zona ${z}.`, () => S.stats.maxZoneEver, z, [1, 1, 2, 2, 3, 3, 4, 5][i], 'zona'));
-    add('final', '👑', 'Fim do Devorador', `Derrote o chefe final da zona ${FINAL_ZONE}.`, () => (S.stats.finalBeaten ? FINAL_ZONE : Math.min(S.stats.maxZoneEver, FINAL_ZONE - 1)), FINAL_ZONE, 15, 'zona');
-    [100, 1e3, 1e4, 1e5, 1e6].forEach((n, i) => add('k' + n, '⚔️', `Caçador ${roman(i + 1)}`, `Derrote ${fmt(n)} criaturas.`, () => S.stats.kills, n, i >= 2 ? 1 : 0, 'criatura'));
-    [10, 100, 1000, 5000].forEach((n, i) => add('b' + n, '☠️', `Matador de Chefes ${roman(i + 1)}`, `Derrote ${fmt(n)} chefes.`, () => S.stats.bosses, n, i >= 1 ? 2 : 0, 'chefe'));
-    [1000, 1e4, 1e5, 1e6].forEach((n, i) => add('c' + n, '👆', `Braço de Ferro ${roman(i + 1)}`, `Dê ${fmt(n)} golpes com as próprias mãos.`, () => S.stats.clicks, n, i >= 1 ? 1 : 0, 'golpe'));
-    [1e6, 1e15, 1e30, 1e60, 1e100].forEach((n, i) => add('g' + i, '💰', `Tesoureiro ${roman(i + 1)}`, `Junte ${fmt(n)} de ouro no total.`, () => S.stats.goldTotal, n, i >= 2 ? 2 : 0, 'ouro'));
-    [1, 5, 20, 50].forEach((n, i) => add('p' + n, '✨', `Renascido ${roman(i + 1)}`, `Renasça ${n} vez${n > 1 ? 'es' : ''}.`, () => S.stats.prestiges, n, 2, 'renascimento'));
-    [10, 100, 500].forEach((n, i) => add('t' + n, '🗝️', `Caçador de Tesouros ${roman(i + 1)}`, `Abra ${n} Baús Vivos.`, () => S.stats.chests, n, 1, 'baú'));
-    add('mithril', '🛡️', 'Mithril nos Dois Braços', 'Forje os dois escudos até Mithril.', minShield, 7, 2, 'forja');
-    add('eterno', '💠', 'Escudos Eternos', 'Forje os dois escudos até Eterno.', minShield, 13, 5, 'forja');
-    add('ac1', '🧤', 'Primeiro Escudeiro', 'Contrate um Escudeiro.', () => S.ac.owned, 1, 0, 'escudeiro');
-    add('ac10', '🎖️', 'Exército de Escudeiros', 'Tenha 10 Escudeiros.', () => S.ac.owned, 10, 5, 'escudeiro');
-    add('skills', '📖', 'Mestre das Técnicas', 'Use cada uma das 10 habilidades.', () => Object.keys(S.stats.skillUses || {}).length, SKILLS.length, 3, 'habilidade');
-    add('lenda', '🏋️', 'Lenda do Treino', 'Leve um treino ao nível 1000.', () => Math.max(0, ...Object.values(S.trainings)), 1000, 3, 'nível');
+    [10, 25, 50, 100, 150, 200, 300, 400].forEach((z, i) => add('z' + z, '🗺️', `Explorador ${roman(i + 1)}`, `Alcance a zona ${z}.`, () => S.stats.maxZoneEver, z, [5, 8, 12, 18, 25, 30, 40, 65][i], 'zona'));
+    add('final', '👑', 'Fim do Devorador', `Derrote o chefe final da zona ${FINAL_ZONE}.`, () => (S.stats.finalBeaten ? FINAL_ZONE : Math.min(S.stats.maxZoneEver, FINAL_ZONE - 1)), FINAL_ZONE, 40, 'zona');
+    [100, 1e3, 1e4, 1e5, 1e6].forEach((n, i) => add('k' + n, '⚔️', `Caçador ${roman(i + 1)}`, `Derrote ${fmt(n)} criaturas.`, () => S.stats.kills, n, [3, 5, 8, 12, 0][i], 'criatura'));
+    [10, 100, 1000, 5000].forEach((n, i) => add('b' + n, '☠️', `Matador de Chefes ${roman(i + 1)}`, `Derrote ${fmt(n)} chefes.`, () => S.stats.bosses, n, [5, 10, 15, 20][i], 'chefe'));
+    [1000, 1e4, 1e5, 1e6].forEach((n, i) => add('c' + n, '👆', `Braço de Ferro ${roman(i + 1)}`, `Dê ${fmt(n)} golpes com as próprias mãos.`, () => S.stats.clicks, n, [3, 6, 10, 15][i], 'golpe'));
+    [1e6, 1e15, 1e30, 1e60, 1e100].forEach((n, i) => add('g' + i, '💰', `Tesoureiro ${roman(i + 1)}`, `Junte ${fmt(n)} de ouro no total.`, () => S.stats.goldTotal, n, [3, 6, 10, 15, 20][i], 'ouro'));
+    [1, 5, 20, 50].forEach((n, i) => add('p' + n, '✨', `Renascido ${roman(i + 1)}`, `Renasça ${n} vez${n > 1 ? 'es' : ''}.`, () => S.stats.prestiges, n, [6, 10, 15, 20][i], 'renascimento'));
+    [10, 100, 500].forEach((n, i) => add('t' + n, '🗝️', `Caçador de Tesouros ${roman(i + 1)}`, `Abra ${n} Baús Vivos.`, () => S.stats.chests, n, [4, 8, 12][i], 'baú'));
+    add('mithril', '🛡️', 'Mithril nos Dois Braços', 'Forje os dois escudos até Mithril.', minShield, 7, 8, 'forja');
+    add('eterno', '💠', 'Escudos Eternos', 'Forje os dois escudos até Eterno.', minShield, 13, 12, 'forja');
+    add('ac1', '🧤', 'Primeiro Escudeiro', 'Contrate um Escudeiro.', () => S.ac.owned, 1, 3, 'escudeiro');
+    add('ac10', '🎖️', 'Exército de Escudeiros', 'Tenha 10 Escudeiros.', () => S.ac.owned, 10, 0, 'escudeiro');
+    add('skills', '📖', 'Mestre das Técnicas', 'Use cada uma das 10 habilidades.', () => Object.keys(S.stats.skillUses || {}).length, SKILLS.length, 8, 'habilidade');
+    add('lenda', '🏋️', 'Lenda do Treino', 'Leve um treino ao nível 1000.', () => Math.max(0, ...Object.values(S.trainings)), 1000, 10, 'nível');
   }
 
   // Parâmetros de balanceamento (ajustados com tools/sim.html)
@@ -472,12 +472,7 @@
     if (M.boss) toast(`☠ ${M.name} derrotad${M.fem ? 'a' : 'o'}!`, 'gold');
     else if (M.variant === 'ouro') toast(`✨ ${M.name}! Ouro ×3`, 'gold');
     if (M.chest) toast(`🗝️ Baú Vivo! +${fmt(g)} de ouro`, 'gold');
-    // gemas: todo chefe derrotado pela primeira vez dá 1 gema; depois, chance pequena
-    if (M.boss) {
-      if (S.zone > S.stats.gemZone) { S.stats.gemZone = S.zone; addGems(M.final ? 10 : 1, 'primeiro chefe'); }
-      else if (Math.random() < 0.04) addGems(1);
-    }
-    if (M.chest && Math.random() < 0.03) addGems(1);
+    // gemas vêm só das conquistas (total fixo); chefes e baús não dão gemas
     if (M.final && !S.stats.finalBeaten) { S.stats.finalBeaten = true; setTimeout(showEnding, 900); }
     if (S.zone === S.maxZone) {
       if (M.boss) unlockNext();
@@ -2212,7 +2207,7 @@
       <div class="card"><p>O progresso é salvo automaticamente neste navegador a cada 10 segundos. Use exportar/importar para levar seu save para outro aparelho.</p>
         <div class="btn-row"><button class="btn primary" id="optSave">Salvar agora</button><button class="btn" id="optExport">Exportar</button><button class="btn" id="optImport">Importar</button></div></div>
       <div class="card"><p>Apaga todo o progresso, incluindo Égides e relíquias.</p><button class="btn danger" id="optReset">Apagar progresso</button></div>
-      <div class="card"><p><b>Como jogar</b></p><p>Clique na arena para golpear: o botão esquerdo do mouse usa o escudo esquerdo, o direito usa o escudo direito, e no crítico Flistaile golpeia com os dois. Derrote ${KILLS_PER_ZONE} criaturas (menos com as Botas da Marcha) para liberar a próxima zona; a cada 5 zonas há um chefe com tempo limite. Gaste ouro em treinos (DPS automático), atributos e forje seus dois escudos. Na zona ${PRESTIGE_ZONE}, renasça para ganhar Égides.</p><p>Chefes derrotados pela primeira vez dão 💎 gemas. Com elas você contrata Escudeiros: arraste cada um até o monstro, uma habilidade ou um botão de compra e ele fica apertando ali. Clique num Escudeiro para recolhê-lo.</p><p>Derrote o Devorador de Mundos na zona ${FINAL_ZONE} para concluir a história — a jornada continua depois.</p><p>Atalhos: teclas 1 a 9 e 0 usam habilidades; ← e → trocam de zona.</p></div>`;
+      <div class="card"><p><b>Como jogar</b></p><p>Clique na arena para golpear: o botão esquerdo do mouse usa o escudo esquerdo, o direito usa o escudo direito, e no crítico Flistaile golpeia com os dois. Derrote ${KILLS_PER_ZONE} criaturas (menos com as Botas da Marcha) para liberar a próxima zona; a cada 5 zonas há um chefe com tempo limite. Gaste ouro em treinos (DPS automático), atributos e forje seus dois escudos. Na zona ${PRESTIGE_ZONE}, renasça para ganhar Égides.</p><p>Conquistas dão 💎 gemas (o jogo inteiro dá o suficiente para 10 Escudeiros). Com elas você contrata Escudeiros: arraste cada um até o monstro, uma habilidade ou um botão de compra e ele fica apertando ali. Clique num Escudeiro para recolhê-lo.</p><p>Derrote o Devorador de Mundos na zona ${FINAL_ZONE} para concluir a história — a jornada continua depois.</p><p>Atalhos: teclas 1 a 9 e 0 usam habilidades; ← e → trocam de zona.</p></div>`;
     p.querySelectorAll('input').forEach((i) => i.setAttribute('autocomplete', 'off'));
     $('optSound').checked = S.settings.sound;
     $('optNumbers').checked = S.settings.numbers;
@@ -2285,7 +2280,7 @@
     btn.innerHTML = `+ Escudeiro <b>💎 ${c}</b>`;
     setText($('acCount'), `${S.ac.owned}`);
     $('acHint').hidden = S.ac.owned > 0 && S.ac.assign.some((x) => x);
-    setText($('acHint'), S.ac.owned === 0 ? 'Derrote chefes para ganhar 💎 gemas e contratar Escudeiros (auto clickers).' : 'Arraste um Escudeiro até o monstro, uma habilidade ou um botão de compra.');
+    setText($('acHint'), S.ac.owned === 0 ? 'Complete conquistas para ganhar 💎 gemas e contratar Escudeiros (auto clickers).' : 'Arraste um Escudeiro até o monstro, uma habilidade ou um botão de compra.');
   }
   function startDrag(e) {
     if (e.button !== undefined && e.button !== 0) return;

@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Nunito:wght@400;600;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/style.css?v=9">
+  <link rel="stylesheet" href="assets/style.css?v=10">
 </head>
 <body>
   <div class="game">
@@ -29,6 +29,7 @@
           </label>
         </div>
       </div>
+      <div class="scene-left">
       <div class="zone-info">
         <div><b id="zoneTitle">Zona 1</b> <span id="biomeName"></span></div>
         <div id="zoneProgress"></div>
@@ -37,6 +38,7 @@
         <div class="mname" id="mName"></div>
         <div class="hpbar"><div class="hpghost" id="mHpGhost"></div><div class="hpfill" id="mHpFill"></div><span id="mHpText"></span></div>
         <div class="bosstimer" id="bossTimer" hidden><div class="btfill" id="btFill"></div><span id="btText"></span></div>
+      </div>
       </div>
       <div class="arena-pins" id="arenaPins"></div>
       <div class="hint" id="hint">Clique na arena para golpear com o escudo!</div>
@@ -63,7 +65,7 @@
           <div class="res res-souls" title="Égides: cada uma dá +10% de dano">
             <svg class="ri" viewBox="0 0 24 24"><path d="M12 2l8 7-8 13-8-13z" fill="#c59bff" stroke="#3d1a6b" stroke-width="1.8" stroke-linejoin="round"/><path d="M4 9h16M12 2l-3 7 3 13 3-13z" fill="none" stroke="#3d1a6b" stroke-width="1.2" stroke-linejoin="round"/></svg>
             <small>Égides</small><b id="souls">0</b></div>
-          <div class="res res-gems" title="Gemas: caem de chefes e Baús Vivos; contratam Escudeiros">
+          <div class="res res-gems" title="Gemas: vêm das conquistas; contratam Escudeiros">
             <svg class="ri" viewBox="0 0 24 24"><path d="M6 3h12l4 6-10 13L2 9z" fill="#5fe0d0" stroke="#0e4a52" stroke-width="1.8" stroke-linejoin="round"/><path d="M2 9h20M8 3l4 6 4-6M12 9v13" fill="none" stroke="#0e4a52" stroke-width="1.1" stroke-linejoin="round"/></svg>
             <small>Gemas</small><b id="gems">0</b></div>
         </div>
@@ -120,6 +122,6 @@
     </div>
   </div>
 
-  <script src="assets/game.js?v=9"></script>
+  <script src="assets/game.js?v=10"></script>
 </body>
 </html>
