@@ -130,6 +130,7 @@
 
   // Escudeiros (auto clickers): comprados com gemas, ficam após renascer
   const AC_COSTS = [3, 6, 10, 16, 25, 40, 60, 85, 120, 160];
+  const FREE_GEM_CAP = AC_COSTS.reduce((a, b) => a + b, 0); // 525: o jogo dá só o suficiente para 10
   const AC_BASE_RATE = 5;
   const FINAL_ZONE = 500;
 
@@ -213,9 +214,10 @@
       ac: { owned: 0, assign: [] },
       achievements: {},
       skills: {},
+      boosts: { goldUntil: 0, dmgUntil: 0 },
       buyMode: 1,
       settings: { sound: true, numbers: true },
-      stats: { clicks: 0, kills: 0, bosses: 0, goldTotal: 0, prestiges: 0, maxZoneEver: 1, playTime: 0, soulsTotal: 0, chests: 0, gemsTotal: 0, gemZone: 0, finalBeaten: false, skillUses: {}, startedAt: Date.now() },
+      stats: { clicks: 0, kills: 0, bosses: 0, goldTotal: 0, prestiges: 0, maxZoneEver: 1, playTime: 0, soulsTotal: 0, chests: 0, gemsTotal: 0, freeGems: 0, paidGems: 0, gemZone: 0, finalBeaten: false, skillUses: {}, startedAt: Date.now() },
       seenIntro: false,
       lastSave: Date.now(),
     };
@@ -247,6 +249,10 @@
     S.ac.assign.length = S.ac.owned;
     for (let i = 0; i < S.ac.owned; i++) if (typeof S.ac.assign[i] !== 'string') S.ac.assign[i] = null;
     if (![1, 10, 25, 'max'].includes(S.buyMode)) S.buyMode = 1;
+    if (!S.boosts || typeof S.boosts !== 'object') S.boosts = { goldUntil: 0, dmgUntil: 0 };
+    // saves antigos: gemas já ganhas contam no limite das grátis
+    if (typeof S.stats.freeGems !== 'number') S.stats.freeGems = Math.min(FREE_GEM_CAP, num(S.stats.gemsTotal, 0));
+    if (typeof S.stats.paidGems !== 'number') S.stats.paidGems = 0;
   }
   function save() {
     S.lastSave = Date.now();
@@ -278,7 +284,8 @@
   const achMult = () => 1 + 0.03 * achCount();
   const globalMult = () => (1 + 0.1 * S.souls) * (1 + 0.25 * rl('egide')) * harmony() * achMult();
   const trainPower = (t, l) => t.per * l * milestone(l);
-  const buffAll = () => (skillActive('ascensao') ? 5 : 1);
+  const boostOn = (k) => !!S.boosts && S.boosts[k] > clock();
+  const buffAll = () => (skillActive('ascensao') ? 5 : 1) * (boostOn('dmgUntil') ? 2 : 1);
 
   function monsterHP(z) {
     return Math.ceil(10 * Math.pow(BAL.hpGrowth, z - 1) * (z > BAL.hpLateStart ? Math.pow(BAL.hpLateGrowth, z - BAL.hpLateStart) : 1));
@@ -295,7 +302,7 @@
   function clickDmg() { return baseClick() * (skillActive('grito') ? 3 : 1) * buffAll(); }
   function critChance() { return Math.min(0.5, 0.01 * lvl('precisao')) + (skillActive('falcao') ? 0.5 : 0); }
   function critMult() { return 3 + 0.5 * lvl('impacto'); }
-  function goldMult(withBuff = true) { return Math.pow(1.15, lvl('ganancia')) * (1 + 0.2 * rl('bolsa')) * (withBuff && skillActive('ouro') ? 3 : 1); }
+  function goldMult(withBuff = true) { return Math.pow(1.15, lvl('ganancia')) * (1 + 0.2 * rl('bolsa')) * (withBuff && skillActive('ouro') ? 3 : 1) * (boostOn('goldUntil') ? 2 : 1); }
   function autoClicks() { return skillActive('rajada') ? 10 : 0; }
   function acRate() { return AC_BASE_RATE * (1 + 0.2 * rl('mao')); }
   function acOn(target) { let n = 0; for (let i = 0; i < S.ac.owned; i++) if (S.ac.assign[i] === target) n++; return n; }
@@ -347,14 +354,28 @@
   // ======================================================================
   // Gemas, escudeiros e conquistas
   // ======================================================================
+  // gemas grátis (chefes, baús, conquistas): somam no máximo o preço dos 10 primeiros Escudeiros
+  function freeGemsLeft() { return Math.max(0, FREE_GEM_CAP - (S.stats.freeGems || 0)); }
   function addGems(n, why) {
+    n = Math.min(n, freeGemsLeft());
     if (n <= 0) return;
     S.gems += n;
     S.stats.gemsTotal += n;
+    S.stats.freeGems = (S.stats.freeGems || 0) + n;
     toast(`💎 +${n} gema${n > 1 ? 's' : ''}${why ? ' — ' + why : ''}`, 'gem');
+    if (freeGemsLeft() === 0) toast('💎 Você juntou todas as gemas do jogo — o bastante para 10 Escudeiros!', 'gem');
   }
-  // depois do 10º, cada Escudeiro custa 35% mais que o anterior (sem limite de quantidade)
-  function acCost(n) { const L = AC_COSTS.length; return n < L ? AC_COSTS[n] : Math.round(AC_COSTS[L - 1] * Math.pow(1.35, n - L + 1)); }
+  // gemas compradas (loja): não contam no limite das grátis
+  function grantPaidGems(n) {
+    if (n <= 0) return;
+    S.gems += n;
+    S.stats.gemsTotal += n;
+    S.stats.paidGems = (S.stats.paidGems || 0) + n;
+    toast(`💎 +${n} gemas`, 'gem');
+    acDirty = true;
+  }
+  // depois do 10º, todo Escudeiro custa o mesmo que o 10º
+  function acCost(n) { return AC_COSTS[Math.min(n, AC_COSTS.length - 1)]; }
   function acNextCost() { return acCost(S.ac.owned); }
   function buyAutoclicker() {
     const c = acNextCost();
@@ -520,7 +541,13 @@
   }
 
   // Ganhos em bloco (aba em segundo plano ou ausência)
-  function bulkGains(secs) {
+  function bulkGains(secs, dry) {
+    if (dry) {
+      let z = S.zone; if (isBoss(z) && z > 1) z--;
+      const kps = Math.min(MAX_KILLS_PER_SEC, (baseDps() + acOn('arena') * acRate() * avgClick()) / monsterHP(z));
+      const kills = Math.floor(kps * secs);
+      return { kills, gold: kills * baseGold(z) * goldMult(false) };
+    }
     let z = S.zone;
     if (isBoss(z) && z > 1) z--;
     const hp = monsterHP(z);
@@ -542,7 +569,7 @@
     if (gain <= 0) return;
     const keep = {
       souls: S.souls + gain, relics: S.relics, settings: S.settings, seenIntro: true, buyMode: S.buyMode,
-      gems: S.gems, ac: S.ac, achievements: S.achievements,
+      gems: S.gems, ac: S.ac, achievements: S.achievements, boosts: S.boosts,
       stats: Object.assign({}, S.stats, { prestiges: S.stats.prestiges + 1, soulsTotal: S.stats.soulsTotal + gain }),
     };
     S = Object.assign(defaultState(), keep);
@@ -2331,6 +2358,94 @@
     if (p.dataset.v !== html) { p.innerHTML = html; p.dataset.v = html; }
   }
 
+  // ---- loja de gemas ----
+  const HOUR = 3600;
+  const GEM_SHOP = [
+    { id: 'warp1', icon: '⏩', name: 'Avanço no Tempo · 1h', cost: 15,
+      desc: 'Recebe na hora o ouro de 1 hora de caçada automática na zona atual.',
+      effect: () => `≈ ${fmt(bulkGains(HOUR, true).gold)} de ouro agora`,
+      buy: () => { const r = bulkGains(HOUR); toast(`⏩ +${fmt(r.gold)} de ouro (${fmt(r.kills)} criaturas)`, 'gold'); } },
+    { id: 'warp8', icon: '⏭️', name: 'Avanço no Tempo · 8h', cost: 90,
+      desc: 'Recebe na hora o ouro de 8 horas de caçada automática na zona atual.',
+      effect: () => `≈ ${fmt(bulkGains(8 * HOUR, true).gold)} de ouro agora`,
+      buy: () => { const r = bulkGains(8 * HOUR); toast(`⏭️ +${fmt(r.gold)} de ouro (${fmt(r.kills)} criaturas)`, 'gold'); } },
+    { id: 'warp24', icon: '🕰️', name: 'Avanço no Tempo · 24h', cost: 220,
+      desc: 'Recebe na hora o ouro de 24 horas de caçada automática na zona atual.',
+      effect: () => `≈ ${fmt(bulkGains(24 * HOUR, true).gold)} de ouro agora`,
+      buy: () => { const r = bulkGains(24 * HOUR); toast(`🕰️ +${fmt(r.gold)} de ouro (${fmt(r.kills)} criaturas)`, 'gold'); } },
+    { id: 'escudeiro', icon: '🧤', name: 'Escudeiro', cost: () => acNextCost(),
+      desc: 'Mais um auto clicker para arrastar até o monstro, uma habilidade ou um item.',
+      effect: () => `Você tem ${S.ac.owned}`,
+      buy: () => { S.gems += acNextCost(); buyAutoclicker(); } },
+    { id: 'recarga', icon: '🔄', name: 'Recarga Instantânea', cost: 10,
+      desc: 'Todas as habilidades ficam prontas para usar de novo.',
+      effect: () => { const n = SKILLS.filter((s) => S.maxZone >= s.unlock && !skillReady(s.id)).length; return n ? `${n} em recarga` : 'Nenhuma em recarga'; },
+      can: () => SKILLS.some((s) => S.maxZone >= s.unlock && !skillReady(s.id)),
+      buy: () => { const now = clock(); for (const s of SKILLS) if (S.skills[s.id]) S.skills[s.id].ready = now; toast('🔄 Habilidades recarregadas!'); } },
+    { id: 'ouro2', icon: '💰', name: 'Bênção do Ouro', cost: 30,
+      desc: 'Todo o ouro ×2 por 1 hora (acumula tempo se comprar de novo).',
+      effect: () => (boostOn('goldUntil') ? `Ativa: ${fmtTime((S.boosts.goldUntil - clock()) / 1000)}` : 'Inativa'),
+      buy: () => { S.boosts.goldUntil = Math.max(clock(), S.boosts.goldUntil || 0) + HOUR * 1000; toast('💰 Ouro ×2 por 1 hora!', 'gold'); } },
+    { id: 'dano2', icon: '⚔️', name: 'Fúria dos Escudos', cost: 40,
+      desc: 'Todo o dano ×2 por 1 hora (acumula tempo se comprar de novo).',
+      effect: () => (boostOn('dmgUntil') ? `Ativa: ${fmtTime((S.boosts.dmgUntil - clock()) / 1000)}` : 'Inativa'),
+      buy: () => { S.boosts.dmgUntil = Math.max(clock(), S.boosts.dmgUntil || 0) + HOUR * 1000; toast('⚔️ Dano ×2 por 1 hora!', 'gold'); } },
+  ];
+  // pacotes de gemas por dinheiro real: o pagamento será ligado à loja da plataforma (Steam / Google Play / App Store)
+  const GEM_PACKS = [
+    { id: 'pack1', gems: 100, icon: '💎' },
+    { id: 'pack2', gems: 300, icon: '💎', tag: '+20%' },
+    { id: 'pack3', gems: 700, icon: '💰', tag: '+40%' },
+    { id: 'pack4', gems: 1600, icon: '👑', tag: '+60%' },
+  ];
+  function purchaseGemPack(pack) {
+    // ponto de integração: quando houver loja da plataforma, confirmar o pagamento e chamar grantPaidGems(pack.gems)
+    modal('Em breve', `<p>A compra de gemas com dinheiro real ainda não está disponível nesta versão.</p><p>Ela será ativada quando o Flistaile chegar à loja do app (Steam / celular).</p>`, [{ label: 'Ok', cls: 'primary' }]);
+  }
+  const gemShopEls = {};
+  const gemCost = (it) => (typeof it.cost === 'function' ? it.cost() : it.cost);
+  function buildGemShop() {
+    const p = $('panel-loja');
+    p.innerHTML = '';
+    p.appendChild(el('div', 'card gem-card', '<p><b>Loja de gemas</b> — gaste 💎 gemas em atalhos e bônus. As gemas do jogo dão para 10 Escudeiros; mais gemas poderão ser compradas na versão de app.</p><p id="gemFreeInfo"></p>'));
+    for (const it of GEM_SHOP) {
+      const root = el('div', 'item gem-item', `<div class="item-icon">${it.icon}</div><div class="item-body"><div class="item-title"><span class="tname">${it.name}</span></div><div class="item-desc">${it.desc}</div><div class="item-effect"></div></div><button class="buy gem"><span class="bl">Comprar</span><span class="bc"></span></button>`);
+      const btn = root.querySelector('.buy');
+      btn.addEventListener('click', () => {
+        const c = gemCost(it);
+        if (S.gems < c || (it.can && !it.can())) return;
+        S.gems -= c;
+        it.buy();
+        Sfx.init(); Sfx.buy();
+        acDirty = true; shopDirty = true;
+        refreshGemShop();
+      });
+      p.appendChild(root);
+      gemShopEls[it.id] = { root, btn, effect: root.querySelector('.item-effect'), bc: root.querySelector('.bc') };
+    }
+    p.appendChild(el('div', 'section-title', 'Comprar gemas'));
+    const packs = el('div', 'gem-packs');
+    for (const pk of GEM_PACKS) {
+      const b = el('button', 'gem-pack', `${pk.tag ? `<i class="gem-tag">${pk.tag}</i>` : ''}<span class="gp-icon">${pk.icon}</span><b>${pk.gems}</b><small>gemas</small><span class="gp-price">Em breve</span>`);
+      b.addEventListener('click', () => purchaseGemPack(pk));
+      packs.appendChild(b);
+    }
+    p.appendChild(packs);
+  }
+  function refreshGemShop() {
+    for (const it of GEM_SHOP) {
+      const e = gemShopEls[it.id];
+      if (!e) continue;
+      const c = gemCost(it);
+      e.btn.disabled = S.gems < c || (it.can ? !it.can() : false);
+      setText(e.bc, `💎 ${fmt(c)}`);
+      const eff = it.effect();
+      if (e.effect.dataset.v !== eff) { e.effect.textContent = eff; e.effect.dataset.v = eff; }
+    }
+    const left = freeGemsLeft();
+    setText($('gemFreeInfo'), left > 0 ? `Gemas que o jogo ainda pode te dar: ${fmt(left)} de ${fmt(FREE_GEM_CAP)}.` : `Você já recebeu todas as ${fmt(FREE_GEM_CAP)} gemas do jogo.`);
+  }
+
   // ---- final da história ----
   function showEnding() {
     Sfx.skill();
@@ -2348,6 +2463,7 @@
     $('buyMode').classList.toggle('hidden', !(tab === 'treinos' || tab === 'atributos' || tab === 'reliquias'));
     if (tab === 'stats') renderStats();
     if (tab === 'conquistas') renderAch();
+    if (tab === 'loja') refreshGemShop();
   }
   function syncBuyMode() {
     document.querySelectorAll('#buyMode button').forEach((b) => b.classList.toggle('active', String(S.buyMode) === b.dataset.mode));
@@ -2399,6 +2515,7 @@
     buildItems();
     buildShopUI();
     buildSkills();
+    buildGemShop();
     buildOptions();
     bindUI();
     syncBuyMode();
@@ -2431,6 +2548,7 @@
       else if (!drag) { const b = $('acBuy'); b.disabled = S.gems < acNextCost(); }
       if (activeTab === 'stats') renderStats();
       if (activeTab === 'conquistas') renderAch();
+      if (activeTab === 'loja') refreshGemShop();
     }, 250);
     setInterval(save, 10000);
     requestAnimationFrame(frame);
@@ -2439,7 +2557,7 @@
   if (window.FL_SIM) {
     // Ganchos para o simulador de balanceamento (tools/sim.html)
     window.FL = {
-      BAL, TRAININGS, ATTRS, RELICS, SKILLS, ACH, AC_COSTS, AC_BASE_RATE, FINAL_ZONE, PRESTIGE_ZONE, KILLS_PER_ZONE,
+      BAL, TRAININGS, ATTRS, RELICS, SKILLS, ACH, AC_COSTS, FREE_GEM_CAP, AC_BASE_RATE, FINAL_ZONE, PRESTIGE_ZONE, KILLS_PER_ZONE,
       defaultState, get S() { return S; }, set S(v) { S = v; }, setClock(f) { clock = f; },
       monsterHP, baseGold, isBoss, baseDps, baseClick, critChance, critMult, goldMult, shieldCost, soulsFor, costBulk,
       maxAffordable, bossTime, killsPerZone, acCost, acRate, achMult, cdMult, lvl, rl, trainPower, milestone, shieldMult, globalMult, harmony, chestChance,

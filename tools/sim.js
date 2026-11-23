@@ -91,7 +91,7 @@
       }
     }
 
-    function addGems(n) { S.gems += n; S.stats.gemsTotal += n; }
+    function addGems(n) { n = Math.min(n, F.FREE_GEM_CAP - (S.stats.freeGems || 0)); if (n <= 0) return; S.gems += n; S.stats.gemsTotal += n; S.stats.freeGems = (S.stats.freeGems || 0) + n; }
     function checkAch() {
       for (const id of Object.keys(S.stats.skillUses)) void id;
       for (const sk of F.SKILLS) if (unlocked(sk.id)) S.stats.skillUses[sk.id] = 1;
